@@ -1,611 +1,192 @@
-/* ============================================================================
- * public/legal-spec.js — Vibe Legal & Safety Center (bilingual ar/en)
- * Bundled inside the app IIFE after all additive UI files and before final render().
- * Self-contained: no external dependencies, no inline style, no inline JS attributes.
- *
- * --- OWNER_INPUT_REQUIRED (source comments only; never rendered to users) ---
- * 1. Governing law / jurisdiction / legal entity name + address are intentionally NOT
- *    asserted anywhere in this file. OWNER_INPUT_REQUIRED: owner must decide and
- *    publish entity, address and jurisdiction before any contractual claim is made.
- * 2. OWNER_INPUT_REQUIRED: public support URL/email. Support wording below points to
- *    in-app support only; a public support contact must be added here once configured.
- * 3. OWNER_INPUT_REQUIRED: in-app account deletion control must exist and ship BEFORE
- *    App Store submission. This file describes deletion *policy*, not the control.
- * 4. OWNER_INPUT_REQUIRED: legal minimum age decision. 18+ is described as the current
- *    product setting of the discovery demo, never as a legal minimum.
- * 5. Copyright: no DMCA agent, no registered agent, no legal entity is claimed here.
- * ==========================================================================*/
-
-var LEGAL_POLICY_VERSION = '2026.09';
-var LEGAL_LAST_UPDATED = '2026-09-19';
-
-var LEGAL_ORDER = [
-  'legal-index', 'legal-terms', 'legal-privacy', 'legal-community',
-  'legal-safety', 'legal-deletion', 'legal-copyright', 'legal-support'
-];
-
-/* Short chip labels (ar, en). */
-var LEGAL_SHORT = {
-  'legal-index': ['المركز', 'Center'],
-  'legal-terms': ['الشروط', 'Terms'],
-  'legal-privacy': ['الخصوصية', 'Privacy'],
-  'legal-community': ['المجتمع', 'Community'],
-  'legal-safety': ['الأمان', 'Safety'],
-  'legal-deletion': ['حذف البيانات', 'Deletion'],
-  'legal-copyright': ['حقوق الملكية', 'Copyright'],
-  'legal-support': ['الدعم', 'Support']
-};
-
-/* ------------------------------- helpers --------------------------------- */
-
-function E(value) {
-  var s = (value === undefined || value === null) ? '' : String(value);
-  try { if (typeof esc === 'function') return String(esc(s)); } catch (e) {}
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-}
-
-function T(ar, en) {
-  try {
-    if (typeof t === 'function') {
-      var v = t(ar, en);
-      if (v !== undefined && v !== null && String(v) !== '') return String(v);
-    }
-  } catch (e) {}
-  try {
-    if (typeof lang !== 'undefined' && lang && String(lang).toLowerCase().indexOf('ar') === 0) return String(ar);
-  } catch (e) {}
-  return String(en);
-}
-
-function pg(titleAr, titleEn, introAr, introEn, secs) {
-  return { t: [titleAr, titleEn], i: [introAr, introEn], s: secs };
-}
-
-function sec(headAr, headEn, paras, bullets, notes) {
-  return { h: [headAr, headEn], p: paras || [], u: bullets || [], x: notes || [] };
-}
-
-/* ----------------------------- page content ------------------------------ */
-
-var LEGAL_PAGES = {};
-
-LEGAL_PAGES['legal-index'] = pg(
-  'مركز القانون والأمان', 'Legal & Safety Center',
-  'نظرة عامة على سياسات Vibe. كل صفحة أدناه يمكن قراءتها دون تسجيل الدخول، وتُنشر مع رقم نسخة وتاريخ تحديث واضحين.',
-  'An overview of Vibe policies. Every page below can be read without signing in, and each is published with a clear version number and update date.',
-  [
-    sec('ما تجده هنا', 'What you will find here',
-      [['هذه الصفحة نقطة البداية لكل ما يتعلق بالقواعد والخصوصية والأمان داخل Vibe.', 'This page is the starting point for everything about rules, privacy and safety inside Vibe.']],
-      [['الشروط — قواعد استخدام الحساب والمحتوى.', 'Terms — rules for using your account and posting content.'],
-       ['الخصوصية — ما نعالجه فعليًا وكيف نتعامل معه.', 'Privacy — what we actually process and how we handle it.'],
-       ['معايير المجتمع — السلوك المتوقع في الغرف والدردشة.', 'Community standards — expected behavior in rooms and chat.'],
-       ['الأمان — الإبلاغ والحظر ومساعدة نفسك.', 'Safety — reporting, blocking and self-help.'],
-       ['حذف الحساب والبيانات — النطاق وكيفية الطلب.', 'Deleting your account and data — scope and how to request it.'],
-       ['حقوق الملكية — المحتوى الخاص بك وشكاوى حقوق النشر.', 'Copyright & IP — your content and copyright complaints.'],
-       ['الدعم — المساعدة في المشاكل التقنية والطلبات.', 'Support — help with technical issues and requests.']]),
-    sec('ملاحظة مهمة', 'Important note',
-      [['هذا المركز يصف سياسة المنتج الحالية. لا يُعد بديلًا عن القانون المحلي، ولا ندّعي الامتثال الشامل لكل قانون في كل بلد.',
-        'This center describes the current product policy. It is not a substitute for local law, and we do not claim blanket compliance with every law in every country.']])
-  ]
-);
-
-LEGAL_PAGES['legal-terms'] = pg(
-  'شروط الاستخدام', 'Terms of Use',
-  'تنطبق هذه الشروط على استخدامك لتطبيق Vibe وميزاته: الغرف، الدردشة، النشر، والصوت.',
-  'These Terms apply to your use of the Vibe app and its features: rooms, chat, posting and voice.',
-  [
-    sec('حسابك ومسؤولياتك', 'Your account and responsibilities',
-      [['استخدام Vibe بشكل كامل — الانضمام إلى الغرف، الدردشة، النشر والتفاعل — يتطلب حسابًا. أنت مسؤول عن الحفاظ على أمان بيانات الدخول وعن النشاط الذي يحدث من خلال حسابك.',
-        'Using Vibe fully — joining rooms, chatting, posting and reacting — requires an account. You are responsible for keeping your credentials safe and for activity that happens through your account.']],
-      [['حافظ على سرية بيانات الدخول ولا تشارك حسابك مع الآخرين.', 'Keep your credentials private and do not share your account with others.'],
-       ['قدّم بريدًا إلكترونيًا تملكه، لأن الرسائل المعاملاتية مثل التحقق واستعادة كلمة المرور تُرسل إليه.', 'Provide an email address you own, because transactional messages such as verification and password reset are sent to it.'],
-       ['أبلغنا عبر الدعم داخل التطبيق إذا لاحظت نشاطًا غير مصرح به.', 'Tell us through in-app support if you notice unauthorized activity.'],
-       ['أنت مسؤول عن التزامك بالقوانين المعمول بها في مكان إقامتك.', 'You are responsible for complying with the laws that apply where you live.']],
-      [['إعداد المنتج الحالي: استكشاف الغرف في نسخة العرض التجريبية متاح للبالغين 18 عامًا وأكثر فقط. هذا وصف لإعداد منتج حالي، وليس تصريحًا بأن 18 هو الحد القانوني الأدنى للاستخدام. تحديد الحد القانوني الأدنى يتطلب قرارًا من مالك المنتج وسياسة منفصلة.',
-        'Current product setting: room discovery in the demo build is available to adults aged 18 and over only. This describes a current product setting; it is not a statement that 18 is the legal minimum age to use Vibe. Setting a legal minimum age requires a decision by the product owner and a separate policy.']]),
-
-    sec('الاستخدام المقبول وملكية المحتوى', 'Acceptable use and ownership of content',
-      [['Vibe يعتمد على محتوى ينشره المستخدمون: المطالبات (البرومبتس)، الصور، الملاحظات الصوتية، رسائل الغرف والتفاعلات الاجتماعية.',
-        'Vibe relies on user-generated content: prompts, photos, voice notes, room messages and social interactions.']],
-      [['المحتوى الذي تنشره يبقى ملكك. لا نطالب بملكية أعمالك.', 'Content you post stays yours. We do not claim ownership of your work.'],
-       ['أنت تمنحنا ترخيصًا محدودًا وغير حصري لتخزين وعرض وتشغيل محتواك داخل Vibe فقط، وبالقدر اللازم لتقديم الخدمة وحماية المستخدمين.', 'You grant us a limited, non-exclusive license to store, display and operate your content inside Vibe only, as needed to provide the service and protect users.'],
-       ['أنت مسؤول عن امتلاك الحقوق اللازمة لرفع النصوص والصور والصوت.', 'You are responsible for holding the rights needed to upload your text, photos and audio.'],
-       ['لا نراجع كل محتوى مسبقًا، لكننا نراجع الإبلاغات والشكاوى.', 'We do not pre-review every piece of content, but we do review reports and complaints.']]),
-
-    sec('السلوك المحظور', 'Prohibited conduct',
-      [['لا يجوز استخدام Vibe لنشر محتوى غير قانوني أو للتفاعل بطريقة تضر بالآخرين أو بالخدمة.',
-        'You may not use Vibe to post illegal content or to interact in ways that harm others or the service.']],
-      [['انتهاك حقوق الملكية الفكرية أو العلامات التجارية.', 'Infringing copyright, trademarks or other intellectual property.'],
-       ['مضايقة الآخرين أو تهديدهم أو الترويج للعنف أو الكراهية.', 'Harassing or threatening others, or promoting violence or hatred.'],
-       ['الرسائل المزعجة، الاحتيال، الروابط الخبيثة، أو جمع بيانات المستخدمين آليًا.', 'Spam, fraud, malicious links, or automated scraping of user data.'],
-       ['محاولة تجاوز حدود الأمان أو الوصول إلى بيانات لا تخصك.', 'Attempting to bypass security limits or access data that is not yours.'],
-       ['نشر المعلومات الخاصة لشخص آخر دون إذنه.', 'Publishing another person private information without permission.']]),
-
-    sec('الإشراف والإزالة', 'Moderation and removal',
-      [['قد نزيل محتوى أو نوقف ميزة أو نقيّد حسابًا عند مخالفة هذه الشروط أو معايير المجتمع. الإزالة ليست تنازلًا عن أي حقوق.',
-        'We may remove content, pause a feature or restrict an account when these Terms or the community standards are violated. Removal does not waive any rights.'],
-       ['لا نضمن مراجعة كل بلاغ بواسطة إنسان ولا خلال مدة زمنية محددة.', 'We do not promise that every report will be reviewed by a human, or within a fixed timeframe.']]),
-
-    sec('توفر الخدمة والأطراف الثالثة', 'Service availability and third parties',
-      [['نعتمد على مزودين خارجيين لتشغيل Vibe: Supabase (المصادقة وقاعدة البيانات والتخزين والوقت الحقيقي)، Resend (الرسائل المعاملاتية)، وSpotify (فقط إذا ربطت حسابك طوعًا).',
-        'We rely on third-party providers to run Vibe: Supabase (authentication, database, storage, realtime), Resend (transactional email) and Spotify (only if you connect your account).']],
-      [['قد تتوقف الخدمة أو تتغير الميزات لأسباب تقنية أو تشغيلية أو أمنية.', 'The service may be interrupted or features may change for technical, operational or security reasons.'],
-       ['استخدامك لخدمات الطرف الثالث قد يخضع لشروطها وسياساتها الخاصة.', 'Your use of third-party services may be governed by their own terms and policies.']]),
-
-    sec('الإنهاء والتغييرات', 'Termination and changes',
-      [['يمكنك التوقف عن استخدام Vibe في أي وقت وطلب حذف حسابك من داخل التطبيق عند توفر الأداة.',
-        'You can stop using Vibe at any time and request deletion of your account from inside the app when the control is available.'],
-       ['قد نعلّق أو ننهي الوصول عند المخالفة الجسيمة أو المتكررة، أو عند وجود خطر على المستخدمين أو الخدمة.',
-        'We may suspend or terminate access for serious or repeated violations, or where there is risk to users or the service.'],
-       ['عند تحديث هذه الشروط نغيّر رقم النسخة وتاريخ آخر تحديث في أعلى الصفحة.',
-        'When we update these Terms we change the version number and last updated date at the top of this page.']])
-  ]
-);
-
-LEGAL_PAGES['legal-privacy'] = pg(
-  'سياسة الخصوصية', 'Privacy Policy',
-  'تصف هذه الصفحة فئات البيانات التي تعالجها النسخة الحالية من التطبيق وكيف يستخدمها التشغيل الفعلي.',
-  'This page describes the categories of data the current build of the app processes and how the actual implementation uses them.',
-  [
-    sec('ما نعالجه فعليًا', 'What we actually process',
-      [['القائمة التالية تعكس الفئات التي تعالجها النسخة الحالية من التطبيق، وليس قائمة نوايا مستقبلية.',
-        'The list below reflects the categories the current build of the app processes, not a list of future intentions.']],
-      [['بيانات الحساب والبريد الإلكتروني عبر Supabase Auth — لتسجيل الدخول والتحقق واستعادة كلمة المرور.',
-        'Account identifiers and email through Supabase Auth — used for sign-in, verification and password reset.'],
-       ['بيانات الملف الشخصي: الاسم الظاهر، الصورة، النبذة، والمطالبات (البرومبتس) والاهتمامات التي تضيفها.',
-        'Profile data: display name, photo, bio, and the prompts and interests you add.'],
-       ['رسائل الدردشة داخل الغرف والتفاعلات الاجتماعية: الردود، الإعجابات، الحظر والإبلاغ، والإشعارات داخل التطبيق.',
-        'Chat and room messages and social interactions: replies, likes, blocks, reports and in-app notifications.'],
-       ['مسارات كائنات الوسائط والملفات التي ترفعها، مثل الصور والملاحظات الصوتية المخزنة في Supabase Storage.',
-        'Media object paths and the files you upload, such as photos and voice notes stored in Supabase Storage.'],
-       ['بيانات الاتصال الحقيقي (Realtime) اللازمة لتحديث الغرف والدردشة أثناء الاستخدام.',
-        'Realtime connection data needed to keep rooms and chat updated while you use the app.'],
-       ['بيانات Spotify، فقط عندما تربط حسابك طوعًا لميزات الذوق الموسيقي.',
-        'Spotify data, only when you voluntarily connect your account for music taste features.']]),
-
-    sec('من يعالج البيانات', 'Who processes the data',
-      [['نشارك البيانات فقط مع مزودي الخدمة اللازمين للتشغيل، وبالحد الأدنى المطلوب:',
-        'We share data only with the service providers needed to operate Vibe, and only to the minimum extent required:']],
-      [['Supabase: المصادقة وقاعدة البيانات وتخزين الوسائط والاتصال الحقيقي.', 'Supabase: authentication, database, media storage and realtime.'],
-       ['Resend: إرسال الرسائل المعاملاتية فقط (مثل التحقق واستعادة كلمة المرور).', 'Resend: transactional email only, such as verification and password reset.'],
-       ['Spotify: عند ربط حسابك فقط ولميزات الذوق الموسيقي.', 'Spotify: only when you connect your account, and only for music taste features.']],
-      [['لا تتضمن عملية التطبيق الحالية بيع بياناتك أو مشاركتها لأغراض إعلانية.',
-        'The current app implementation does not include selling your data or sharing it for advertising purposes.']]),
-
-    sec('الإعلانات والتتبع', 'Advertising and tracking',
-      [['لا نجد في التنفيذ الحالي ما يثبت وجود إعلانات، أو أدوات تتبع إعلاني عبر الشركات، أو بيع بيانات لأطراف ثالثة. هذه ملاحظة عن الوضع الحالي، وليست وعدًا دائمًا؛ أي تغيير جوهري يجب أن يُنعكس في تحديث هذه السياسة.',
-        'The current implementation does not evidence advertising, cross-company ad tracking, or the sale of your data to third parties. This is a statement about the current build, not a permanent promise; any material change must be reflected in an update to this policy.']]),
-
-    sec('الاحتفاظ والتحكم والحذف', 'Retention, controls and deletion',
-      [['تحتفظ البيانات ما دام حسابك قائمًا وبالقدر اللازم لتشغيل الخدمة والأمان.',
-        'Data is retained while your account exists and as needed to run the service and keep it secure.']],
-      [['يمكنك تعديل أو حذف المحتوى الذي تنشره من داخل التطبيق، وإيقاف الإشعارات، وحظر المستخدمين، وإرسال الإبلاغات.',
-        'You can edit or delete content you post from inside the app, turn notifications off, block users and send reports.'],
-       ['يمكنك طلب حذف الحساب والبيانات من داخل التطبيق عند توفر أداة الحذف في نسختك. راجع صفحة حذف الحساب والبيانات لمعرفة النطاق المتوقع.',
-        'You can request deletion of your account and data from inside the app when the delete control is available in your build. See the account and data deletion page for the expected scope.'],
-       ['قد نحتفظ بمعلومات محدودة عند وجود حاجة موثقة لمكافحة الإساءة أو الاحتيال أو لالتزام قانوني أو أمني.',
-        'We may retain limited information where there is a documented need to address abuse or fraud, or for a legal or security obligation.']]),
-
-    sec('حقوقك وحدود الوعود', 'Your rights and the limits of our promises',
-      [['بعض حقوق الخصوصية قد تنطبق عليك بحسب مكان إقامتك والقانون المعمول به. لا ندّعي الامتثال الشامل لكل قوانين الخصوصية في كل بلد، بما في ذلك عدم تقديم ادعاء عام بالامتثال لـ GDPR أو CCPA.',
-        'Some privacy rights may apply to you depending on where you live and the law that applies. We do not claim blanket compliance with every privacy law in every country, and we make no general claim of GDPR or CCPA compliance.'],
-       ['لممارسة أي طلب يتعلق بالخصوصية، استخدم الدعم داخل التطبيق. إذا أضاف المالك لاحقًا عنوانًا قانونيًا عامًا، يجب نشره في صفحة الدعم.',
-        'To make a privacy request, use in-app support. If the owner later adds a public legal contact, it must be published on the support page.']])
-  ]
-);
-
-LEGAL_PAGES['legal-community'] = pg(
-  'معايير المجتمع', 'Community Standards',
-  'قواعد السلوك في غرف Vibe والدردشة والتفاعلات. تنطبق على الجميع بالتساوي.',
-  'The rules of behavior in Vibe rooms, chat and interactions. They apply to everyone equally.',
-  [
-    sec('السلوك الذي لا نسمح به', 'Behavior we do not allow',
-      [['تنطبق هذه المعايير على الغرف والدردشة والرسائل والصور والملاحظات الصوتية والأسماء والصور الشخصية وكل محتوى آخر داخل Vibe.',
-        'These standards apply to rooms, chat, messages, photos, voice notes, display names, profile pictures and all other content inside Vibe.']],
-      [['التحرش أو التنمر أو الملاحقة أو الإهانة المتكررة.', 'Harassment, bullying, stalking or repeated insults.'],
-       ['التهديدات بالعنف أو التحريض عليه ضد أي شخص أو مجموعة.', 'Threats of violence, or encouraging violence against any person or group.'],
-       ['خطاب الكراهية أو التمييز بسبب الدين أو العرق أو الجنس أو الأصل أو الإعاقة أو الهوية.', 'Hate speech or discrimination based on religion, race, gender, origin, disability or identity.'],
-       ['الاستغلال الجنسي أو المحتوى الجنسي غير القانوني أو الترويج له.', 'Sexual exploitation, illegal sexual content, or promoting it.'],
-       ['أي محتوى يهدد سلامة القُصّر أو أي محاولة تواصل غير لائقة معهم.', 'Any content that endangers minors, or any inappropriate contact with them.'],
-       ['الرسائل المزعجة، الاحتيال، الروابط الخبيثة، والترويج التجاري غير المصرح به.', 'Spam, scams, malicious links and unauthorized commercial promotion.'],
-       ['انتحال شخصية مستخدم آخر أو فريق Vibe أو أي جهة رسمية.', 'Impersonating another user, the Vibe team, or an official body.'],
-       ['نشر معلومات خاصة عن الآخرين مثل العنوان أو الهاتف أو الموقع الدقيق.', 'Publishing other people private information such as address, phone number or precise location.'],
-       ['المحتوى غير القانوني، أو المواد التي تنتهك حقوق النشر أو العلامات التجارية.', 'Illegal content, or material that infringes copyright or trademarks.']]),
-
-    sec('الإبلاغ والحظر: ما نتوقعه منك', 'Reporting and blocking: what we expect',
-      [['إذا صادفت محتوى أو سلوكًا مخالفًا، استخدم أدوات الإبلاغ أو الحظر داخل التطبيق بدل الرد بالمثل.',
-        'If you encounter content or behavior that breaks these standards, use the in-app report or block controls instead of responding in kind.']],
-      [['الإبلاغ الكاذب المتعمد بقصد الإضرار بالآخرين قد يؤدي إلى تقييد حسابك.', 'Knowingly false reports intended to harm others may lead to restrictions on your account.'],
-       ['الحظر يوقف التفاعل بينك وبين المستخدم الآخر داخل Vibe، وهو أداة تحكم شخصية وليس عقوبة عامة.', 'Blocking stops interaction between you and the other user inside Vibe; it is a personal control, not a global punishment.'],
-       ['لا تنشر تفاصيل نزاع خاص علنًا في الغرف؛ استخدم الإبلاغ والدعم بدلًا من ذلك.', 'Do not post details of a private dispute publicly in rooms; use reporting and support instead.']]),
-
-    sec('كيف نتعامل مع المخالفات', 'How we handle violations',
-      [['قد نزيل المحتوى، أو نحد من الوصول إلى الميزات، أو نعلّق الحساب، بحسب شدة المخالفة وتكرارها. لا نعد بمراجعة بشرية لكل بلاغ ولا بإطار زمني محدد.',
-        'We may remove content, limit access to features, or suspend an account, depending on severity and repetition. We do not promise human review for every report, nor a fixed timeline.'],
-       ['المخالفات الجسيمة مثل التهديدات أو محتوى الاعتداء على الأطفال أو الاحتيال قد تؤدي إلى إنهاء الحساب.',
-        'Severe violations such as threats, child sexual abuse material, or fraud may lead to account termination.']])
-  ]
-);
-
-LEGAL_PAGES['legal-safety'] = pg(
-  'مركز الأمان', 'Safety Center',
-  'كيف تتصرف إذا تعرضت لمضايقة أو محتوى ضار، وكيف تحمي نفسك داخل Vibe.',
-  'What to do if you face harassment or harmful content, and how to protect yourself inside Vibe.',
-  [
-    sec('كيف تُبلّغ', 'How to report',
-      [['الإبلاغ خطوة مباشرة داخل التطبيق ولا يحتاج مراسلة خارجية.', 'Reporting is a direct step inside the app and does not require any external contact.']],
-      [['افتح المحتوى أو الملف الشخصي أو الرسالة ثم اختر الإبلاغ وحدد السبب الأقرب للحالة.', 'Open the content, profile or message, then choose report and select the closest reason.'],
-       ['استخدم الحظر لإيقاف التفاعل فورًا مع مستخدم معين.', 'Use block to immediately stop interaction with a specific user.'],
-       ['أضف تفاصيل مفيدة: متى حدث الأمر، وفي أي غرفة، وما هي الرسالة أو الصورة.', 'Add useful details: when it happened, in which room, and which message or photo.'],
-       ['يمكنك أيضًا التحدث مع الدعم داخل التطبيق إذا احتجت متابعة.', 'You can also talk to in-app support if you need follow-up.']]),
-
-    sec('ما لا نعد به', 'What we do not promise',
-      [['لا نضمن وجود مراجع بشري متاح على مدار الساعة، ولا وقت استجابة محددًا. نحن نراجع البلاغات، لكن الحجم والتوقيت قد يتغيران.',
-        'We do not promise round-the-clock human moderators, and we do not promise a specific response time. We do review reports, but volume and timing can vary.']]),
-
-    sec('الحالات الطارئة', 'Emergency situations',
-      [['إذا كان أي شخص في خطر مباشر، تواصل مع خدمات الطوارئ المحلية في بلدك على الفور بدل انتظار رد داخل التطبيق. Vibe ليست قناة طوارئ ولا بديلًا عن المساعدة المهنية.',
-        'If anyone is in immediate danger, contact local emergency services right away instead of waiting for a reply inside the app. Vibe is not an emergency channel and is not a substitute for professional help.']]),
-
-    sec('سلامتك الشخصية', 'Your personal safety',
-      [['احمِ بياناتك: لا تشارك العنوان الدقيق أو الموقع الحالي أو معلومات مالية أو رمز التحقق مع أي شخص.',
-        'Protect your data: do not share your exact address, live location, financial details or verification codes with anyone.']],
-      [['كن حذرًا من الطلبات المالية أو الهدايا أو الروابط الخارجية.', 'Be cautious about requests for money, gifts or external links.'],
-       ['عند اللقاء الواقعي اختر مكانًا عامًا وأخبر شخصًا تثق به.', 'If you meet in person, choose a public place and tell someone you trust.'],
-       ['يمكنك دائمًا الحظر أو تسجيل الخروج من أي غرفة تشعر فيها بعدم الارتياح.', 'You can always block or leave any room where you feel uncomfortable.']]),
-
-    sec('الاعتراض على قرار', 'Appeals',
-      [['إذا كنت تعتقد أن قرارًا صدر بحق حسابك أو محتواك كان خاطئًا، أرسل اعتراضًا عبر الدعم داخل التطبيق مع وصف موجز للسياق.',
-        'If you believe a decision about your account or content was wrong, send an appeal through in-app support with a short description of the context.']])
-  ]
-);
-
-LEGAL_PAGES['legal-deletion'] = pg(
-  'حذف الحساب والبيانات', 'Account & Data Deletion',
-  'تصف هذه الصفحة سياسة الحذف ونطاقه المتوقع. أداة الحذف الفعلية ميزة منفصلة تُنفَّذ داخل التطبيق.',
-  'This page describes the deletion policy and its expected scope. The functional delete control is a separate feature implemented inside the app.',
-  [
-    sec('ما تصفه هذه الصفحة', 'What this page describes',
-      [['هذه الصفحة سياسة فقط. أداة حذف الحساب الوظيفية مُنفَّذة في مكان منفصل داخل التطبيق، ويجب أن تكون متاحة قبل إرسال التطبيق إلى App Store. هذه الصفحة لا تعمل كأداة حذف.',
-        'This page is a policy statement only. The functional account deletion control is implemented separately inside the app and must be available before the app is submitted to the App Store. This page does not itself perform deletion.']]),
-
-    sec('نطاق الحذف المتوقع', 'Expected scope of deletion',
-      [['ينطبق نطاق الحذف المتوقع على الحساب والبيانات المرتبطة به:', 'The expected scope covers the account and the data tied to it:']],
-      [['الحساب وبيانات الدخول المرتبطة به.', 'The account and its associated sign-in data.'],
-       ['بيانات الملف الشخصي: الاسم الظاهر، الصورة، النبذة والاهتمامات.', 'Profile data: display name, photo, bio and interests.'],
-       ['الصور والمطالبات (البرومبتس) التي رفعتها.', 'Photos and prompts you uploaded.'],
-       ['ملفات الوسائط المخزنة مثل الصور والملاحظات الصوتية.', 'Stored media objects such as photos and voice notes.'],
-       ['الرسائل والمحتوى الذي ينشره المستخدم، بالقدر الذي يسمح به التخزين التقني والقانون المعمول به.', 'Messages and user-generated content, to the extent storage and applicable law allow.']]),
-
-    sec('ما قد يبقى بعد الحذف', 'What may remain after deletion',
-      [['إذا وُجدت حاجة موثقة لمكافحة الإساءة أو الاحتيال، أو التزام قانوني، أو حماية أمنية، فقد نحتفظ بمعلومات محدودة لفترة مناسبة. وقد نحتفظ بسجلات مجهولة الهوية لا تُعرّفك شخصيًا.',
-        'Where there is a documented need to address abuse or fraud, a legal obligation, or a security need, we may retain limited information for an appropriate period. We may also keep anonymized records that do not identify you.']]),
-
-    sec('كيف تطلب الحذف', 'How to request deletion',
-      [['استخدم أداة حذف الحساب داخل التطبيق عندما تكون متاحة في نسختك.', 'Use the in-app account deletion control when it is available in your build.'],
-       ['إذا لم تكن الأداة متاحة في نسختك الحالية، فاتصل بالدعم داخل التطبيق وسنُسجّل الطلب.', 'If the control is not available in your current build, contact in-app support and we will log the request.'],
-       ['قد نطلب تأكيدًا بسيطًا للتحقق من ملكية الحساب قبل تنفيذ الحذف.', 'We may ask for a simple confirmation to verify account ownership before acting.']])
-  ]
-);
-
-LEGAL_PAGES['legal-copyright'] = pg(
-  'حقوق النشر والملكية الفكرية', 'Copyright & Intellectual Property',
-  'ما تملكه، وكيف ترسل شكوى، وما القناة الحالية لاستقبال الشكاوى.',
-  'What you own, how to send a complaint, and the current channel for receiving complaints.',
-  [
-    sec('حقوقك', 'Your rights',
-      [['تحتفظ بحقوق المحتوى الذي تنشره في Vibe. في المقابل، لا يجوز رفع محتوى لا تملك حق استخدامه، بما في ذلك الصور والمقاطع الصوتية والنصوص والعلامات التجارية.',
-        'You keep the rights to the content you post in Vibe. In return, do not upload material you do not have the right to use, including photos, audio, text and trademarks.']]),
-
-    sec('ما يجب أن تحتويه الشكوى', 'What a complaint should include',
-      [['لتمكيننا من مراجعة شكوى حقوق النشر بجدية، أرفق العناصر التالية:', 'To let us review a copyright complaint properly, include the following:']],
-      [['وصف العمل المحمي الذي تدّعي أنه استُخدم دون إذن.', 'A description of the protected work you claim was used without permission.'],
-       ['مكان المادة المخالفة داخل Vibe: الغرفة أو الحساب أو الرابط أو لقطة شاشة توضح الموقع.', 'Where the material appears inside Vibe: the room, account, link or a screenshot showing the location.'],
-       ['بيانات التواصل معك حتى نتمكن من الرد.', 'Your contact details so we can respond.'],
-       ['بيان بحسن النية بأن الاستخدام غير مصرح به من مالك الحق أو وكيله أو القانون.', 'A good-faith statement that the use is not authorized by the rights owner, its agent, or the law.'],
-       ['بيان بأن المعلومات الواردة دقيقة وأنك مخوّل بالتصرف نيابة عن مالك الحق.', 'A statement that the information is accurate and that you are authorized to act for the rights owner.']]),
-
-    sec('أين ترسل الشكوى', 'Where to send a complaint',
-      [['القناة الحالية لاستقبال شكاوى حقوق النشر هي الدعم داخل التطبيق. إذا أضاف المالك لاحقًا عنوانًا قانونيًا عامًا أو وكيلًا معتمدًا، يجب أن يُنشر هنا قبل الاعتماد عليه. لا ندّعي وجود وكيل DMCA أو كيان قانوني محدد.',
-        'The current channel for copyright complaints is in-app support. If the owner later adds a public legal contact or a designated agent, it must be published here before it can be relied on. No DMCA agent or specific legal entity is claimed.']]),
-
-    sec('ما قد يحدث بعد ذلك', 'What may happen next',
-      [['قد نزيل المحتوى المبلغ عنه أو نقيّد الوصول إليه أثناء المراجعة.', 'We may remove or restrict the reported content while we review it.'],
-       ['قد نُبلغ المستخدم الذي نشر المحتوى لتمكينه من الرد.', 'We may notify the user who posted the content so they can respond.'],
-       ['الحسابات المتكررة في انتهاك حقوق الملكية قد تُقيَّد أو تُنهى.', 'Accounts that repeatedly infringe intellectual property may be restricted or terminated.']])
-  ]
-);
-
-LEGAL_PAGES['legal-support'] = pg(
-  'الدعم والمساعدة', 'Support & Help',
-  'خطوات آمنة لاستكشاف الأخطاء، ومتى تتصل بنا، وما تتوقعه من أوقات الاستجابة.',
-  'Safe troubleshooting steps, when to contact us, and what to expect about response times.',
-  [
-    sec('استكشاف الأخطاء الآمن', 'Safe troubleshooting',
-      [['جرّب هذه الخطوات قبل إرسال طلب دعم:', 'Try these steps before sending a support request:']],
-      [['تأكد من اتصالك بالإنترنت ثم أعد تحميل الصفحة أو أعد تشغيل التطبيق.', 'Check your internet connection, then reload the page or restart the app.'],
-       ['تأكد من منح أذونات الصور أو الميكروفون عند رفع الصور وتسجيل الملاحظات الصوتية.', 'Make sure photo or microphone permissions are granted when uploading photos or recording voice notes.'],
-       ['راجع إعدادات الإشعارات داخل التطبيق وفي نظام التشغيل.', 'Check notification settings both inside the app and in your operating system.'],
-       ['جرّب تسجيل الخروج ثم الدخول من جديد إذا استمرت المشكلة.', 'Try signing out and back in if the problem continues.'],
-       ['لا ترسل كلمة المرور أو رمز التحقق إلى أي شخص؛ نحن لا نطلبها منك أبدًا.', 'Never send your password or verification code to anyone; we never ask you for them.']]),
-
-    sec('متى تتصل بنا', 'When to contact us',
-      [['يمكنك التواصل مع الدعم داخل التطبيق في الحالات التالية:', 'You can contact in-app support for the following:']],
-      [['الإبلاغ عن سلوك مخالف أو مشكلة أمان.', 'Reporting abusive behavior or a safety problem.'],
-       ['طلبات الخصوصية أو حذف الحساب والبيانات.', 'Privacy requests or account and data deletion requests.'],
-       ['الاعتراض على قرار إشراف أو تقييد.', 'Appeals against a moderation or restriction decision.'],
-       ['شكاوى حقوق النشر أو الملكية الفكرية.', 'Copyright or intellectual property complaints.'],
-       ['مشاكل تقنية لا يستطيع استكشاف الأخطاء حلها.', 'Technical problems that troubleshooting does not resolve.']]),
-
-    sec('القناة الحالية', 'Current channel',
-      [['تستخدم Vibe حاليًا الدعم داخل التطبيق لجميع الطلبات المذكورة أعلاه. إذا أضاف المالك لاحقًا رابط دعم عامًا أو بريدًا إلكترونيًا، فيجب إضافته في هذا القسم قبل نشره للمستخدمين.',
-        'Vibe currently uses in-app support for all requests listed above. If the owner later configures a public support URL or email, it must be added in this section before it is announced to users.']]),
-
-    sec('التوقعات', 'Expectations',
-      [['نبذل جهدًا معقولًا للرد، لكننا لا نضمن وقت استجابة محددًا ولا دعمًا بشريًا على مدار الساعة. في حالات الخطر الفوري يجب التوجه إلى خدمات الطوارئ المحلية.',
-        'We make a reasonable effort to respond, but we do not guarantee a specific response time or round-the-clock human support. For immediate danger, contact local emergency services.']])
-  ]
-);
-
-/* ------------------------------- rendering ------------------------------- */
-
-function renderLegalSection(s) {
-  var out = '<section class="legal-section"><h2>' + E(T(s.h[0], s.h[1])) + '</h2>';
-  (s.p || []).forEach(function (pair) { out += '<p>' + E(T(pair[0], pair[1])) + '</p>'; });
-  if (s.u && s.u.length) {
-    out += '<ul>';
-    s.u.forEach(function (pair) { out += '<li>' + E(T(pair[0], pair[1])) + '</li>'; });
-    out += '</ul>';
-  }
-  (s.x || []).forEach(function (pair) { out += '<p class="legal-note">' + E(T(pair[0], pair[1])) + '</p>'; });
-  return out + '</section>';
-}
-
-function legalRoot() {
-  try {
-    if (typeof app !== 'undefined' && app && typeof app === 'object' &&
-        'innerHTML' in app && typeof app.appendChild === 'function') return app;
-  } catch (e) {}
-  try {
-    if (typeof document === 'undefined') return null;
-    return document.querySelector('#app') || document.querySelector('#root') ||
-           document.querySelector('main') || document.body;
-  } catch (e) { return null; }
-}
-
-function legalMount(html) {
-  var root = legalRoot();
-  if (root) { try { root.innerHTML = html; } catch (e) {} }
-  return root;
-}
-
-function legalBackTarget() {
-  try { if (cloud && cloud.user) return 'settings'; } catch (e) {}
-  try { if (typeof isAuthedFn === 'function') {} } catch (e) {}
-  return 'auth';
-}
-
-function legalRender(kind) {
-  legalInstall();
-  var current = '';
-  try { current = String(view || ''); } catch (e) {}
-  var key = String(kind || current || 'legal-index');
-  if (key.indexOf('legal-') !== 0) key = 'legal-' + key;
-  if (!LEGAL_PAGES[key]) key = 'legal-index';
-  var page = LEGAL_PAGES[key];
-  var back = legalBackTarget();
-
-  var chips = LEGAL_ORDER.map(function (k) {
-    var short = LEGAL_SHORT[k] || [k, k];
-    var active = (k === key);
-    return '<button type="button" class="legal-chip' + (active ? ' is-active' : '') +
-           '" data-legal="' + E(k) + '"' + (active ? ' aria-current="page"' : '') + '>' +
-           E(T(short[0], short[1])) + '</button>';
-  }).join('');
-
-  var body = page.s.map(renderLegalSection).join('');
-  var meta = T('النسخة', 'Version') + ' ' + LEGAL_POLICY_VERSION + ' · ' +
-             T('آخر تحديث', 'Last updated') + ' ' + LEGAL_LAST_UPDATED;
-
-  var html =
-    '<div class="legal-page" data-legal-page="' + E(key) + '">' +
-      '<nav class="legal-nav" aria-label="' + E(T('تنقل صفحات القانون والأمان', 'Legal and safety pages navigation')) + '">' +
-        '<button type="button" class="legal-back" data-legal-nav="' + E(back) + '">' +
-          E('&#8592; ' + T('رجوع', 'Back')) + '</button>' +
-        '<div class="legal-chips">' + chips + '</div>' +
-      '</nav>' +
-      '<main class="legal-main" id="legal-main">' +
-        '<header class="legal-head">' +
-          '<h1>' + E(T(page.t[0], page.t[1])) + '</h1>' +
-          '<p class="legal-meta" role="status">' + E(meta) + '</p>' +
-          (page.i ? '<p class="legal-intro">' + E(T(page.i[0], page.i[1])) + '</p>' : '') +
-        '</header>' +
-        body +
-      '</main>' +
-      '<footer class="legal-footer" role="note">' +
-        '<p>' + E(T('تصف هذه الصفحة سياسة المنتج الحالية، وهي ليست نصيحة قانونية محلية.',
-                    'This page describes the current product policy and is not local legal advice.')) + '</p>' +
-        '<p class="legal-meta">' + E('Vibe · ' + T('النسخة', 'Version') + ' ' + LEGAL_POLICY_VERSION + ' · ' + LEGAL_LAST_UPDATED) + '</p>' +
-      '</footer>' +
-    '</div>';
-
-  legalMount(html);
-  return html;
-}
-
-/* ------------------------------ navigation ------------------------------- */
-
-function legalNavigate(target, isPage) {
-  if (!target) return;
-  var key = String(target);
-  if (isPage && key.indexOf('legal-') !== 0) key = 'legal-' + key;
-  var sent = false;
-  try { if (typeof go === 'function') { go(key); sent = true; } } catch (e) {}
-  if (!sent) { try { view = key; } catch (e) {} }
-  if (key.indexOf('legal-') !== 0) return;
-  var root = legalRoot();
-  var shown = null;
-  try { shown = root && root.querySelector ? root.querySelector('[data-legal-page]') : null; } catch (e) {}
-  var shownKey = shown ? shown.getAttribute('data-legal-page') : null;
-  if (shownKey !== key) legalRender(key);
-}
-
-var legalDelegated = false;
-function legalInstall() {
-  if (legalDelegated) return;
-  if (typeof document === 'undefined' || !document.addEventListener) return;
-  legalDelegated = true;
-  document.addEventListener('click', function (ev) {
-    var el = ev.target;
-    if (!el) return;
-    if (typeof el.closest !== 'function') return;
-    var hit = el.closest('[data-legal-nav], [data-legal]');
-    if (!hit || hit.__legalBound) return;
-    var nav = hit.getAttribute('data-legal-nav');
-    var page = hit.getAttribute('data-legal');
-    if (!nav && !page) return;
-    ev.preventDefault();
-    legalNavigate(nav || page, !nav && !!page);
-  }, false);
-}
-
-/* ------------------------------- enhancers ------------------------------- */
-
-function legalBtn(label, target, isNav) {
-  var b = document.createElement('button');
-  b.type = 'button';
-  b.className = 'legal-chip';
-  b.textContent = label;
-  if (isNav) b.setAttribute('data-legal-nav', target);
-  else b.setAttribute('data-legal', target);
-  b.__legalBound = true;
-  b.addEventListener('click', function (ev) {
-    ev.preventDefault();
-    legalNavigate(target, !isNav);
-  });
-  return b;
-}
-
-function legalSettingsSection(root) {
-  var host = null;
-  try { host = root.querySelector('.settings-page'); } catch (e) {}
-  if (!host || !host.appendChild) return;
-  try { if (host.querySelector('[data-legal-section]')) return; } catch (e) {}
-
-  var section = document.createElement('section');
-  section.className = 'legal-settings-section';
-  section.setAttribute('data-legal-section', '1');
-
-  var h = document.createElement('h2');
-  h.textContent = T('القانون والأمان', 'Legal & Safety');
-  var lead = document.createElement('p');
-  lead.textContent = T(
-    'اقرأ الشروط وسياسة الخصوصية ومعايير المجتمع، وأدر طلبات حذف الحساب والبيانات.',
-    'Read the Terms, privacy policy and community standards, and manage account and data deletion requests.'
-  );
-
-  var nav = document.createElement('nav');
-  nav.setAttribute('aria-label', T('روابط القانون والأمان', 'Legal and safety links'));
-  nav.appendChild(legalBtn(T('مركز القانون والأمان', 'Legal & Safety Center'), 'legal-index', false));
-  nav.appendChild(legalBtn(T('شروط الاستخدام', 'Terms of Use'), 'legal-terms', false));
-  nav.appendChild(legalBtn(T('سياسة الخصوصية', 'Privacy Policy'), 'legal-privacy', false));
-  nav.appendChild(legalBtn(T('معايير المجتمع', 'Community Standards'), 'legal-community', false));
-  nav.appendChild(legalBtn(T('حذف الحساب والبيانات', 'Delete Account & Data'), 'legal-deletion', false));
-
-  section.appendChild(h);
-  section.appendChild(lead);
-  section.appendChild(nav);
-  host.appendChild(section);
-}
-
-function legalAuthFooter(root) {
-  var v = '';
-  try { v = String(view || ''); } catch (e) {}
-  var host = null;
-  try {
-    host = root.querySelector ? root.querySelector('.auth-page, .auth-screen, .auth-card, #auth, .cloud-ui, .cloud-root') : null;
-  } catch (e) {}
-  var looksAuth = /^(auth|login|signin|sign-in|signup|sign-up|welcome|cloud|)$/.test(v);
-  var hasPassword = false;
-  try { hasPassword = !!(root.querySelector && root.querySelector('input[type="password"]')); } catch (e) {}
-  if (!host && !(looksAuth || hasPassword)) return;
-
-  var target = host || root;
-  if (!target || !target.appendChild) return;
-  try { if (target.querySelector && target.querySelector('[data-legal-footer]')) return; } catch (e) {}
-
-  var footer = document.createElement('footer');
-  footer.className = 'legal-auth-footer';
-  footer.setAttribute('data-legal-footer', '1');
-
-  var nav = document.createElement('nav');
-  nav.setAttribute('aria-label', T('روابط القانون', 'Legal links'));
-  nav.appendChild(legalBtn(T('الشروط', 'Terms'), 'legal-terms', false));
-  nav.appendChild(legalBtn(T('الخصوصية', 'Privacy'), 'legal-privacy', false));
-  nav.appendChild(legalBtn(T('المجتمع', 'Community'), 'legal-community', false));
-  nav.appendChild(legalBtn(T('الدعم', 'Support'), 'legal-support', false));
-
-  var note = document.createElement('p');
-  note.className = 'legal-meta';
-  note.textContent = T(
-    'يمكن قراءة هذه الصفحات قبل إنشاء حساب.',
-    'These pages can be read before creating an account.'
-  );
-
-  footer.appendChild(nav);
-  footer.appendChild(note);
-  target.appendChild(footer);
-}
-
-function legalEnhance() {
-  try {
-    if (typeof document === 'undefined') return;
-    var root = legalRoot();
-    if (!root || !root.querySelector) return;
-    var v = '';
-    try { v = String(view || ''); } catch (e) {}
-    var user = null;
-    try { user = cloud && cloud.user ? cloud.user : null; } catch (e) {}
-    if (v === 'settings' && !root.querySelector('[data-legal-section]')) legalSettingsSection(root);
-    if (!user) legalAuthFooter(root);
-  } catch (e) {}
-}
-
-/* --------------------------- render interception -------------------------- */
-
-var legalBaseRender = (typeof render === 'function') ? render : null;
-
-(function legalWrapRender() {
-  if (typeof render !== 'function') return;
-  if (render.__vibeLegalWrapped) return;
-  var base = render;
-  var wrapped = function () {
-    var v = '';
-    try { v = String(view || ''); } catch (e) {}
-    if (v.indexOf('legal-') === 0) {
-      try { return legalRender(v); } catch (e) {}
-      return undefined;
-    }
-    var out = base.apply(this, arguments);
-    try { legalEnhance(); } catch (e) {}
-    return out;
-  };
-  wrapped.__vibeLegalWrapped = true;
-  try { render = wrapped; } catch (e) { /* render is immutable in this build */ }
-})();
-
-legalInstall();
-
-try {
-  if (typeof window !== 'undefined') {
-    window.__vibeLegal = {
-      version: LEGAL_POLICY_VERSION,
-      updated: LEGAL_LAST_UPDATED,
-      render: legalRender,
-      enhance: legalEnhance,
-      navigate: legalNavigate,
-      pages: LEGAL_ORDER.slice()
-    };
-  }
-} catch (e) {}
+/* legal-spec.js - Vibe Legal & Safety Center. Policy version 2026.09.
+   OWNER_INPUT_REQUIRED: public legal contact/entity, governing law & jurisdiction.
+   Policy text only. Functional in-app account deletion is a separate engineering task. */
+(function(){
+if(typeof render!=='function'||render.__legal)return;
+var LEGAL_POLICY_VERSION='2026.09',LEGAL_LAST_UPDATED='2026-09-19';
+var ES=String(lang||'').toLowerCase().indexOf('es')===0;
+function L(en,es){return ES?es:en;}
+function R(v){return esc(v==null?'':String(v));}
+var NAV=['legal-terms','legal-privacy','legal-community','legal-safety','legal-deletion','legal-copyright','legal-support'];
+var LABELS={
+'legal-index':L('Legal & Safety Center','Centro Legal y de Seguridad'),
+'legal-terms':L('Terms of Service','Términos de Servicio'),
+'legal-privacy':L('Privacy Policy','Política de Privacidad'),
+'legal-community':L('Community Guidelines','Normas de la Comunidad'),
+'legal-safety':L('Safety Center','Centro de Seguridad'),
+'legal-deletion':L('Data Deletion','Eliminación de Datos'),
+'legal-copyright':L('Copyright & IP','Derechos de Autor y PI'),
+'legal-support':L('Support','Soporte')};
+var PAGES={
+'legal-index':{intro:['Policies and safety resources for Vibe.','Políticas y recursos de seguridad de Vibe.'],sections:[
+ ['Policies','Políticas',null,[
+  ['Terms of Service - your account, content, and rules.','Términos de Servicio - tu cuenta, contenido y reglas.'],
+  ['Privacy Policy - data we collect and how it is used.','Política de Privacidad - datos que recopilamos y cómo se usan.'],
+  ['Community Guidelines - allowed and prohibited behavior.','Normas de la Comunidad - comportamiento permitido y prohibido.'],
+  ['Safety Center - reporting, blocking, emergencies, appeals.','Centro de Seguridad - reportes, bloqueo, emergencias, apelaciones.'],
+  ['Data Deletion - what deletion covers.','Eliminación de Datos - qué abarca la eliminación.'],
+  ['Copyright & IP - rights and complaint steps.','Derechos de Autor y PI - derechos y pasos de reclamación.'],
+  ['Support - troubleshooting and contacts.','Soporte - solución de problemas y contactos.']]],
+ ['Version','Versión',[['Policy version '+LEGAL_POLICY_VERSION+', last updated '+LEGAL_LAST_UPDATED+'.','Versión de la política '+LEGAL_POLICY_VERSION+', última actualización '+LEGAL_LAST_UPDATED+'.']]]]},
+'legal-terms':{intro:['These Terms govern your use of Vibe. Policy version '+LEGAL_POLICY_VERSION+'.','Estos Términos rigen tu uso de Vibe. Versión de la política '+LEGAL_POLICY_VERSION+'.'],sections:[
+ ['Your account','Tu cuenta',[
+  ['You must be old enough to use the service where you live, give accurate information, and keep your login secure.','Debes tener la edad suficiente para usar el servicio donde vives, dar información veraz y mantener tu inicio de sesión seguro.'],
+  ['You are responsible for activity under your account and for following these Terms and the Community Guidelines.','Eres responsable de la actividad de tu cuenta y de cumplir estos Términos y las Normas de la Comunidad.']]],
+ ['Your content','Tu contenido',[
+  ['You keep ownership of the content you create or upload (user-generated content).','Conservas la propiedad del contenido que creas o subes (contenido generado por el usuario).'],
+  ['You grant Vibe a limited, non-exclusive, worldwide, royalty-free license to host, store, display, and process your content only to operate and provide the service.','Otorgas a Vibe una licencia limitada, no exclusiva, mundial y libre de regalías para alojar, almacenar, mostrar y procesar tu contenido solo para operar y prestar el servicio.'],
+  ['This license ends when your content is deleted, except for limited retention described in the Privacy Policy.','Esta licencia termina cuando tu contenido se elimina, salvo la retención limitada descrita en la Política de Privacidad.']]],
+ ['Limited license to the service','Licencia limitada del servicio',[
+  ['We grant you a personal, non-transferable, revocable, limited license to use Vibe for personal, non-commercial purposes.','Te otorgamos una licencia personal, intransferible, revocable y limitada para usar Vibe con fines personales y no comerciales.'],
+  ['Do not copy, reverse engineer, scrape, resell, or misuse the service.','No copies, apliques ingeniería inversa, extraigas datos, revendas ni hagas mal uso del servicio.']]],
+ ['Prohibited conduct','Conducta prohibida',[
+  ['You must follow the Community Guidelines. Do not use the service unlawfully, harm others, or interfere with the service or its security.','Debes seguir las Normas de la Comunidad. No uses el servicio de forma ilegal, no dañes a otros ni interfieras con el servicio o su seguridad.']]],
+ ['Moderation and removal','Moderación y eliminación',[
+  ['We may review, restrict, or remove content or accounts that violate these Terms or the Community Guidelines, and may report unlawful content where required.','Podemos revisar, restringir o eliminar contenido o cuentas que infrinjan estos Términos o las Normas de la Comunidad, y reportar contenido ilegal cuando sea exigible.']]],
+ ['Third-party services','Servicios de terceros',[
+  ['Vibe uses third-party providers described in the Privacy Policy. Their terms may apply to their services, and we are not responsible for them.','Vibe usa proveedores terceros descritos en la Política de Privacidad. Sus términos pueden aplicar a sus servicios y no somos responsables de ellos.']]],
+ ['Availability','Disponibilidad',[
+  ['The service is provided "as is" and "as available". Features may change or be unavailable, and we do not promise uninterrupted or error-free operation.','El servicio se ofrece "tal cual" y "según disponibilidad". Las funciones pueden cambiar o no estar disponibles, y no prometemos un funcionamiento ininterrumpido ni libre de errores.']]],
+ ['Suspension and termination','Suspensión y terminación',[
+  ['We may suspend or terminate access for violations of these Terms or for legal or security reasons.','Podemos suspender o terminar el acceso por infracciones de estos Términos o por motivos legales o de seguridad.'],
+  ['You may stop using Vibe at any time and request deletion of your data.','Puedes dejar de usar Vibe en cualquier momento y solicitar la eliminación de tus datos.']]],
+ ['Governing law and jurisdiction','Ley aplicable y jurisdicción',[
+  ['OWNER_INPUT_REQUIRED: governing law and jurisdiction have not been decided and require an owner/legal decision. This page does not state one.','OWNER_INPUT_REQUIRED: la ley aplicable y la jurisdicción no se han decidido y requieren una decisión del propietario/legal. Esta página no especifica ninguna.']]],
+ ['Changes to these Terms','Cambios en estos Términos',[
+  ['We may update these Terms. Material changes are announced in the app with a new policy version. Continuing to use Vibe means you accept the updated Terms.','Podemos actualizar estos Términos. Los cambios importantes se anuncian en la app con una nueva versión de la política. Si sigues usando Vibe, aceptas los Términos actualizados.']]]]},
+'legal-privacy':{intro:['How Vibe handles your data. Policy version '+LEGAL_POLICY_VERSION+'.','Cómo trata Vibe tus datos. Versión de la política '+LEGAL_POLICY_VERSION+'.'],sections:[
+ ['Data we collect','Datos que recopilamos',[
+  ['Account: email and authentication identifiers.','Cuenta: correo electrónico e identificadores de autenticación.'],
+  ['Profile and interests: name, bio, photos, prompts, and the interests you choose.','Perfil e intereses: nombre, biografía, fotos, respuestas y los intereses que eliges.'],
+  ['Activity: chat messages, media uploads, notifications, reactions, likes, blocks, and reports.','Actividad: mensajes de chat, archivos multimedia, notificaciones, reacciones, me gusta, bloqueos y reportes.']]],
+ ['Service providers','Proveedores de servicios',[
+  ['Supabase provides authentication, database, storage, and realtime features.','Supabase proporciona autenticación, base de datos, almacenamiento y funciones en tiempo real.'],
+  ['Resend sends transactional email, such as account and notification emails.','Resend envía correo transaccional, como correos de cuenta y notificaciones.'],
+  ['Spotify is used only if you connect your account, to show listening activity. It is not used unless you connect it.','Spotify se usa solo si conectas tu cuenta, para mostrar actividad de escucha. No se usa a menos que lo conectes.']]],
+ ['Advertising and tracking','Publicidad y seguimiento',[
+  ['Current code shows no advertising and no cross-company tracking. We do not sell personal data.','El código actual no muestra publicidad ni seguimiento entre empresas. No vendemos datos personales.']]],
+ ['Retention and deletion summary','Resumen de retención y eliminación',[
+  ['We keep data while your account is active and as needed to operate the service, handle reports, and meet legal obligations.','Conservamos los datos mientras tu cuenta está activa y según sea necesario para operar el servicio, gestionar reportes y cumplir obligaciones legales.'],
+  ['Deleting your account removes your account and profile content. Some records, such as abuse, security, or log records, may be retained or anonymized as required.','Eliminar tu cuenta borra tu cuenta y el contenido de tu perfil. Algunos registros, como los de abuso, seguridad o técnicos, pueden conservarse o anonimizarse según sea necesario.']]],
+ ['Your choices','Tus opciones',[
+  ['You can edit your profile, disconnect Spotify, and delete your account using in-app controls.','Puedes editar tu perfil, desconectar Spotify y eliminar tu cuenta con los controles de la app.']]],
+ ['Compliance note','Nota de cumplimiento',[
+  ['This policy describes current data practices. It is not a claim of GDPR, CCPA, or any other regulatory compliance.','Esta política describe las prácticas actuales de datos. No es una declaración de cumplimiento del GDPR, CCPA ni de ninguna otra normativa.']]],
+ ['Legal contact','Contacto legal',[
+  ['OWNER_INPUT_REQUIRED: a public legal contact and the responsible legal entity have not been configured yet. Use in-app support for now.','OWNER_INPUT_REQUIRED: aún no se han configurado un contacto legal público ni la entidad legal responsable. Por ahora usa el soporte dentro de la app.']]]]},
+'legal-community':{intro:['These guidelines explain the behavior we expect. In-app report and block tools are the fastest way to flag problems.','Estas normas explican el comportamiento que esperamos. Las herramientas de reportar y bloquear dentro de la app son la forma más rápida de señalar problemas.'],sections:[
+ ['Not allowed','No permitido',null,[
+  ['Harassment, bullying, or targeted abuse.','Acoso, intimidación o abuso dirigido.'],
+  ['Threats of violence or incitement to harm.','Amenazas de violencia o incitación a dañar.'],
+  ['Hate speech or attacks based on protected characteristics.','Discurso de odio o ataques por características protegidas.'],
+  ['Sexual exploitation, or any content that endangers minors.','Explotación sexual o cualquier contenido que ponga en peligro a menores.'],
+  ['Spam, scams, phishing, or fraud.','Spam, estafas, phishing o fraude.'],
+  ['Impersonation of people or organizations.','Suplantación de personas u organizaciones.'],
+  ['Doxxing or sharing private information without consent.','Doxxing o compartir información privada sin consentimiento.'],
+  ['Illegal content or activity.','Contenido o actividad ilegal.'],
+  ['Infringing copyright or other intellectual property.','Infringir derechos de autor u otra propiedad intelectual.']]],
+ ['How to respond','Cómo actuar',[
+  ['Use report to flag content and block to stop contact. Reports help us review and act.','Usa reportar para señalar contenido y bloquear para detener el contacto. Los reportes nos ayudan a revisar y actuar.']]],
+ ['Enforcement','Aplicación',[
+  ['Content or accounts that break these guidelines may be restricted or removed, as described in the Terms.','El contenido o las cuentas que incumplan estas normas pueden restringirse o eliminarse, según los Términos.']]]]},
+'legal-safety':{intro:['Safety tools and what to do in urgent situations.','Herramientas de seguridad y qué hacer en situaciones urgentes.'],sections:[
+ ['Report and block','Reportar y bloquear',[
+  ['Use report to send a concern to our review process, and block to prevent further contact from a user.','Usa reportar para enviar una preocupación a nuestro proceso de revisión, y bloquear para impedir más contacto de un usuario.']]],
+ ['Review times','Tiempos de revisión',[
+  ['We do not promise a specific moderation response time (no SLA). Reports are reviewed as capacity allows.','No prometemos un tiempo de respuesta de moderación específico (sin SLA). Los reportes se revisan según la capacidad disponible.']]],
+ ['Emergencies','Emergencias',[
+  ['If you or someone else is in immediate danger, contact your local emergency services right away. Vibe is not an emergency service.','Si tú o alguien más está en peligro inmediato, contacta de inmediato a los servicios de emergencia locales. Vibe no es un servicio de emergencia.']]],
+ ['Appeals','Apelaciones',[
+  ['If you believe a moderation decision was wrong, submit an appeal through in-app support.','Si crees que una decisión de moderación fue incorrecta, envía una apelación mediante el soporte dentro de la app.']]]]},
+'legal-deletion':{intro:['This page explains the scope of deletion. Functional in-app account deletion must be delivered as a separate engineering task; this page is policy only and does not itself delete data.','Esta página explica el alcance de la eliminación. La eliminación funcional de la cuenta dentro de la app debe entregarse como tarea de ingeniería aparte; esta página es solo informativa y no elimina datos por sí misma.'],sections:[
+ ['How to delete','Cómo eliminar',[
+  ['Use the in-app account deletion control in Settings when it is available. You can also contact in-app support.','Usa el control de eliminación de cuenta en Ajustes cuando esté disponible. También puedes contactar al soporte dentro de la app.']]],
+ ['What deletion covers','Qué abarca la eliminación',null,[
+  ['Account and profile.','Cuenta y perfil.'],
+  ['Interests.','Intereses.'],
+  ['Photos and prompts.','Fotos y respuestas.'],
+  ['Uploaded media.','Archivos multimedia subidos.'],
+  ['Messages.','Mensajes.'],
+  ['Other user-generated content.','Otro contenido generado por el usuario.']]],
+ ['Caveats','Advertencias',[
+  ['Records tied to abuse reports, security, or legal obligations may be retained or anonymized as required by law.','Los registros vinculados a reportes de abuso, seguridad u obligaciones legales pueden conservarse o anonimizarse según lo exija la ley.'],
+  ['Copies held by other users, for example messages they saved, or by third-party providers may not be under our control.','Las copias en poder de otros usuarios, por ejemplo mensajes que guardaron, o de proveedores terceros pueden no estar bajo nuestro control.']]]]},
+'legal-copyright':{intro:['How to report copyright or intellectual property concerns.','Cómo reportar asuntos de derechos de autor o propiedad intelectual.'],sections:[
+ ['Your rights','Tus derechos',[
+  ['Only upload content you own or are allowed to use. You must have the rights to everything you post.','Sube solo contenido que te pertenezca o que puedas usar. Debes tener los derechos de todo lo que publicas.']]],
+ ['Filing a complaint','Presentar una reclamación',[
+  ['To report infringement, contact in-app support and include:','Para reportar una infracción, contacta al soporte dentro de la app e incluye:']],[
+  ['Identification of the work you own.','Identificación de la obra que te pertenece.'],
+  ['The location (link or details) of the infringing content.','La ubicación (enlace o detalles) del contenido infractor.'],
+  ['Your name and contact information.','Tu nombre e información de contacto.'],
+  ['A statement that you have a good-faith belief the use is unauthorized.','Una declaración de que crees de buena fe que el uso no está autorizado.'],
+  ['A statement that the information is accurate and that you are the owner or authorized to act.','Una declaración de que la información es exacta y que eres el titular o estás autorizado a actuar.'],
+  ['Your signature, electronic is fine.','Tu firma, la electrónica es válida.']]],
+ ['Contact','Contacto',[
+  ['In-app support is the current channel for copyright complaints. OWNER_INPUT_REQUIRED: a public copyright/legal contact has not been configured.','El soporte dentro de la app es el canal actual para reclamaciones de derechos de autor. OWNER_INPUT_REQUIRED: no se ha configurado un contacto público de derechos de autor/legal.']]]]},
+'legal-support':{intro:['Help with common issues and where to reach us in the app.','Ayuda con problemas comunes y cómo contactarnos en la app.'],sections:[
+ ['Troubleshooting','Solución de problemas',[
+  ['For sign-in, loading, or notification issues, restart the app, check your connection, and try again. Include device and app version when you contact us.','Para problemas de inicio de sesión, carga o notificaciones, reinicia la app, revisa tu conexión e inténtalo de nuevo. Incluye el dispositivo y la versión de la app cuando nos contactes.']]],
+ ['Reporting and appeals','Reportes y apelaciones',[
+  ['Use report and block for content, and in-app support for appeals or account issues.','Usa reportar y bloquear para contenido, y el soporte dentro de la app para apelaciones o problemas de cuenta.']]],
+ ['Privacy and deletion','Privacidad y eliminación',[
+  ['For privacy questions or deletion help, use in-app support. See the Privacy Policy and Data Deletion pages.','Para preguntas de privacidad o ayuda con la eliminación, usa el soporte dentro de la app. Consulta las páginas de Privacidad y Eliminación de Datos.']]],
+ ['Copyright and IP','Derechos de autor y PI',[
+  ['For intellectual property concerns, use in-app support and the Copyright page checklist.','Para asuntos de propiedad intelectual, usa el soporte dentro de la app y la lista de la página de Derechos de Autor.']]],
+ ['Contact','Contacto',[
+  ['OWNER_INPUT_REQUIRED: no public support email, company name, or address is shown here because none has been provided. In-app support is the current channel.','OWNER_INPUT_REQUIRED: no se muestra aquí un correo de soporte, nombre de empresa ni dirección porque no se han proporcionado. El soporte dentro de la app es el canal actual.']]]]}};
+function isAuthed(){try{return !!(typeof app!=='undefined'&&app&&(app.session||app.user||app.currentUser||(app.auth&&app.auth.user)));}catch(_){return false;}}
+function sections(list){
+var h='',i,j,s,ps,ls;
+for(i=0;i<list.length;i++){s=list[i];ps=s[2]||[];ls=s[3]||[];
+h+='<section class="legal-sec"><h2>'+R(L(s[0],s[1]))+'</h2>';
+for(j=0;j<ps.length;j++)h+='<p>'+R(L(ps[j][0],ps[j][1]))+'</p>';
+if(ls.length){h+='<ul>';for(j=0;j<ls.length;j++)h+='<li>'+R(L(ls[j][0],ls[j][1]))+'</li>';h+='</ul>';}
+h+='</section>';}
+return h;}
+function legalNav(cur){
+var h='<nav class="legal-nav" aria-label="'+R(L('Legal pages','Páginas legales'))+'"><ul>',i;
+for(i=0;i<NAV.length;i++){if(NAV[i]===cur)continue;h+='<li><button type="button" data-legal-go="'+NAV[i]+'">'+R(LABELS[NAV[i]])+'</button></li>';}
+return h+'</ul></nav>';}
+function legalPage(id){
+var p=PAGES[id]||PAGES['legal-index'],back=isAuthed()?'settings':'auth';
+var h='<main class="legal-center" role="main" aria-labelledby="legal-title">';
+h+='<header class="legal-head"><button type="button" data-legal-go="'+back+'" aria-label="'+R(L('Back','Volver'))+'">'+R(L('Back','Volver'))+'</button>';
+h+='<h1 id="legal-title" tabindex="-1">'+R(LABELS[id]||LABELS['legal-index'])+'</h1>';
+h+='<p class="legal-meta">'+R(L('Policy','Política'))+' '+R(LEGAL_POLICY_VERSION)+' &middot; '+R(L('Updated','Actualizado'))+' '+R(LEGAL_LAST_UPDATED)+'</p></header>';
+h+='<p class="legal-intro">'+R(L(p.intro[0],p.intro[1]))+'</p>';
+return h+legalNav(id)+sections(p.sections||[])+'</main>';}
+function legalCard(){
+var h='<section class="legal-center legal-card" aria-labelledby="legal-center-title"><h2 id="legal-center-title">'+R(L('Legal & Safety','Legal y Seguridad'))+'</h2>';
+h+='<p>'+R(L('Policy version','Versión de la política'))+' '+R(LEGAL_POLICY_VERSION)+'</p><div class="legal-actions">';
+for(var i=0;i<NAV.length;i++)h+='<button type="button" data-legal-go="'+NAV[i]+'">'+R(LABELS[NAV[i]])+'</button>';
+return h+'</div></section>';}
+function authFooter(){
+var ids=['legal-terms','legal-privacy','legal-community','legal-support'];
+var h='<footer class="legal-auth-footer" aria-label="'+R(L('Legal links','Enlaces legales'))+'"><nav><ul>';
+for(var i=0;i<ids.length;i++)h+='<li><button type="button" data-legal-go="'+ids[i]+'">'+R(LABELS[ids[i]])+'</button></li>';
+return h+'</ul></nav><p>'+R(L('Policy version','Versión de la política'))+' '+R(LEGAL_POLICY_VERSION)+'</p></footer>';}
+function enhance(v,out){
+if(/settings/i.test(v))return out+legalCard();
+if(!isAuthed()&&/auth|login|signin|welcome|landing/i.test(v))return out+authFooter();
+return out;}
+function enhanceDom(v){
+if(typeof document==='undefined')return;
+var run=function(){var c;
+if(/settings/i.test(v)){c=document.querySelector('[data-view="settings"],#settings,.settings');if(c)c.insertAdjacentHTML('beforeend',legalCard());}
+else if(!isAuthed()&&/auth|login|signin|welcome|landing/i.test(v)){c=document.querySelector('[data-view="auth"],#auth,.auth-screen');if(c)c.insertAdjacentHTML('beforeend',authFooter());}};
+if(typeof Promise!=='undefined')Promise.resolve().then(run);else setTimeout(run,0);}
+var base=render;
+render=function(view){
+var v=String(view==null?'':view);
+if(v.indexOf('legal-')===0)return legalPage(v);
+var out=base.apply(this,arguments);
+if(typeof out==='string')return enhance(v,out);
+enhanceDom(v);return out;};
+render.__legal=true;
+if(typeof document!=='undefined')document.addEventListener('click',function(e){
+var el=e.target&&e.target.closest?e.target.closest('[data-legal-go]'):null;
+if(!el)return;e.preventDefault();
+var id=el.getAttribute('data-legal-go');
+if(typeof go==='function')go(id);
+setTimeout(function(){var h=document.getElementById('legal-title');if(h){try{h.focus();}catch(_){}}},0);});})();
