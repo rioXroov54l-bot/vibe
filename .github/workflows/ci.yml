@@ -32,3 +32,6 @@ jobs:
 
       - name: Run cinema tests
         run: npm run test:cinema
+
+      - name: Release preflight
+        run: npm run preflight
