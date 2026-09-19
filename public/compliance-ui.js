@@ -1,285 +1,126 @@
-/* Vibe App Store readiness: in-app account deletion + data export.
-   Runs inside the app IIFE after legal-spec.js. No inline JS / style attrs. */
-var complianceUiState = { status: null, loading: false, error: '' };
-var __complianceBooted = false;
-var __complianceRerendering = false;
+/* Vibe App Store readiness: account deletion + data export UI.
+   Bundled inside the app IIFE after legal-spec.js. */
+var complianceUiState={status:null,loading:false,error:''};
 
-function complianceSignedIn() {
-  try {
-    if (typeof cloud === 'undefined' || !cloud) return false;
-    if (typeof cloud.isSignedIn === 'function') return !!cloud.isSignedIn();
-    if (typeof cloud.getUser === 'function') return !!cloud.getUser();
-    if (cloud.session) return true;
-    if (cloud.user) return true;
-  } catch (e) {}
-  return false;
-}
-
-function complianceFlags(d) {
-  d = d || {};
-  return {
-    account_deletion_configured: d.account_deletion_configured === true,
-    data_export_configured: d.data_export_configured === true,
-    privacy_policy_configured: d.privacy_policy_configured === true
-  };
-}
-
-/* Cache only safe booleans. Never surface internal config values. */
-async function complianceLoadStatus(force) {
-  if (complianceUiState.loading) return complianceUiState.status;
-  if (complianceUiState.status && !force) return complianceUiState.status;
-  complianceUiState.loading = true;
-  complianceUiState.error = '';
-  try {
-    var r = await cloudAPI('compliance-status');
-    var d = (r && r.data) || r || {};
-    complianceUiState.status = complianceFlags(d);
-  } catch (e) {
-    complianceUiState.error = 'unavailable';
-    complianceUiState.status = complianceFlags({});
-  } finally {
-    complianceUiState.loading = false;
-  }
+async function complianceLoadStatus(force){
+  if(complianceUiState.loading)return complianceUiState.status;
+  if(complianceUiState.status&&!force)return complianceUiState.status;
+  complianceUiState.loading=true;complianceUiState.error='';
+  try{
+    const r=await cloudAPI('compliance-status');
+    complianceUiState.status={
+      account_deletion_configured:r?.account_deletion_configured===true,
+      moderation_blocklist_configured:r?.moderation_blocklist_configured===true,
+      reciprocal_block_enforcement_configured:r?.reciprocal_block_enforcement_configured===true
+    };
+  }catch(e){
+    complianceUiState.error='unavailable';
+    complianceUiState.status={account_deletion_configured:false,moderation_blocklist_configured:false,reciprocal_block_enforcement_configured:false};
+  }finally{complianceUiState.loading=false}
   return complianceUiState.status;
 }
 
-async function complianceExportData() {
-  try {
-    if (typeof toast === 'function') toast('Preparing your data export\u2026');
-    var r = await cloudAPI('data-export');
-    var payload = (r && r.data) || r || {};
-    var text = JSON.stringify(payload, null, 2);
-    var blob = new Blob([text], { type: 'application/json' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'vibe-data-export-' + new Date().toISOString().slice(0, 10) + '.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(function () { try { URL.revokeObjectURL(url); } catch (e) {} }, 0);
-    if (typeof toast === 'function') toast('Your data export has downloaded.');
-  } catch (e) {
-    if (typeof toast === 'function') toast('Could not prepare your data export. Please try again.');
-  }
+async function complianceExportData(){
+  try{
+    toast(t('جارٍ تجهيز نسخة بياناتك…','Preparing your data export…'));
+    const data=await cloudAPI('data-export');
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download='vibe-data-export-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),0);
+    toast(t('تم تنزيل نسخة بياناتك.','Your data export was downloaded.'));
+  }catch(e){toast(t('تعذر تجهيز نسخة البيانات الآن.','Could not prepare your data export right now.'))}
 }
 
-function complianceErrorText(err) {
-  var raw = '';
-  try { raw = String((err && (err.code || err.error || err.message)) || ''); } catch (e) {}
-  if (raw.toLowerCase().indexOf('account_deletion_not_configured') !== -1) {
-    return 'Account deletion is unavailable in this build. Secure deletion must be configured before App Store release. Your account has not been deleted.';
-  }
-  return 'We could not complete account deletion right now. Your account has not been deleted. Please try again later.';
+function complianceDeletionError(e){
+  const code=String(e?.code||e?.error||e?.message||'');
+  if(code.includes('account_deletion_not_configured'))return t(
+    'الحذف الآمن غير مهيأ في هذه النسخة. لم يتم حذف حسابك.',
+    'Secure account deletion is not configured in this build. Your account was not deleted.'
+  );
+  return t('تعذر حذف الحساب الآن. لم يتم حذف حسابك.','Account deletion could not be completed. Your account was not deleted.');
 }
 
-function complianceCloseSheet(sheet) {
-  try {
-    if (sheet && sheet.remove) { sheet.remove(); return; }
-    var d = document.querySelector('[role="dialog"], .sheet');
-    if (d && d.remove) d.remove();
-  } catch (e) {}
-}
-
-function complianceOpenDelete() {
-  var wrap = document.createElement('div');
-  wrap.className = 'compliance-delete';
-
-  var p1 = document.createElement('p');
-  p1.textContent = 'Deleting your account permanently removes your account, profile, interests, photos, prompts, settings, and messages, together with their associated media.';
-  var p2 = document.createElement('p');
-  p2.textContent = 'Limited anonymized safety and legal records may be retained where required by law.';
-
-  var form = document.createElement('form');
-  form.className = 'compliance-delete-form';
-  var label = document.createElement('label');
-  label.setAttribute('for', 'compliance-delete-confirm');
-  label.textContent = 'Type DELETE to confirm';
-  var input = document.createElement('input');
-  input.type = 'text';
-  input.id = 'compliance-delete-confirm';
-  input.name = 'confirm';
-  input.required = true;
-  input.setAttribute('autocomplete', 'off');
-  input.setAttribute('placeholder', 'DELETE');
-  var msg = document.createElement('p');
-  msg.className = 'compliance-error';
-  msg.setAttribute('role', 'alert');
-  var submit = document.createElement('button');
-  submit.type = 'submit';
-  submit.className = 'destructive';
-  submit.textContent = 'Permanently delete my account';
-
-  form.appendChild(label);
-  form.appendChild(input);
-  form.appendChild(submit);
-  form.appendChild(msg);
-  wrap.appendChild(p1);
-  wrap.appendChild(p2);
-  wrap.appendChild(form);
-
-  var sheet = null;
-  try { sheet = sheetShell('Delete account', wrap); } catch (e) { sheet = wrap; }
-  return sheet;
-}
-
-function complianceOpenPolicy() {
-  try {
-    view = 'legal-deletion';
-    render();
-    return;
-  } catch (e) {}
-  try { go('legal-deletion'); } catch (e2) {}
-}
-
-function complianceSectionHtml() {
-  var s = complianceUiState.status || {};
-  var ok = s.account_deletion_configured === true;
-  var notice = '';
-  if (complianceUiState.loading) notice = 'Checking secure deletion availability\u2026';
-  else if (!ok) notice = 'Secure deletion is not available in this build.';
-  return [
-    '<section class="card privacy-card compliance-card" aria-labelledby="compliance-dp-heading">',
-    '<h2 id="compliance-dp-heading">Data &amp; privacy</h2>',
-    '<p>Download a copy of your data, review the deletion policy, or delete your account.</p>',
-    '<div class="actions">',
-    '<button type="button" data-compliance="export">Download my data</button>',
-    '<button type="button" data-compliance="policy">Account &amp; Data Deletion Policy</button>',
-    '<button type="button" class="destructive" data-compliance="delete"' + (ok ? '' : ' disabled') + '>Delete my account</button>',
-    '</div>',
-    notice ? '<p class="compliance-notice" role="status">' + esc(notice) + '</p>' : '',
-    '</section>'
-  ].join('');
-}
-
-var __complianceBaseAccountPage = (typeof accountPage === 'function') ? accountPage : null;
-
-function complianceAccountPage() {
-  var base = '';
-  try {
-    if (__complianceBaseAccountPage) {
-      var b = __complianceBaseAccountPage.apply(this, arguments);
-      if (typeof b === 'string') base = b;
-    }
-  } catch (e) {}
-  return '<section class="account-page compliance-account">' +
-    '<h1>Account management</h1>' +
-    complianceSectionHtml() +
-    '</section>' + base;
-}
-
-function complianceBtn(label, kind) {
-  var b = document.createElement('button');
-  b.type = 'button';
-  b.textContent = label;
-  b.setAttribute('data-compliance', kind);
-  return b;
-}
-
-function complianceSettingsCard() {
-  var card = document.createElement('section');
-  card.className = 'card privacy-card compliance-card';
-  var h = document.createElement('h2');
-  h.textContent = 'Privacy & Account';
-  var p = document.createElement('p');
-  p.textContent = 'Manage your account, download your data, or review our privacy policy.';
-  var actions = document.createElement('div');
-  actions.className = 'actions';
-  actions.appendChild(complianceBtn('Manage account', 'manage'));
-  actions.appendChild(complianceBtn('Download my data', 'export'));
-  actions.appendChild(complianceBtn('Privacy Policy', 'privacy'));
-  card.appendChild(h);
-  card.appendChild(p);
-  card.appendChild(actions);
-  return card;
-}
-
-function complianceAugmentDom() {
-  var acc = document.querySelector('.compliance-account, .account-page');
-  if (acc && !acc.getAttribute('data-compliance-ready')) {
-    acc.setAttribute('data-compliance-ready', '1');
-    if (!acc.querySelector('[data-compliance="delete"]')) {
-      try { acc.insertAdjacentHTML('beforeend', complianceSectionHtml()); } catch (e) {}
-    }
-  }
-  var set = document.querySelector('.settings-page');
-  if (set && !set.getAttribute('data-compliance-ready')) {
-    set.setAttribute('data-compliance-ready', '1');
-    try { set.appendChild(complianceSettingsCard()); } catch (e) {}
-  }
-}
-
-/* Bind delegated handlers once (safe helper, no inline JS). */
-if (typeof on === 'function') {
-  on(function (e) {
-    var el = e && e.target;
-    if (!el || !el.closest) return;
-    var hit = el.closest('[data-compliance]');
-    if (!hit) return;
-    var kind = hit.getAttribute('data-compliance');
-    if (kind === 'export') { e.preventDefault(); complianceExportData(); }
-    else if (kind === 'policy' || kind === 'privacy') { e.preventDefault(); complianceOpenPolicy(); }
-    else if (kind === 'delete') { e.preventDefault(); complianceOpenDelete(); }
-    else if (kind === 'manage') {
-      e.preventDefault();
-      try { go('account'); } catch (e2) { try { view = 'account'; render(); } catch (e3) {} }
-    }
-  }, 'click');
-
-  on(async function (e) {
-    var f = e && e.target;
-    if (!f || !f.classList || !f.classList.contains('compliance-delete-form')) return;
+function complianceOpenDelete(){
+  sheetShell(()=>`<div class="modal-title"><h2>${t('حذف الحساب نهائيًا','Permanently delete account')}</h2></div>
+  <p>${t('سيؤدي الحذف إلى إزالة حسابك وملفك واهتماماتك وصورك وبرومبتاتك وإعداداتك ورسائلك والوسائط المرتبطة بحسابك. قد تُحتفظ بسجلات أمان محدودة بعد إزالة هويتك إذا لزم ذلك لمكافحة الإساءة أو لالتزام قانوني.','Deletion removes your account, profile, interests, photos, prompts, settings, messages and media associated with your account. Limited safety records may be retained after removing your identity where needed for abuse prevention or a legal obligation.')}</p>
+  <p class="notice">${t('هذا الإجراء لا يمكن التراجع عنه. اكتب DELETE بالإنجليزية للتأكيد.','This action cannot be undone. Type DELETE to confirm.')}</p>
+  <form ${on(async e=>{
     e.preventDefault();
-    var input = f.querySelector('input[name="confirm"]');
-    var msg = f.querySelector('.compliance-error');
-    var submit = f.querySelector('button[type="submit"]');
-    var value = input ? input.value.trim() : '';
-    if (value !== 'DELETE') {
-      if (msg) msg.textContent = 'Please type DELETE exactly to confirm.';
-      return;
+    const input=e.target.confirm,button=e.target.querySelector('button[type="submit"]'),status=e.target.querySelector('[role="status"]');
+    const value=String(input?.value||'').trim();
+    if(value!=='DELETE'){if(status)status.textContent=t('اكتب DELETE تمامًا للتأكيد.','Type DELETE exactly to confirm.');return}
+    if(button)button.disabled=true;if(status)status.textContent=t('جارٍ حذف الحساب…','Deleting account…');
+    try{
+      await cloudAPI('account-delete','POST',{confirm:'DELETE'});
+      document.querySelector('#create')?.close();
+      toast(t('تم حذف حسابك.','Your account was deleted.'));
+      location.assign('/');
+    }catch(err){
+      if(button)button.disabled=false;
+      if(status)status.textContent=complianceDeletionError(err);
     }
-    if (msg) msg.textContent = 'Deleting your account\u2026';
-    if (submit) submit.disabled = true;
-    try {
-      await cloudAPI('account-delete', 'POST', { confirm: value });
-      complianceCloseSheet(f.closest('[role="dialog"], .sheet'));
-      if (typeof toast === 'function') toast('Your account has been deleted.');
-      try { location.assign('/'); } catch (e2) {}
-    } catch (err) {
-      if (submit) submit.disabled = false;
-      if (msg) msg.textContent = complianceErrorText(err);
-    }
-  }, 'submit');
+  },'submit')}>
+    <label>${t('تأكيد الحذف','Deletion confirmation')}<input name="confirm" required autocomplete="off" placeholder="DELETE"></label>
+    <p role="status" class="small muted"></p>
+    <button type="submit" class="control leave">${t('حذف حسابي نهائيًا','Permanently delete my account')}</button>
+  </form>
+  <button class="chip" ${on(()=>{document.querySelector('#create')?.close();view='legal-deletion';render()})}>${t('قراءة سياسة حذف الحساب والبيانات','Read Account & Data Deletion Policy')}</button>`);
 }
 
-/* Route hook: load status once, then re-render. */
-function complianceOnRoute() {
-  try {
-    if (!complianceSignedIn()) return;
-    if (view !== 'account' && view !== 'settings') return;
-    complianceAugmentDom();
-    if (!complianceUiState.status && !complianceUiState.loading && !__complianceBooted) {
-      __complianceBooted = true;
-      complianceLoadStatus().then(function () {
-        complianceAugmentDom();
-        try { if (__complianceBaseRender) __complianceBaseRender(); } catch (e) {}
-      });
-    }
-  } catch (e) {}
+function complianceAccountMarkup(){
+  const configured=complianceUiState.status?.account_deletion_configured===true;
+  return `<section class="policy-page compliance-account-page">
+    <h1>${t('إدارة الحساب والبيانات','Account & data management')}</h1>
+    <p>${t('تحكم في حسابك ونسخة بياناتك وحذف الحساب من داخل Vibe.','Control your account, download your data, and delete your account from inside Vibe.')}</p>
+    <article class="aside-card">
+      <h2>${t('بياناتي','My data')}</h2>
+      <button class="chip" ${on(complianceExportData)}>${t('تنزيل نسخة من بياناتي','Download my data')}</button>
+      <button class="chip" ${on(()=>{view='legal-privacy';render()})}>${t('سياسة الخصوصية','Privacy Policy')}</button>
+      <button class="chip" ${on(()=>{view='legal-deletion';render()})}>${t('سياسة حذف الحساب والبيانات','Account & Data Deletion Policy')}</button>
+    </article>
+    <article class="aside-card">
+      <h2>${t('الأمان والحساب','Account security')}</h2>
+      <button class="chip" ${on(()=>cloudPassword())}>${t('تغيير كلمة المرور','Change password')}</button>
+      <button class="chip" ${on(()=>cloudLogout())}>${t('تسجيل الخروج','Sign out')}</button>
+    </article>
+    <article class="aside-card danger-zone">
+      <h2>${t('منطقة حساسة','Danger zone')}</h2>
+      ${complianceUiState.loading?`<p class="muted">${t('جارٍ التحقق من خدمة الحذف…','Checking secure deletion…')}</p>`:''}
+      ${!complianceUiState.loading&&!configured?`<p class="notice">${t('الحذف الآمن غير متاح في هذه النسخة حتى يكتمل إعداد الخادم. لا يتم اعتبار إرسال طلب دعم حذفًا للحساب.','Secure deletion is unavailable in this build until server configuration is completed. A support request is not treated as account deletion.')}</p>`:''}
+      <button class="control leave" ${configured?'': 'disabled'} ${on(complianceOpenDelete)}>${t('حذف حسابي نهائيًا','Permanently delete my account')}</button>
+    </article>
+  </section>`;
 }
 
-var __complianceBaseRender = (typeof render === 'function') ? render : null;
-
-try {
-  accountPage = complianceAccountPage;
-  if (__complianceBaseRender) {
-    render = function () {
-      var out = __complianceBaseRender.apply(this, arguments);
-      if (!__complianceRerendering) {
-        __complianceRerendering = true;
-        try { complianceOnRoute(); } finally { __complianceRerendering = false; }
-      }
-      return out;
-    };
+var complianceBaseAccountPage=accountPage;
+accountPage=function(){
+  if(!cloud.user)return cloudGate();
+  if(!complianceUiState.status&&!complianceUiState.loading){
+    complianceLoadStatus().then(()=>{if(view==='account')render()});
   }
-} catch (e) {}
+  return complianceAccountMarkup();
+};
+
+var complianceBaseSettingsPage=settingsPage;
+settingsPage=function(){
+  const html=complianceBaseSettingsPage();
+  return html.replace('</section>',`<article class="aside-card compliance-settings">
+    <h2>${t('الخصوصية والحساب','Privacy & account')}</h2>
+    <div class="controls">
+      <button class="chip" ${on(()=>go('account'))}>${t('إدارة الحساب','Manage account')}</button>
+      <button class="chip" ${on(complianceExportData)}>${t('تنزيل بياناتي','Download my data')}</button>
+      <button class="chip" ${on(()=>{view='legal-privacy';render()})}>${t('سياسة الخصوصية','Privacy Policy')}</button>
+    </div>
+  </article></section>`);
+};
+
+var complianceBaseRender=render;
+render=function(){
+  const out=complianceBaseRender.apply(this,arguments);
+  if(cloud?.user&&(view==='settings'||view==='account')&&!complianceUiState.status&&!complianceUiState.loading){
+    complianceLoadStatus().then(()=>{if(view==='settings'||view==='account')render()});
+  }
+  return out;
+};
