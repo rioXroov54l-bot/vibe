@@ -6,7 +6,8 @@
     "build": "node scripts/build.mjs",
     "test": "node tests/security.cjs && node tests/support.mjs && node tests/video-preview.mjs && node tests/master-spec.mjs && node tests/admin-console.mjs",
     "test:cinema": "node scripts/build.mjs && node tests/cinema.mjs",
-    "preflight": "node scripts/release-preflight.mjs"
+    "preflight": "node scripts/release-preflight.mjs",
+    "appstore:check": "node tests/appstore-compliance.mjs"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.10",
