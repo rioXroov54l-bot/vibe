@@ -51,7 +51,9 @@ assert(authUi.includes("t('إرسال الرمز','Send code')"));
 for (const marker of ['SPOTIFY_CLIENT_ID','SPOTIFY_CLIENT_SECRET','AES-GCM','__Host-vibe-spotify-refresh','user-top-read','/v1/me/top/artists']) assert(spotifyServer.includes(marker));
 assert(spotifyServer.includes('spotifyConfig(env)'));
 assert(spotifyServer.includes("url.pathname.slice('/api/cloud/'.length)"));
-assert(!spotifyServer.includes('access_token:'));
+// Responses handed to spotifyJson must never echo OAuth tokens; internal tokenData.access_token / tokenData.refresh_token reads stay allowed.
+assert(!/spotifyJson\(\s*\{[^}]*\baccess_token\b/.test(spotifyServer));
+assert(!/spotifyJson\(\s*\{[^}]*\brefresh_token\b/.test(spotifyServer));
 assert(spotifyUi.includes('/api/cloud/spotify/status'));
 assert(spotifyUi.includes('/api/cloud/spotify/top'));
 assert(spotifyUi.includes('/api/cloud/spotify/connect'));
