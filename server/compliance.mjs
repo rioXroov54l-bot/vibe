@@ -102,18 +102,10 @@ async function complianceServiceFetch(env, path, init) {
   }
 }
 
-function complianceUserToken(req) {
-  const h = complianceHeader(req, 'authorization');
-  if (!h) return null;
-  const m = /^Bearer\s+(.+)$/i.exec(String(h));
-  return m ? m[1].trim() : null;
-}
-
-async function complianceUserFetch(req, env, path, init) {
-  const token = complianceUserToken(req);
+async function complianceUserFetch(token, path, init) {
   const headers = Object.assign({
     apikey: SB_KEY,
-    Authorization: 'Bearer ' + (token || SB_KEY),
+    ...(token ? { Authorization: 'Bearer ' + token } : {}),
   }, (init && init.headers) || {});
   const ctrl = new AbortController();
   const timer = setTimeout(() => { try { ctrl.abort(); } catch (e) {} }, COMPLIANCE_TIMEOUT_MS);
@@ -131,10 +123,10 @@ async function complianceRows(res) {
   try { const j = await res.json(); return Array.isArray(j) ? j : []; } catch (e) { return []; }
 }
 
-async function complianceHasRow(env, req, path, service) {
+async function complianceHasRow(env, token, path, service) {
   const res = service
     ? await complianceServiceFetch(env, path, { headers: complianceSvcHeaders(env) })
-    : await complianceUserFetch(req, env, path);
+    : await complianceUserFetch(token, path);
   const rows = await complianceRows(res);
   return rows.length > 0;
 }
@@ -171,7 +163,7 @@ async function complianceStatus(req, env) {
 
 const complianceExportPlan = [
   ['vibe_profiles', 'id=eq.{uid}'],
-  ['profiles', 'id=eq.{uid}&select=id,email,username,display_name,avatar_url,created_at,updated_at'],
+  ['profiles', 'id=eq.{uid}&select=id,email,username,full_name,avatar_url,created_at,onboarding_step,onboarding_completed_at'],
   ['vibe_settings', 'user_id=eq.{uid}'],
   ['vibe_profile_details', 'user_id=eq.{uid}'],
   ['vibe_profile_photos', 'user_id=eq.{uid}'],
@@ -184,11 +176,11 @@ const complianceExportPlan = [
   ['vibe_members', 'user_id=eq.{uid}'],
   ['vibe_reports', 'reporter_id=eq.{uid}&order=created_at.desc'],
   ['messages', 'or=(sender_id.eq.{uid},receiver_id.eq.{uid})&order=created_at.desc'],
-  ['rooms', 'owner_id=eq.{uid}'],
+  ['vibe_rooms', 'owner_id=eq.{uid}'],
 ];
 
-async function complianceExportOne(req, env, table, query) {
-  const res = await complianceUserFetch(req, env, '/rest/v1/' + table + '?' + query + '&limit=' + COMPLIANCE_EXPORT_LIMIT);
+async function complianceExportOne(token, table, query) {
+  const res = await complianceUserFetch(token, '/rest/v1/' + table + '?' + query + '&limit=' + COMPLIANCE_EXPORT_LIMIT);
   const rows = await complianceRows(res);
   return rows.slice(0, COMPLIANCE_EXPORT_LIMIT);
 }
@@ -200,6 +192,8 @@ async function complianceDataExport(req, env) {
   const gate = await complianceGate(req, 'data-export', 3);
   if (gate) return gate;
 
+  const token = id.token || null;
+  if (!token) return cloudResponse({ error: 'unauthorized' }, 401);
   const out = {
     exported_at: new Date().toISOString(),
     format_version: '1',
@@ -207,7 +201,7 @@ async function complianceDataExport(req, env) {
   };
   for (const [table, template] of complianceExportPlan) {
     const query = template.replace(/\{uid\}/g, encodeURIComponent(uid));
-    out[table] = await complianceExportOne(req, env, table, query);
+    out[table] = await complianceExportOne(token, table, query);
   }
   return cloudResponse(out, 200);
 }
@@ -376,8 +370,10 @@ async function complianceReports(req, env, url, method) {
   const u = encodeURIComponent(uid);
 
   if (method === 'GET') {
+    const token = id.token || null;
+    if (!token) return cloudResponse({ error: 'unauthorized' }, 401);
     const rows = await complianceRows(await complianceUserFetch(
-      req, env, '/rest/v1/vibe_reports?select=*&reporter_id=eq.' + u + '&order=created_at.desc&limit=100'
+      token, '/rest/v1/vibe_reports?select=*&reporter_id=eq.' + u + '&order=created_at.desc&limit=100'
     ));
     return cloudResponse({ reports: rows.slice(0, 100) }, 200);
   }
@@ -399,7 +395,9 @@ async function complianceReports(req, env, url, method) {
     if (details === null) return cloudResponse({ error: 'invalid_details' }, 400);
   }
 
-  const res = await complianceUserFetch(req, env, '/rest/v1/vibe_reports', {
+  const token = id.token || null;
+  if (!token) return cloudResponse({ error: 'unauthorized' }, 401);
+  const res = await complianceUserFetch(token, '/rest/v1/vibe_reports', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Prefer: 'return=representation' },
     body: JSON.stringify({
@@ -478,13 +476,13 @@ async function complianceMessages(req, env, url) {
   const u = encodeURIComponent(uid);
   const r = encodeURIComponent(recipient);
   const blocked = await complianceHasRow(
-    env, req, '/rest/v1/vibe_blocks?select=id&user_id=eq.' + u + '&blocked_id=eq.' + r + '&limit=1', false
+    env, id.token || null, '/rest/v1/vibe_blocks?select=user_id,blocked_id&user_id=eq.' + u + '&blocked_id=eq.' + r + '&limit=1', false
   );
   if (blocked) return cloudResponse({ error: 'interaction_blocked' }, 403);
 
   if (env && env.SUPABASE_SERVICE_ROLE_KEY) {
     const reciprocal = await complianceHasRow(
-      env, req, '/rest/v1/vibe_blocks?select=id&user_id=eq.' + r + '&blocked_id=eq.' + u + '&limit=1', true
+      env, null, '/rest/v1/vibe_blocks?select=user_id,blocked_id&user_id=eq.' + r + '&blocked_id=eq.' + u + '&limit=1', true
     );
     if (reciprocal) return cloudResponse({ error: 'interaction_blocked' }, 403);
   }
