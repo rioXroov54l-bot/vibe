@@ -35,6 +35,9 @@ jobs:
       - name: Release preflight
         run: npm run preflight
 
+      - name: App Store compliance check
+        run: npm run appstore:check
+
       - name: Upload release bundle
         uses: actions/upload-artifact@v4
         with:
