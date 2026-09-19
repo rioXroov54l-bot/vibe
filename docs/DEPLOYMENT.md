@@ -25,6 +25,11 @@ The build output is a single self-contained Worker entrypoint:
 `npm run build` must be run before any release check; `npm run preflight`
 fails when the build output is missing or empty.
 
+`dist/.openai` is a **hidden** directory. It is part of the release bundle, so
+the packaging step must upload it explicitly with
+`include-hidden-files: true`; otherwise the bundle would ship
+`dist/server/index.js` without its hosting manifest and migrations.
+
 ## 2. What repository CI does — and does not do
 
 | Workflow | Trigger | Purpose |
@@ -38,14 +43,20 @@ fails when the build output is missing or empty.
   that the site is live.
 - The **Vibe Release Bundle** workflow only *builds, verifies and packages*:
   it uploads an artifact named `vibe-sites-release` (path `dist/`, retention
-  7 days, `if-no-files-found: error`) with `permissions: contents: read`.
+  7 days, `if-no-files-found: error`, `include-hidden-files: true`) with
+  `permissions: contents: read`. `include-hidden-files: true` is required
+  because `dist/.openai` is hidden: `actions/upload-artifact@v4` skips hidden
+  paths by default, so without the flag the artifact would lose
+  `dist/.openai/hosting.json` and `dist/.openai/drizzle` and would not be a
+  valid Sites bundle.
 - **Actual publishing to ChatGPT Sites happens from Work/Sites** — a human
   reviews the artifact/preview and uses the Sites publish flow. The GitHub
   workflow itself never publishes.
 - `npm run preflight` (`scripts/release-preflight.mjs`) is read-only: it checks
   the hosting manifest, the built output, the required npm scripts, the runtime
-  metadata branch and obvious literal secret patterns. It never requests,
-  reads or prints a secret value and it exits non-zero on failure.
+  metadata branch, obvious literal secret patterns, and that the release bundle
+  workflow still uploads `dist/` with `include-hidden-files: true`. It never
+  requests, reads or prints a secret value and it exits non-zero on failure.
 
 ## 3. Configuration names (names only — no values)
 
@@ -103,7 +114,11 @@ Follow the steps in order. Do not skip the review step.
   for it to finish successfully.
 - **D. Review the artifact / preview**
   Download the `vibe-sites-release` artifact and inspect the built output, or
-  review the Sites preview. Confirm the code matches the reviewed change.
+  review the Sites preview. Confirm the archive is complete — it must contain
+  `dist/server/index.js`, `dist/.openai/hosting.json` and
+  `dist/.openai/drizzle/` — and that the code matches the reviewed change. A
+  bundle missing the `dist/.openai` entries is incomplete; re-run step C and
+  check `include-hidden-files: true` is still present in the workflow.
 - **E. Publish through ChatGPT Sites/Work**
   Publishing is a manual action performed in ChatGPT Sites/Work after the
   review in step D. No GitHub workflow publishes, promotes or rolls back.
@@ -131,6 +146,10 @@ Follow the steps in order. Do not skip the review step.
   `deployment_status: manual_publish_required` with the note that publishing
   happens through ChatGPT Sites/Work while repository CI produces a validated
   release bundle.
+- **An incomplete bundle fails loudly.** The artifact upload uses
+  `if-no-files-found: error`, and `npm run preflight` fails if the release
+  workflow stops uploading `dist/` with hidden files included — so a release
+  cannot be packaged silently without its hosting manifest and migrations.
 
 ## 6. Secret handling rules
 
