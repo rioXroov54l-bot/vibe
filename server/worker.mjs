@@ -12,6 +12,7 @@ export default {
  async fetch(request,env={}){
   const url=new URL(request.url);
   if(url.protocol!=='https:'){const secure=new URL(request.url);secure.protocol='https:';return new Response(null,{status:308,headers:{Location:secure.toString(),...common}});}
+  if(url.pathname==='/api/admin-console'||url.pathname.startsWith('/api/admin-console/'))return adminConsoleRoute(request,env,url);
   if(url.pathname.startsWith('/api/cloud/'))return cloudRoute(request,env,url);
   if(url.pathname.startsWith('/api/cinema'))return cinemaRoute(request,env,url);
   if(url.pathname==='/api/video-preview'){
