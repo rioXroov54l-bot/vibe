@@ -7,8 +7,8 @@
  * 1. Governing law / jurisdiction / legal entity name + address are intentionally NOT
  *    asserted anywhere in this file. OWNER_INPUT_REQUIRED: owner must decide and
  *    publish entity, address and jurisdiction before any contractual claim is made.
- * 2. OWNER_INPUT_REQUIRED: public support URL/email. Support wording below points to
- *    in-app support only; a public support contact must be added here once configured.
+ * 2. Public support email is configured as support@vibe-groups.com. OWNER_INPUT_REQUIRED
+ *    still applies to the responsible legal entity, registered address and legal contact URL.
  * 3. OWNER_INPUT_REQUIRED: in-app account deletion control must exist and ship BEFORE
  *    App Store submission. This file describes deletion *policy*, not the control.
  * 4. OWNER_INPUT_REQUIRED: legal minimum age decision. 18+ is described as the current
@@ -190,8 +190,8 @@ LEGAL_PAGES['legal-privacy'] = pg(
     sec('حقوقك وحدود الوعود', 'Your rights and the limits of our promises',
       [['بعض حقوق الخصوصية قد تنطبق عليك بحسب مكان إقامتك والقانون المعمول به. لا ندّعي الامتثال الشامل لكل قوانين الخصوصية في كل بلد، بما في ذلك عدم تقديم ادعاء عام بالامتثال لـ GDPR أو CCPA.',
         'Some privacy rights may apply to you depending on where you live and the law that applies. We do not claim blanket compliance with every privacy law in every country, and we make no general claim of GDPR or CCPA compliance.'],
-       ['لممارسة أي طلب يتعلق بالخصوصية، استخدم الدعم داخل التطبيق. إذا أضاف المالك لاحقًا عنوانًا قانونيًا عامًا، يجب نشره في صفحة الدعم.',
-        'To make a privacy request, use in-app support. If the owner later adds a public legal contact, it must be published on the support page.']])
+       ['لممارسة أي طلب يتعلق بالخصوصية، استخدم الدعم داخل التطبيق أو راسل support@vibe-groups.com. أي عنوان قانوني رسمي إضافي يجب أن يُنشر بوضوح عند اعتماده.',
+        'To make a privacy request, use in-app support or email support@vibe-groups.com. Any additional official legal contact must be published clearly once approved.']])
   ]
 );
 
@@ -307,8 +307,8 @@ LEGAL_PAGES['legal-copyright'] = pg(
        ['بيان بأن المعلومات الواردة دقيقة وأنك مخوّل بالتصرف نيابة عن مالك الحق.', 'A statement that the information is accurate and that you are authorized to act for the rights owner.']]),
 
     sec('أين ترسل الشكوى', 'Where to send a complaint',
-      [['القناة الحالية لاستقبال شكاوى حقوق النشر هي الدعم داخل التطبيق. إذا أضاف المالك لاحقًا عنوانًا قانونيًا عامًا أو وكيلًا معتمدًا، يجب أن يُنشر هنا قبل الاعتماد عليه. لا ندّعي وجود وكيل DMCA أو كيان قانوني محدد.',
-        'The current channel for copyright complaints is in-app support. If the owner later adds a public legal contact or a designated agent, it must be published here before it can be relied on. No DMCA agent or specific legal entity is claimed.']]),
+      [['القنوات الحالية لاستقبال شكاوى حقوق النشر هي الدعم داخل التطبيق و support@vibe-groups.com. لا ندّعي وجود وكيل DMCA أو كيان قانوني محدد ما لم يتم اعتماده ونشره رسميًا.',
+        'The current channels for copyright complaints are in-app support and support@vibe-groups.com. No DMCA agent or specific legal entity is claimed unless formally designated and published.']]),
 
     sec('ما قد يحدث بعد ذلك', 'What may happen next',
       [['قد نزيل المحتوى المبلغ عنه أو نقيّد الوصول إليه أثناء المراجعة.', 'We may remove or restrict the reported content while we review it.'],
@@ -339,8 +339,8 @@ LEGAL_PAGES['legal-support'] = pg(
        ['مشاكل تقنية لا يستطيع استكشاف الأخطاء حلها.', 'Technical problems that troubleshooting does not resolve.']]),
 
     sec('القناة الحالية', 'Current channel',
-      [['تستخدم Vibe حاليًا الدعم داخل التطبيق لجميع الطلبات المذكورة أعلاه. إذا أضاف المالك لاحقًا رابط دعم عامًا أو بريدًا إلكترونيًا، فيجب إضافته في هذا القسم قبل نشره للمستخدمين.',
-        'Vibe currently uses in-app support for all requests listed above. If the owner later configures a public support URL or email, it must be added in this section before it is announced to users.']]),
+      [['تستخدم Vibe حاليًا الدعم داخل التطبيق والبريد support@vibe-groups.com للطلبات المذكورة أعلاه. أي رابط دعم عام إضافي يجب نشره هنا عند اعتماده.',
+        'Vibe currently uses in-app support and support@vibe-groups.com for the requests listed above. Any additional public support URL must be published here once approved.']]),
 
     sec('التوقعات', 'Expectations',
       [['نبذل جهدًا معقولًا للرد، لكننا لا نضمن وقت استجابة محددًا ولا دعمًا بشريًا على مدار الساعة. في حالات الخطر الفوري يجب التوجه إلى خدمات الطوارئ المحلية.',
