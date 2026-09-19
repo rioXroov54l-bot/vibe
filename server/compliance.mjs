@@ -305,7 +305,7 @@ async function compliancePurgeRows(env, uid) {
   if (!patched) return false;
   const tail = [
     ['messages', 'or=(sender_id.eq.' + u + ',receiver_id.eq.' + u + ')'],
-    ['rooms', 'owner_id=eq.' + u],
+    ['vibe_rooms', 'owner_id=eq.' + u],
     ['vibe_profiles', 'id=eq.' + u],
     ['profiles', 'id=eq.' + u],
   ];
@@ -385,10 +385,15 @@ async function complianceReports(req, env, url, method) {
   const body = await complianceReadBody(req);
   if (!body || typeof body !== 'object') return cloudResponse({ error: 'invalid_body' }, 400);
   if (COMPLIANCE_TARGET_KINDS.indexOf(body.target_kind) === -1) return cloudResponse({ error: 'invalid_target_kind' }, 400);
-  const targetId = complianceStr(body.target_id, 1, 128);
   const reason = complianceStr(body.reason, 1, 120);
-  if (!targetId) return cloudResponse({ error: 'invalid_target_id' }, 400);
   if (!reason) return cloudResponse({ error: 'invalid_reason' }, 400);
+  const selfKinds = ['support', 'appeal', 'copyright', 'privacy'];
+  let targetId = complianceStr(body.target_id, 1, 128);
+  if (selfKinds.indexOf(body.target_kind) !== -1) {
+    targetId = 'self';
+  } else if (!targetId) {
+    return cloudResponse({ error: 'invalid_target_id' }, 400);
+  }
   let details = null;
   if (body.details !== undefined && body.details !== null) {
     details = complianceStr(body.details, 0, 2000);
@@ -432,7 +437,7 @@ function complianceNormalize(text) {
 }
 
 function complianceFilterText(body, env) {
-  const text = body && (typeof body.text === 'string' ? body.text : (typeof body.content === 'string' ? body.content : null));
+  const text = body && (typeof body.body === 'string' ? body.body : (typeof body.text === 'string' ? body.text : (typeof body.content === 'string' ? body.content : null)));
   if (typeof text !== 'string') return null;
   if (text.length > 2000) return cloudResponse({ error: 'invalid_content' }, 422);
   if (/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/.test(text)) return cloudResponse({ error: 'invalid_content' }, 422);
