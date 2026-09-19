@@ -753,21 +753,23 @@ function acOverview(env) {
 
 async function acVisibleCount(identity, table) {
   try {
+    /* RLS-scoped session token only. The service role key is never used here. */
     const token = identity && identity.token ? identity.token : null;
     if (!token || typeof sbFetch !== "function") return null;
 
+    /* sbFetch composes SB_URL + path itself, so the PostgREST path must start
+       with "/rest/v1/". */
     const path = "/rest/v1/" + encodeURIComponent(table) + "?select=id";
-    const extra = { headers: { Prefer: "count=exact", Range: "0-0" } };
-    const res = await sbFetch(path, token, "GET", null, extra);
 
+    /* sbFetch spreads `extra` straight into the request headers (there is no
+       nested `headers` bag), and a GET request must not carry a body. */
+    const extra = { Prefer: "count=exact", Range: "0-0" };
+    const res = await sbFetch(path, token, "GET", undefined, extra);
+
+    /* Row payloads are never read. Only the Content-Range total is extracted. */
     let contentRange = null;
     if (res && res.headers && typeof res.headers.get === "function") {
       contentRange = res.headers.get("content-range") || res.headers.get("Content-Range");
-    } else if (res && typeof res === "object") {
-      contentRange =
-        res["content-range"] ||
-        res["Content-Range"] ||
-        (res.headers && (res.headers["content-range"] || res.headers["Content-Range"]));
     }
     if (!contentRange) return null;
 
