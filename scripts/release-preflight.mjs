@@ -13,6 +13,10 @@
  *   5. Runtime metadata in public/system-console-core.js and
  *      server/admin-console.mjs no longer contains "deepseek/system-control-center".
  *   6. No obvious literal secret values exist in public/, server/, scripts/.
+ *   7. .github/workflows/release-bundle.yml keeps uploading dist/ with
+ *      actions/upload-artifact@v4 AND sets include-hidden-files: true, because
+ *      dist/.openai is a hidden directory that would otherwise be excluded
+ *      from the release artifact.
  *
  * Guarantees:
  *   - Read-only. Never requests, reads, prints or stores a secret value.
@@ -271,6 +275,46 @@ async function checkLiteralSecrets() {
 }
 
 /* ------------------------------------------------------------------ *
+ * 7. Release bundle workflow must archive hidden files
+ * ------------------------------------------------------------------ */
+
+const RELEASE_WORKFLOW = path.join(ROOT, '.github', 'workflows', 'release-bundle.yml');
+
+async function checkReleaseBundleWorkflow() {
+  let source = '';
+  try {
+    source = await readText(RELEASE_WORKFLOW);
+  } catch (_e) {
+    record(false, 'release bundle workflow readable (.github/workflows/release-bundle.yml)', 'file not found');
+    return;
+  }
+  record(true, 'release bundle workflow readable (.github/workflows/release-bundle.yml)', rel(RELEASE_WORKFLOW));
+
+  const usesUploadArtifact = /uses:\s*actions\/upload-artifact@v4\b/.test(source);
+  record(
+    usesUploadArtifact,
+    'release bundle uses actions/upload-artifact@v4',
+    usesUploadArtifact ? 'found' : 'step not found'
+  );
+  if (!usesUploadArtifact) return;
+
+  const uploadsDist = /^[ \t]*path:[ \t]*dist\/?[ \t]*$/m.test(source);
+  record(uploadsDist, 'release bundle uploads path: dist/', uploadsDist ? 'path=dist/' : 'path: dist/ not found');
+
+  /*
+   * dist/.openai is a hidden directory. actions/upload-artifact@v4 excludes
+   * hidden files unless include-hidden-files: true is set, which would drop
+   * dist/.openai/hosting.json and dist/.openai/drizzle from the artifact.
+   */
+  const hiddenEnabled = /^[ \t]*include-hidden-files:[ \t]*true[ \t]*$/m.test(source);
+  record(
+    hiddenEnabled,
+    'release bundle artifacts include hidden files (include-hidden-files: true)',
+    hiddenEnabled ? 'dist/.openai is archived' : 'missing include-hidden-files: true — dist/.openai would be dropped from the artifact'
+  );
+}
+
+/* ------------------------------------------------------------------ *
  * Runner
  * ------------------------------------------------------------------ */
 
@@ -283,6 +327,7 @@ async function main() {
   await checkPackageScripts();
   await checkRuntimeMetadata();
   await checkLiteralSecrets();
+  await checkReleaseBundleWorkflow();
 
   let failed = 0;
   for (const check of checks) {
