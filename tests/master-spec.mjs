@@ -34,7 +34,7 @@ const attachmentsSource = app.slice(attachmentsStart, attachmentsEnd);
 assert(attachmentsSource.indexOf("uiIcon('image')") < attachmentsSource.indexOf("uiIcon(noteRecording?'stop':'mic')"));
 
 // Master spec extensions.
-assert(master.includes('master-match-notice'));
+assert(master.includes('master-spec-match-notice'));
 for (const key of ['zodiac','communication_style','relationship_goal','languages','smoking','drinking','exercise','sleep','pets']) assert(master.includes(key));
 assert(master.includes('top-artists-card'));
 assert(master.includes("cloudAPI('profile-details'"));
