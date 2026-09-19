@@ -1,14 +1,13 @@
-name: Vibe CI
+name: Vibe Release Bundle
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  test:
+  release:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,3 +34,11 @@ jobs:
 
       - name: Release preflight
         run: npm run preflight
+
+      - name: Upload release bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: vibe-sites-release
+          path: dist/
+          retention-days: 7
+          if-no-files-found: error

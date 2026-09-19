@@ -12,7 +12,7 @@ try {
 } catch (sysCssErr) { /* stylesheet is optional at runtime */ }
 
 /* ---------- 2. labels & metadata ---------- */
-var SYS_BRANCH = 'deepseek/system-control-center';
+var SYS_BRANCH = 'main';
 var SYS_REPO = 'rioXroov54l-bot/vibe';
 
 var SYS_SECTIONS = [
