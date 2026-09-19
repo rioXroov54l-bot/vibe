@@ -10,7 +10,8 @@ const systemConsoleCore=await fs.readFile('public/system-console-core.js','utf8'
 const systemConsoleA=await fs.readFile('public/system-console-sections-a.js','utf8');
 const systemConsoleB=await fs.readFile('public/system-console-sections-b.js','utf8');
 const systemConsoleObservability=await fs.readFile('public/system-console-observability.js','utf8');
-const bundledApp=appSource.replace(/render\(\);\s*\}\(\)\);\s*$/,cloudUi+'\n'+masterSpec+'\n'+authSpec+'\n'+authUiSecure+'\n'+spotifySpec+'\n'+systemConsoleCore+'\n'+systemConsoleA+'\n'+systemConsoleB+'\n'+systemConsoleObservability+'\nrender();\n})();');
+const legalSpec=await fs.readFile('public/legal-spec.js','utf8');
+const bundledApp=appSource.replace(/render\(\);\s*\}\(\)\);\s*$/,cloudUi+'\n'+masterSpec+'\n'+authSpec+'\n'+authUiSecure+'\n'+spotifySpec+'\n'+systemConsoleCore+'\n'+systemConsoleA+'\n'+systemConsoleB+'\n'+systemConsoleObservability+'\n'+legalSpec+'\nrender();\n})();');
 const assets={};for(const [name,type]of Object.entries(files))assets['/'+name]={type,body:name==='app.js'?bundledApp:await fs.readFile('public/'+name,'utf8')};
 assets['/vibe-logo-320x132.png']={type:'image/png',base64:true,body:(await fs.readFile('public/vibe-logo-320x132.png')).toString('base64')};
 const worker=await fs.readFile('server/worker.mjs','utf8');
