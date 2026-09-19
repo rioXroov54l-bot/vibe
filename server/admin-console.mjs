@@ -28,7 +28,7 @@ const AC_RATE_MAX_KEYS = 500;
 const AC_EVENTS_MAX = 30;
 
 const AC_REPO = "rioXroov54l-bot/vibe";
-const AC_BRANCH = "deepseek/system-control-center";
+const AC_BRANCH = "main";
 const AC_HOSTING = "OpenAI/ChatGPT Sites";
 
 /* ------------------------------------------------------------------ *
@@ -744,7 +744,11 @@ function acOverview(env) {
     build: {
       branch: AC_BRANCH,
       hosting: AC_HOSTING,
-      deployment_status: "unknown",
+      /* No live status is available from this console and none is claimed:
+         publishing is a manual action performed in ChatGPT Sites/Work. */
+      deployment_status: "manual_publish_required",
+      deployment_note:
+        "publishing happens through ChatGPT Sites/Work; repository CI produces a validated release bundle.",
     },
     health: health,
     safe_events: AC_EVENTS.slice(),
