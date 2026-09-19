@@ -35,3 +35,6 @@ jobs:
 
       - name: Release preflight
         run: npm run preflight
+
+      - name: App Store compliance check
+        run: npm run appstore:check
