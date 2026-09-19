@@ -40,5 +40,6 @@ jobs:
         with:
           name: vibe-sites-release
           path: dist/
+          include-hidden-files: true
           retention-days: 7
           if-no-files-found: error
