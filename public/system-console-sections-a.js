@@ -143,8 +143,24 @@ function secEntries(obj) {
   return out;
 }
 
-function secRelationFrom(r) { return r && (r.from || r.from_table || r.source || r.parent || r.table); }
-function secRelationTo(r) { return r && (r.to || r.to_table || r.target || r.child || r.references); }
+/* Relation shapes: the backend emits source_table / target_table; older shapes
+   (from / to, from_table / to_table, source / target, parent / child, table /
+   references) are still accepted as fallbacks. */
+function secRelationFrom(r) { return r && (r.from || r.from_table || r.source_table || r.source || r.parent || r.table); }
+function secRelationTo(r) { return r && (r.to || r.to_table || r.target_table || r.target || r.child || r.references); }
+
+/* schema?table=<name> reports the RLS-scoped visible row count. Accepts both the
+   grouped payload { visible: { table, scope, visible_count, error } } and the
+   flat visible_count / visible_count_error keys. Always returns
+   { count: number|null, error: string|null } — never an object. */
+function secVisibleCount(result) {
+  var r = (result && typeof result === 'object') ? result : {};
+  var v = (r.visible && typeof r.visible === 'object' && !Array.isArray(r.visible)) ? r.visible : null;
+  var rawCount = v ? v.visible_count : r.visible_count;
+  var rawError = v ? v.error : r.visible_count_error;
+  var count = (typeof rawCount === 'number' && isFinite(rawCount)) ? rawCount : null;
+  return { count: count, error: rawError ? String(rawError) : null };
+}
 
 function secFindTable(name) {
   var schema = (typeof sysGet === 'function') ? sysGet('schema') : null;
@@ -198,12 +214,19 @@ function secBindGlobalOnce() {
     if (!sysState.tableCountError) sysState.tableCountError = {};
     el.disabled = true;
     Promise.resolve(sysFetch('schema?table=' + encodeURIComponent(name), true)).then(function (result) {
-      var visible = (result && typeof result === 'object' && 'visible' in result) ? result.visible : result;
-      sysState.tableCount[name] = visible;
-      sysState.tableCountError[name] = false;
+      var info = secVisibleCount(result);
+      if (info.error || info.count === null) {
+        /* Unknown count: store null, never 0, and keep the error separate. */
+        sysState.tableCount[name] = null;
+        sysState.tableCountError[name] = info.error || 'visible_count_unavailable';
+      } else {
+        sysState.tableCount[name] = info.count;
+        sysState.tableCountError[name] = null;
+      }
       secRender();
     }).catch(function () {
-      sysState.tableCountError[name] = true;
+      sysState.tableCount[name] = null;
+      sysState.tableCountError[name] = 'request_failed';
       secRender();
     });
   });
@@ -242,11 +265,12 @@ function sysSectionOverview() {
       (repoBranch ? ' · <span class="sys-muted">' + secEsc(repoBranch) + '</span>' : '') + '</div></div>';
   }
 
+  /* Backend environment keys: admin_console_configured, spotify_configured, support_configured. */
   var env = d.environment || {};
   html += secBlock(secT('environment', 'Environment'), '<div class="sys-grid sys-grid-3">' +
-    secBoolCard('Admin', env.admin) +
-    secBoolCard('Spotify', env.spotify) +
-    secBoolCard('Support', env.support) +
+    secBoolCard('Admin', env.admin_console_configured) +
+    secBoolCard('Spotify', env.spotify_configured) +
+    secBoolCard('Support', env.support_configured) +
     '</div>');
 
   var modules = d.modules;
@@ -846,9 +870,11 @@ function sysDrawerContent(drawer) {
     var known = sysState.tableCount ? sysState.tableCount[table.name] : undefined;
     var hasError = sysState.tableCountError ? sysState.tableCountError[table.name] : false;
 
+    /* Only a real number is rendered. null means the count is unknown and is
+       never displayed as 0. */
     var countHtml = '';
     if (hasError) countHtml = secWarning(secT('check_failed', 'Could not read visible rows.'));
-    else if (known !== undefined && known !== null) countHtml = '<div class="sys-kv">' + secEsc(secT('visible_rows', 'Visible rows')) + ': ' + secEsc(secNum(known)) + '</div>';
+    else if (typeof known === 'number') countHtml = '<div class="sys-kv">' + secEsc(secT('visible_rows', 'Visible rows')) + ': ' + secEsc(secNum(known)) + '</div>';
     else countHtml = '<div class="sys-muted">' + secEsc(secT('visible_unknown', 'Visible row count not checked yet.')) + '</div>';
 
     var relHtml = '';
