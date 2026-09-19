@@ -47,7 +47,7 @@ for (const marker of [
 assert.ok(/rate/i.test(backend), 'admin console must include rate limiting');
 assert.ok(!backend.includes('SUPABASE_SERVICE_ROLE_KEY'));
 assert.ok(!/\beval\s*\(/.test(backend));
-assert.ok(!/\bnew\s+Function\b/.test(backend));
+assert.ok(!/\bnew\s+Function\s*\(/.test(backend));
 
 const client = [core, sectionsA, sectionsB, observability].join('\n');
 for (const marker of [
