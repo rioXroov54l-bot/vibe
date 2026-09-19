@@ -16,9 +16,10 @@
 
 - Data inventory; App Privacy draft; permissions matrix; age rating draft; App Review notes; App Store Connect checklist; retention, export, native-gap, asset, and regional readiness documents.
 
-## PENDING VALIDATION
+## REPOSITORY VALIDATION
 
-- **The new App Store compliance changes have not yet passed CI in this phase.** No PASS statement is made for the repository.
+- **PASS:** Vibe CI completed successfully with Build, core tests, Cinema tests, Release preflight, and App Store compliance checks all green on the release-readiness branch.
+- This PASS applies to repository/product readiness only. It is not an App Store approval claim.
 
 ## BLOCKED UNTIL RUNTIME CONFIG
 
@@ -57,4 +58,4 @@
 
 ## Final verdict
 
-"Web/product readiness: substantially implemented but pending CI and production runtime configuration. App Store submission: BLOCKED until native iOS packaging, runtime deletion/moderation configuration, owner/legal decisions, and manual App Store Connect tasks are complete."
+"Repository and web/product readiness: PASS for the implemented code and CI checks. App Store submission: BLOCKED until native iOS packaging, production runtime deletion/moderation configuration, owner/legal decisions, and manual App Store Connect tasks are complete."
