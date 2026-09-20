@@ -5,6 +5,8 @@ final class AuthService: ObservableObject {
     @Published var session: SupabaseSession?
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var pendingEmail: String?
+    @Published var needsVerification = false
 
     private let backend = SupabaseService.shared
     private let keychain = KeychainStore.shared
@@ -30,7 +32,7 @@ final class AuthService: ObservableObject {
             "password": password,
             "name": displayName,
             "accepted": true
-        ])
+        ], email: email)
     }
 
     func signIn(email: String, password: String) async {
@@ -83,7 +85,7 @@ final class AuthService: ObservableObject {
         }
     }
 
-    private func authenticate(path: String, body: [String: Any]) async {
+    private func authenticate(path: String, body: [String: Any], email: String? = nil) async {
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }
@@ -95,6 +97,10 @@ final class AuthService: ObservableObject {
                 body: data
             )
             if response.confirmationRequired {
+                if let email {
+                    pendingEmail = email
+                    needsVerification = true
+                }
                 return
             }
             if let token = response.accessToken,

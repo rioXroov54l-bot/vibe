@@ -45,5 +45,10 @@ struct SignUpView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
         }
+        .navigationDestination(isPresented: $auth.needsVerification) {
+            if let email = auth.pendingEmail {
+                OTPView(email: email)
+            }
+        }
     }
 }
