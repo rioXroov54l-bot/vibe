@@ -3,6 +3,7 @@ import SwiftUI
 struct OTPView: View {
     let email: String
     @State private var digits = Array(repeating: "", count: 6)
+    @State private var resendSeconds = 60
     @FocusState private var focusedField: Int?
     @EnvironmentObject private var auth: AuthService
 
@@ -49,10 +50,26 @@ struct OTPView: View {
                 }
                     .buttonStyle(PrimaryAuthButtonStyle())
                     .disabled(digits.joined().count < 6)
+
+                Button {
+                    resendSeconds = 60
+                    Task { await auth.resendOTP(email: email) }
+                } label: {
+                    Text(resendSeconds > 0 ? "Resend in \(resendSeconds)s" : "Resend code")
+                }
+                .disabled(resendSeconds > 0 || auth.isLoading)
             }
             .padding(24)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
-        .onAppear { focusedField = 0 }
+        .onAppear {
+            focusedField = 0
+            Task {
+                while resendSeconds > 0 {
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    resendSeconds -= 1
+                }
+            }
+        }
     }
 }

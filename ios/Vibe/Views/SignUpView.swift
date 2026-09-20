@@ -4,7 +4,9 @@ struct SignUpView: View {
     @State private var displayName = ""
     @State private var email = ""
     @State private var password = ""
+    @State private var confirmPassword = ""
     @State private var accepted = false
+    @State private var localError: String?
     @EnvironmentObject private var auth: AuthService
 
     var body: some View {
@@ -23,6 +25,10 @@ struct SignUpView: View {
                         .textContentType(.newPassword)
                         .padding()
                         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
+                    SecureField("Confirm password", text: $confirmPassword)
+                        .textContentType(.newPassword)
+                        .padding()
+                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
 
                     Toggle(isOn: $accepted) {
                         Text("I am 18 or older and agree to the terms and privacy policy.")
@@ -30,6 +36,15 @@ struct SignUpView: View {
                     }
 
                     Button {
+                        localError = nil
+                        guard accepted else {
+                            localError = "Please accept the terms and privacy policy."
+                            return
+                        }
+                        guard password == confirmPassword else {
+                            localError = "Passwords do not match."
+                            return
+                        }
                         Task { await auth.signUp(email: email, password: password, displayName: displayName) }
                     } label: {
                         if auth.isLoading {
@@ -39,7 +54,13 @@ struct SignUpView: View {
                         }
                     }
                     .buttonStyle(PrimaryAuthButtonStyle())
-                    .disabled(!accepted)
+                    .disabled(auth.isLoading)
+
+                    if let error = localError ?? auth.errorMessage {
+                        Text(error)
+                            .font(.footnote)
+                            .foregroundStyle(.red)
+                    }
                 }
                 .padding(24)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

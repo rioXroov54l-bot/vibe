@@ -27,6 +27,8 @@ final class AuthService: ObservableObject {
     }
 
     func signUp(email: String, password: String, displayName: String) async {
+        print("Signup button pressed")
+        print("Calling Supabase signup")
         await authenticate(path: "/api/cloud/auth/signup", body: [
             "email": email,
             "password": password,
@@ -36,6 +38,7 @@ final class AuthService: ObservableObject {
     }
 
     func signIn(email: String, password: String) async {
+        print("Signin button pressed")
         await authenticate(path: "/api/cloud/auth/login", body: [
             "email": email,
             "password": password
@@ -43,6 +46,7 @@ final class AuthService: ObservableObject {
     }
 
     func verifyOTP(email: String, token: String, kind: String = "signup") async {
+        print("OTP verification started")
         await authenticate(path: "/api/cloud/auth/verify", body: [
             "email": email,
             "token": token,
@@ -52,6 +56,11 @@ final class AuthService: ObservableObject {
 
     func requestRecovery(email: String) async {
         await authenticate(path: "/api/cloud/auth/recover", body: ["email": email])
+    }
+
+    func resendOTP(email: String, kind: String = "signup") async {
+        print("Resend OTP requested")
+        await authenticate(path: kind == "signup" ? "/api/cloud/auth/resend" : "/api/cloud/auth/otp", body: ["email": email, "type": kind])
     }
 
     func signOut() async {
@@ -100,6 +109,7 @@ final class AuthService: ObservableObject {
                 if let email {
                     pendingEmail = email
                     needsVerification = true
+                    print("OTP email sent")
                 }
                 return
             }
@@ -110,6 +120,7 @@ final class AuthService: ObservableObject {
                 keychain.save(token, for: Key.access)
                 keychain.save(refresh, for: Key.refresh)
                 keychain.save(userID, for: Key.user)
+                print("Signup completed")
             }
         } catch {
             errorMessage = error.localizedDescription
