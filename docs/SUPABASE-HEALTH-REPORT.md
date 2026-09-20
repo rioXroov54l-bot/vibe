@@ -82,6 +82,27 @@ Result: pass. No test data remained.
 
 Result: pass. No test data remained.
 
+## Live integration test
+
+`npm run test:live` now exercises the deployed Supabase project and Worker
+contract for:
+
+- test-user creation and password login
+- profile read/update
+- onboarding completion
+- profile media upload and photo registration
+- room creation and membership
+- room messaging and reactions
+- direct messages and inbox
+
+Result: pass. Test users are deleted after the run.
+
+## Realtime status
+
+Realtime messaging is not enabled. The web client currently polls message state
+and does not claim live multi-user streaming. This is the intended disabled
+state until Supabase Realtime is implemented.
+
 ## Remaining production items
 
 - Configure production runtime secrets.
