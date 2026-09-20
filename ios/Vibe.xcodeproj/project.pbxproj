@@ -289,9 +289,9 @@ B600000000000000000000000C /* Debug */ = {
 		SWIFT_EMIT_LOC_STRINGS = YES;
 		SWIFT_VERSION = 5.0;
 		TARGETED_DEVICE_FAMILY = 1;
-		VIBE_API_URL = "";
-		VIBE_SUPABASE_URL = "";
-		VIBE_SUPABASE_ANON_KEY = "";
+		VIBE_API_URL = "https://vibe-social-nights.bb0949.chatgpt.site";
+		VIBE_SUPABASE_URL = "https://hsvcdyxelshvgofjvlim.supabase.co";
+		VIBE_SUPABASE_ANON_KEY = "sb_publishable_BCp7IhSHgWkNqXFY0Tk1xA_SE3wIWTg";
 	};
 	name = Debug;
 };
@@ -307,9 +307,9 @@ B700000000000000000000000D /* Release */ = {
 		SWIFT_EMIT_LOC_STRINGS = YES;
 		SWIFT_VERSION = 5.0;
 		TARGETED_DEVICE_FAMILY = 1;
-		VIBE_API_URL = "";
-		VIBE_SUPABASE_URL = "";
-		VIBE_SUPABASE_ANON_KEY = "";
+		VIBE_API_URL = "https://vibe-social-nights.bb0949.chatgpt.site";
+		VIBE_SUPABASE_URL = "https://hsvcdyxelshvgofjvlim.supabase.co";
+		VIBE_SUPABASE_ANON_KEY = "sb_publishable_BCp7IhSHgWkNqXFY0Tk1xA_SE3wIWTg";
 	};
 	name = Release;
 };
