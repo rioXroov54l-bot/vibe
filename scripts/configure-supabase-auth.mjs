@@ -63,9 +63,7 @@ const response = await fetch(endpoint, {
 });
 
 if (!response.ok) {
-  const text = await response.text();
   console.error(`Supabase Auth configuration failed (${response.status}).`);
-  console.error(text.slice(0, 1200));
   process.exit(1);
 }
 

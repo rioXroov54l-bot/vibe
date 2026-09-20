@@ -1,7 +1,7 @@
 // ASSETS is embedded by scripts/build.mjs. No credentials enter public assets.
 const limits=new Map();
 const videoTitles=new Map(),videoRequests=new Map();
-const policy="default-src 'none'; script-src 'self' https://www.youtube.com; script-src-attr 'none'; style-src 'self'; style-src-attr 'none'; font-src 'self'; img-src 'self' blob: https://i.ytimg.com; media-src blob: https:; connect-src 'self' https://hsvcdyxelshvgofjvlim.supabase.co; object-src 'none'; frame-src https://www.youtube-nocookie.com; worker-src blob:; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; frame-ancestors 'self' https://chatgpt.com";
+const policy="default-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; style-src-attr 'none'; font-src 'self'; img-src 'self' blob: https://i.ytimg.com; media-src blob: https:; connect-src 'self' https://hsvcdyxelshvgofjvlim.supabase.co; object-src 'none'; frame-src https://www.youtube-nocookie.com; worker-src blob:; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; frame-ancestors 'self' https://chatgpt.com";
 const common={'Content-Security-Policy':policy,'Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff','Strict-Transport-Security':'max-age=31536000','Permissions-Policy':'camera=(self), geolocation=(), microphone=(self), payment=(), usb=()','Cache-Control':'no-store'};
 const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{...common,'Content-Type':'application/json; charset=utf-8'}});
 function available(env){return env.SUPPORT_ENABLED==='true'&&!!env.OPENAI_API_KEY&&!!env.OPENAI_MODEL&&!!env.SUPPORT_ALLOWED_USER_IDS;}
