@@ -30,9 +30,12 @@ final class SupabaseService {
     private init() {
         let apiString = Bundle.main.object(forInfoDictionaryKey: "VIBE_API_URL") as? String ?? ""
         let supabaseString = Bundle.main.object(forInfoDictionaryKey: "VIBE_SUPABASE_URL") as? String ?? ""
-        apiBaseURL = URL(string: apiString) ?? URL(string: "https://example.invalid")!
-        supabaseBaseURL = URL(string: supabaseString) ?? URL(string: "https://example.invalid")!
-        anonKey = Bundle.main.object(forInfoDictionaryKey: "VIBE_SUPABASE_ANON_KEY") as? String ?? ""
+        let anonFromBundle = Bundle.main.object(forInfoDictionaryKey: "VIBE_SUPABASE_ANON_KEY") as? String ?? ""
+        apiBaseURL = URL(string: apiString.isEmpty ? "https://vibe-social-nights.bb0949.chatgpt.site" : apiString)
+            ?? URL(string: "https://vibe-social-nights.bb0949.chatgpt.site")!
+        supabaseBaseURL = URL(string: supabaseString.isEmpty ? "https://hsvcdyxelshvgofjvlim.supabase.co" : supabaseString)
+            ?? URL(string: "https://hsvcdyxelshvgofjvlim.supabase.co")!
+        anonKey = anonFromBundle.isEmpty ? "sb_publishable_BCp7IhSHgWkNqXFY0Tk1xA_SE3wIWTg" : anonFromBundle
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 30
         session = URLSession(configuration: config)
@@ -48,7 +51,7 @@ final class SupabaseService {
         body: Data? = nil,
         token: String? = nil
     ) async throws -> T {
-        var request = URLRequest(url: apiBaseURL.appendingPathComponent(path))
+        var request = URLRequest(url: URL(string: path, relativeTo: apiBaseURL) ?? apiBaseURL)
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(anonKey, forHTTPHeaderField: "apikey")
@@ -83,7 +86,7 @@ final class SupabaseService {
         body: Data? = nil,
         token: String? = nil
     ) async throws {
-        var request = URLRequest(url: apiBaseURL.appendingPathComponent(path))
+        var request = URLRequest(url: URL(string: path, relativeTo: apiBaseURL) ?? apiBaseURL)
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(anonKey, forHTTPHeaderField: "apikey")
@@ -103,7 +106,7 @@ final class SupabaseService {
         contentType: String,
         token: String
     ) async throws -> T {
-        var request = URLRequest(url: apiBaseURL.appendingPathComponent(path))
+        var request = URLRequest(url: URL(string: path, relativeTo: apiBaseURL) ?? apiBaseURL)
         request.httpMethod = "POST"
         request.setValue(contentType, forHTTPHeaderField: "Content-Type")
         request.setValue(anonKey, forHTTPHeaderField: "apikey")

@@ -2,7 +2,8 @@ import SwiftUI
 
 struct OTPView: View {
     let email: String
-    @State private var code = ""
+    @State private var digits = Array(repeating: "", count: 6)
+    @FocusState private var focusedField: Int?
     @EnvironmentObject private var auth: AuthService
 
     var body: some View {
@@ -12,16 +13,30 @@ struct OTPView: View {
             Text("Enter the 6-digit code sent to your email.")
                 .foregroundStyle(.secondary)
 
-            TextField("Code", text: $code)
-                .keyboardType(.numberPad)
-                .font(.largeTitle.weight(.bold))
-                .multilineTextAlignment(.center)
-                .tracking(8)
-                .padding()
-                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 18))
+            HStack(spacing: 10) {
+                ForEach(0..<6, id: \.self) { index in
+                    TextField("", text: Binding(
+                        get: { digits[index] },
+                        set: { newValue in
+                            let value = String(newValue.prefix(1)).filter(\.isNumber)
+                            digits[index] = value
+                            if !value.isEmpty, index < 5 {
+                                focusedField = index + 1
+                            }
+                        }
+                    ))
+                    .keyboardType(.numberPad)
+                    .textContentType(.oneTimeCode)
+                    .multilineTextAlignment(.center)
+                    .font(.title2.bold())
+                    .frame(width: 48, height: 58)
+                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 14))
+                    .focused($focusedField, equals: index)
+                }
+            }
 
             Button {
-                Task { await auth.verifyOTP(email: email, token: code) }
+                Task { await auth.verifyOTP(email: email, token: digits.joined()) }
             } label: {
                 if auth.isLoading {
                     ProgressView()
@@ -30,8 +45,9 @@ struct OTPView: View {
                 }
             }
                 .buttonStyle(PrimaryAuthButtonStyle())
-                .disabled(code.count < 6)
+                .disabled(digits.joined().count < 6)
         }
         .padding(24)
+        .onAppear { focusedField = 0 }
     }
 }
