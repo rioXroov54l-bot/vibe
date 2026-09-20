@@ -1,0 +1,352 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+C1000000000000000000000011 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000010 /* AppState.swift */; };
+C1000000000000000000000013 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000012 /* Models.swift */; };
+C1000000000000000000000015 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000014 /* AuthService.swift */; };
+C1000000000000000000000017 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000016 /* ChatService.swift */; };
+C1000000000000000000000019 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000018 /* KeychainStore.swift */; };
+C100000000000000000000001B /* MediaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000001A /* MediaService.swift */; };
+C100000000000000000000001D /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000001C /* NotificationService.swift */; };
+C100000000000000000000001F /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000001E /* ProfileService.swift */; };
+C1000000000000000000000021 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000020 /* SubscriptionService.swift */; };
+C1000000000000000000000023 /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000022 /* SupabaseService.swift */; };
+C1000000000000000000000025 /* VibeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000024 /* VibeApp.swift */; };
+C1000000000000000000000027 /* AuthFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000026 /* AuthFlowView.swift */; };
+C1000000000000000000000029 /* ChatListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000028 /* ChatListView.swift */; };
+C100000000000000000000002B /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000002A /* ChatView.swift */; };
+C100000000000000000000002D /* MainTabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000002C /* MainTabsView.swift */; };
+C100000000000000000000002F /* MediaCaptureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000002E /* MediaCaptureView.swift */; };
+C1000000000000000000000031 /* OTPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000030 /* OTPView.swift */; };
+C1000000000000000000000033 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000032 /* ProfileView.swift */; };
+C1000000000000000000000035 /* RecoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000034 /* RecoveryView.swift */; };
+C1000000000000000000000037 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000036 /* SettingsView.swift */; };
+C1000000000000000000000039 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000038 /* SignInView.swift */; };
+C100000000000000000000003B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000003A /* SignUpView.swift */; };
+C100000000000000000000003D /* UsernameEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000003C /* UsernameEditorView.swift */; };
+C100000000000000000000003F /* VoiceRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000003E /* VoiceRecorderView.swift */; };
+C1000000000000000000000041 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000040 /* WelcomeView.swift */; };
+D1000000000000000000000043 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000042 /* Contents.json */; };
+D1000000000000000000000045 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000044 /* Contents.json */; };
+D1000000000000000000000047 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000046 /* Contents.json */; };
+D1000000000000000000000049 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000048 /* Contents.json */; };
+D100000000000000000000004B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D000000000000000000000004A /* Info.plist */; };
+D100000000000000000000004D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D000000000000000000000004C /* PrivacyInfo.xcprivacy */; };
+D100000000000000000000004F /* Vibe.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = D000000000000000000000004E /* Vibe.entitlements */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+B900000000000000000000000F /* Vibe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vibe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+C0000000000000000000000010 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AppState.swift"; path = "AppState.swift"; sourceTree = "<group>"; };
+C0000000000000000000000012 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Models.swift"; path = "Models/Models.swift"; sourceTree = "<group>"; };
+C0000000000000000000000014 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AuthService.swift"; path = "Supabase/AuthService.swift"; sourceTree = "<group>"; };
+C0000000000000000000000016 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ChatService.swift"; path = "Supabase/ChatService.swift"; sourceTree = "<group>"; };
+C0000000000000000000000018 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "KeychainStore.swift"; path = "Supabase/KeychainStore.swift"; sourceTree = "<group>"; };
+C000000000000000000000001A /* MediaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MediaService.swift"; path = "Supabase/MediaService.swift"; sourceTree = "<group>"; };
+C000000000000000000000001C /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NotificationService.swift"; path = "Supabase/NotificationService.swift"; sourceTree = "<group>"; };
+C000000000000000000000001E /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ProfileService.swift"; path = "Supabase/ProfileService.swift"; sourceTree = "<group>"; };
+C0000000000000000000000020 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SubscriptionService.swift"; path = "Supabase/SubscriptionService.swift"; sourceTree = "<group>"; };
+C0000000000000000000000022 /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SupabaseService.swift"; path = "Supabase/SupabaseService.swift"; sourceTree = "<group>"; };
+C0000000000000000000000024 /* VibeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "VibeApp.swift"; path = "VibeApp.swift"; sourceTree = "<group>"; };
+C0000000000000000000000026 /* AuthFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AuthFlowView.swift"; path = "Views/AuthFlowView.swift"; sourceTree = "<group>"; };
+C0000000000000000000000028 /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ChatListView.swift"; path = "Views/ChatListView.swift"; sourceTree = "<group>"; };
+C000000000000000000000002A /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ChatView.swift"; path = "Views/ChatView.swift"; sourceTree = "<group>"; };
+C000000000000000000000002C /* MainTabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MainTabsView.swift"; path = "Views/MainTabsView.swift"; sourceTree = "<group>"; };
+C000000000000000000000002E /* MediaCaptureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MediaCaptureView.swift"; path = "Views/MediaCaptureView.swift"; sourceTree = "<group>"; };
+C0000000000000000000000030 /* OTPView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "OTPView.swift"; path = "Views/OTPView.swift"; sourceTree = "<group>"; };
+C0000000000000000000000032 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ProfileView.swift"; path = "Views/ProfileView.swift"; sourceTree = "<group>"; };
+C0000000000000000000000034 /* RecoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RecoveryView.swift"; path = "Views/RecoveryView.swift"; sourceTree = "<group>"; };
+C0000000000000000000000036 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SettingsView.swift"; path = "Views/SettingsView.swift"; sourceTree = "<group>"; };
+C0000000000000000000000038 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SignInView.swift"; path = "Views/SignInView.swift"; sourceTree = "<group>"; };
+C000000000000000000000003A /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SignUpView.swift"; path = "Views/SignUpView.swift"; sourceTree = "<group>"; };
+C000000000000000000000003C /* UsernameEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UsernameEditorView.swift"; path = "Views/UsernameEditorView.swift"; sourceTree = "<group>"; };
+C000000000000000000000003E /* VoiceRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "VoiceRecorderView.swift"; path = "Views/VoiceRecorderView.swift"; sourceTree = "<group>"; };
+C0000000000000000000000040 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "WelcomeView.swift"; path = "Views/WelcomeView.swift"; sourceTree = "<group>"; };
+D0000000000000000000000042 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Contents.json"; path = "Assets.xcassets/AccentColor.colorset/Contents.json"; sourceTree = "<group>"; };
+D0000000000000000000000044 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Contents.json"; path = "Assets.xcassets/AppIcon.appiconset/Contents.json"; sourceTree = "<group>"; };
+D0000000000000000000000046 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Contents.json"; path = "Assets.xcassets/Contents.json"; sourceTree = "<group>"; };
+D0000000000000000000000048 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Contents.json"; path = "Assets.xcassets/LaunchBackground.colorset/Contents.json"; sourceTree = "<group>"; };
+D000000000000000000000004A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info.plist"; path = "Info.plist"; sourceTree = "<group>"; };
+D000000000000000000000004C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PrivacyInfo.xcprivacy"; path = "PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
+D000000000000000000000004E /* Vibe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = "Vibe.entitlements"; path = "Vibe.entitlements"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+B1000000000000000000000007 /* Frameworks */ = {
+	isa = PBXFrameworksBuildPhase;
+	buildActionMask = 2147483647;
+	files = (
+	);
+	runOnlyForDeploymentPostprocessing = 0;
+};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+AD000000000000000000000003 = {
+	isa = PBXGroup;
+	children = (
+		B800000000000000000000000E /* Vibe */,
+		AE000000000000000000000004 /* Products */,
+	);
+	sourceTree = "<group>";
+};
+AE000000000000000000000004 /* Products */ = {
+	isa = PBXGroup;
+	children = (
+		B900000000000000000000000F /* Vibe.app */,
+	);
+	name = Products;
+	sourceTree = "<group>";
+};
+B800000000000000000000000E /* Vibe */ = {
+	isa = PBXGroup;
+	children = (
+		C0000000000000000000000010,
+		C0000000000000000000000012,
+		C0000000000000000000000014,
+		C0000000000000000000000016,
+		C0000000000000000000000018,
+		C000000000000000000000001A,
+		C000000000000000000000001C,
+		C000000000000000000000001E,
+		C0000000000000000000000020,
+		C0000000000000000000000022,
+		C0000000000000000000000024,
+		C0000000000000000000000026,
+		C0000000000000000000000028,
+		C000000000000000000000002A,
+		C000000000000000000000002C,
+		C000000000000000000000002E,
+		C0000000000000000000000030,
+		C0000000000000000000000032,
+		C0000000000000000000000034,
+		C0000000000000000000000036,
+		C0000000000000000000000038,
+		C000000000000000000000003A,
+		C000000000000000000000003C,
+		C000000000000000000000003E,
+		C0000000000000000000000040,
+		D0000000000000000000000042,
+		D0000000000000000000000044,
+		D0000000000000000000000046,
+		D0000000000000000000000048,
+		D000000000000000000000004A,
+		D000000000000000000000004C,
+		D000000000000000000000004E
+	);
+	path = Vibe;
+	sourceTree = "<group>";
+};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+AC000000000000000000000002 /* Vibe */ = {
+	isa = PBXNativeTarget;
+	buildConfigurationList = B3000000000000000000000009 /* Build configuration list for PBXNativeTarget "Vibe" */;
+	buildPhases = (
+		AF000000000000000000000005 /* Sources */,
+		B1000000000000000000000007 /* Frameworks */,
+		B0000000000000000000000006 /* Resources */,
+	);
+	buildRules = (
+	);
+	dependencies = (
+	);
+	name = Vibe;
+	productName = Vibe;
+	productReference = B900000000000000000000000F /* Vibe.app */;
+	productType = "com.apple.product-type.application";
+};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+AB000000000000000000000001 /* Project object */ = {
+	isa = PBXProject;
+	attributes = {
+		BuildIndependentTargetsInParallel = 1;
+		LastSwiftUpdateCheck = 2600;
+		LastUpgradeCheck = 2600;
+		TargetAttributes = {
+			AC000000000000000000000002 = {
+				CreatedOnToolsVersion = 26.0;
+			};
+		};
+	};
+	buildConfigurationList = B2000000000000000000000008 /* Build configuration list for PBXProject "Vibe" */;
+	compatibilityVersion = "Xcode 14.0";
+	developmentRegion = en;
+	hasScannedForEncodings = 0;
+	knownRegions = (
+		en,
+		Base,
+	);
+	mainGroup = AD000000000000000000000003;
+	productRefGroup = AE000000000000000000000004 /* Products */;
+	projectDirPath = "";
+	projectRoot = "";
+	targets = (
+		AC000000000000000000000002 /* Vibe */,
+	);
+};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+B0000000000000000000000006 /* Resources */ = {
+	isa = PBXResourcesBuildPhase;
+	buildActionMask = 2147483647;
+	files = (
+		D1000000000000000000000043,
+		D1000000000000000000000045,
+		D1000000000000000000000047,
+		D1000000000000000000000049,
+		D100000000000000000000004B,
+		D100000000000000000000004D,
+		D100000000000000000000004F
+	);
+	runOnlyForDeploymentPostprocessing = 0;
+};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+AF000000000000000000000005 /* Sources */ = {
+	isa = PBXSourcesBuildPhase;
+	buildActionMask = 2147483647;
+	files = (
+		C1000000000000000000000011,
+		C1000000000000000000000013,
+		C1000000000000000000000015,
+		C1000000000000000000000017,
+		C1000000000000000000000019,
+		C100000000000000000000001B,
+		C100000000000000000000001D,
+		C100000000000000000000001F,
+		C1000000000000000000000021,
+		C1000000000000000000000023,
+		C1000000000000000000000025,
+		C1000000000000000000000027,
+		C1000000000000000000000029,
+		C100000000000000000000002B,
+		C100000000000000000000002D,
+		C100000000000000000000002F,
+		C1000000000000000000000031,
+		C1000000000000000000000033,
+		C1000000000000000000000035,
+		C1000000000000000000000037,
+		C1000000000000000000000039,
+		C100000000000000000000003B,
+		C100000000000000000000003D,
+		C100000000000000000000003F,
+		C1000000000000000000000041
+	);
+	runOnlyForDeploymentPostprocessing = 0;
+};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+B400000000000000000000000A /* Debug */ = {
+	isa = XCBuildConfiguration;
+	buildSettings = {
+		ALWAYS_SEARCH_USER_PATHS = NO;
+		CLANG_ENABLE_MODULES = YES;
+		CLANG_ENABLE_OBJC_ARC = YES;
+		COPY_PHASE_STRIP = NO;
+		DEBUG_INFORMATION_FORMAT = dwarf;
+		ENABLE_STRICT_OBJC_MSGSEND = YES;
+		ENABLE_TESTABILITY = YES;
+		GCC_C_LANGUAGE_STANDARD = gnu17;
+		IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+		MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+		ONLY_ACTIVE_ARCH = YES;
+		SDKROOT = iphoneos;
+		SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+		SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+	};
+	name = Debug;
+};
+B500000000000000000000000B /* Release */ = {
+	isa = XCBuildConfiguration;
+	buildSettings = {
+		ALWAYS_SEARCH_USER_PATHS = NO;
+		CLANG_ENABLE_MODULES = YES;
+		CLANG_ENABLE_OBJC_ARC = YES;
+		COPY_PHASE_STRIP = NO;
+		DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+		ENABLE_NS_ASSERTIONS = NO;
+		ENABLE_STRICT_OBJC_MSGSEND = YES;
+		GCC_C_LANGUAGE_STANDARD = gnu17;
+		IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+		MTL_ENABLE_DEBUG_INFO = NO;
+		SDKROOT = iphoneos;
+		SWIFT_COMPILATION_MODE = wholemodule;
+		SWIFT_OPTIMIZATION_LEVEL = "-O";
+		VALIDATE_PRODUCT = YES;
+	};
+	name = Release;
+};
+B600000000000000000000000C /* Debug */ = {
+	isa = XCBuildConfiguration;
+	buildSettings = {
+		ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+		CODE_SIGN_STYLE = Automatic;
+		GENERATE_INFOPLIST_FILE = NO;
+		INFOPLIST_FILE = Vibe/Info.plist;
+		PRODUCT_BUNDLE_IDENTIFIER = com.vibe.app;
+		PRODUCT_NAME = "$(TARGET_NAME)";
+		SWIFT_EMIT_LOC_STRINGS = YES;
+		SWIFT_VERSION = 5.0;
+		TARGETED_DEVICE_FAMILY = 1;
+		VIBE_API_URL = "";
+		VIBE_SUPABASE_URL = "";
+		VIBE_SUPABASE_ANON_KEY = "";
+	};
+	name = Debug;
+};
+B700000000000000000000000D /* Release */ = {
+	isa = XCBuildConfiguration;
+	buildSettings = {
+		ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+		CODE_SIGN_STYLE = Automatic;
+		GENERATE_INFOPLIST_FILE = NO;
+		INFOPLIST_FILE = Vibe/Info.plist;
+		PRODUCT_BUNDLE_IDENTIFIER = com.vibe.app;
+		PRODUCT_NAME = "$(TARGET_NAME)";
+		SWIFT_EMIT_LOC_STRINGS = YES;
+		SWIFT_VERSION = 5.0;
+		TARGETED_DEVICE_FAMILY = 1;
+		VIBE_API_URL = "";
+		VIBE_SUPABASE_URL = "";
+		VIBE_SUPABASE_ANON_KEY = "";
+	};
+	name = Release;
+};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+B2000000000000000000000008 /* Build configuration list for PBXProject "Vibe" */ = {
+	isa = XCConfigurationList;
+	buildConfigurations = (
+		B400000000000000000000000A /* Debug */,
+		B500000000000000000000000B /* Release */,
+	);
+	defaultConfigurationIsVisible = 0;
+	defaultConfigurationName = Release;
+};
+B3000000000000000000000009 /* Build configuration list for PBXNativeTarget "Vibe" */ = {
+	isa = XCConfigurationList;
+	buildConfigurations = (
+		B600000000000000000000000C /* Debug */,
+		B700000000000000000000000D /* Release */,
+	);
+	defaultConfigurationIsVisible = 0;
+	defaultConfigurationName = Release;
+};
+/* End XCConfigurationList section */
+	};
+	rootObject = AB000000000000000000000001 /* Project object */;
+}
