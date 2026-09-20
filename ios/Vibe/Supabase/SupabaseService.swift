@@ -10,6 +10,7 @@ struct VibeProfile: Codable {
     let id: String
     let displayName: String?
     let bio: String?
+    let username: String?
 }
 
 final class SupabaseService {

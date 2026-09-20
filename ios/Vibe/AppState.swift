@@ -35,7 +35,7 @@ final class AppState: ObservableObject {
     }
 
     func signOut() async {
-        try? await supabase.request(
+        try? await supabase.requestNoContent(
             path: "/api/cloud/auth/logout",
             method: "POST",
             token: session?.accessToken

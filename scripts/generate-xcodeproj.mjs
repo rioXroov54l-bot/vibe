@@ -16,7 +16,14 @@ async function walk(dir) {
 await walk(sourceRoot);
 
 const swiftFiles = files.filter(f => f.endsWith('.swift')).sort();
-const resourceFiles = files.filter(f => !f.endsWith('.swift')).sort();
+const assetCatalog = path.join(sourceRoot, 'Assets.xcassets');
+const resourceFiles = files
+  .filter(f => !f.endsWith('.swift'))
+  .filter(f => !f.endsWith('Info.plist'))
+  .filter(f => !f.endsWith('.entitlements'))
+  .filter(f => !f.includes(`${path.sep}Assets.xcassets${path.sep}`))
+  .sort();
+resourceFiles.push(assetCatalog);
 
 let counter = 0;
 const uuid = prefix => {
@@ -78,9 +85,10 @@ const resourceFileRefs = [...resourceRefs.entries()]
     if (file.endsWith('.xcprivacy') || file.endsWith('.plist')) {
       return fileReference(id, file, 'text.plist.xml');
     }
-    if (file.endsWith('.entitlements')) return fileReference(id, file, 'text.plist.entitlements');
-    if (file.endsWith('.json')) return fileReference(id, file, 'text.json');
-    return fileReference(id, file, 'file');
+  if (file.endsWith('.entitlements')) return fileReference(id, file, 'text.plist.entitlements');
+  if (file.endsWith('.json')) return fileReference(id, file, 'text.json');
+  if (file.endsWith('.xcassets')) return fileReference(id, file, 'folder.assetcatalog');
+  return fileReference(id, file, 'file');
   })
   .join('\n');
 
