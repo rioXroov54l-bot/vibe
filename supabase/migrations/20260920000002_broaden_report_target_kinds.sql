@@ -1,4 +1,3 @@
--- Broaden supported report target kinds for compliance/legal reports.
 -- Non-destructive: only replaces the target_kind check constraint.
 
 do $$

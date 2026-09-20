@@ -1,4 +1,3 @@
--- Additive reconciliation for the live Supabase schema.
 -- This migration intentionally:
 --   - creates missing runtime tables only if absent
 --   - adds missing columns only if absent
