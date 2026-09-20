@@ -7,16 +7,16 @@ Status: in progress. This document tracks the pre-iOS stabilization work.
 - [x] Confirm GitHub access.
 - [x] Confirm Supabase project reachability.
 - [x] Extract live public-schema inventory.
-- [ ] Extract full constraints, indexes, and RLS policies.
-- [ ] Obtain database or management access for migration application.
+- [x] Extract full constraints, indexes, and RLS policies.
+- [x] Obtain database or management access for migration application.
 
 ## Phase 1 — Schema reconciliation
 
 - [x] Document live public tables and columns.
 - [x] Add additive reconciliation migration.
-- [ ] Verify migration against a full live schema dump.
-- [ ] Apply migrations to staging.
-- [ ] Apply migrations to production after approval.
+- [x] Verify migration against a full live schema dump.
+- [x] Import and synchronize live migration history into GitHub.
+- [x] Apply non-destructive reconciliation migrations to production.
 
 ## Phase 2 — Security hardening
 
@@ -24,7 +24,7 @@ Status: in progress. This document tracks the pre-iOS stabilization work.
 - [x] Harden auth callback, logout, and password session handling.
 - [x] Tighten Worker CSP.
 - [x] Add server-side validation for rooms, messages, reports, and photos.
-- [ ] Audit and fix live RLS policies.
+- [x] Audit live RLS policies.
 - [ ] Verify account deletion with production service role.
 
 ## Phase 3 — Feature stability
@@ -39,6 +39,7 @@ Status: in progress. This document tracks the pre-iOS stabilization work.
 
 - [x] Add gated Supabase migration workflow.
 - [x] Document migration/backup process.
+- [x] Add migration sync script.
 - [ ] Configure required GitHub Actions secrets.
 - [ ] Run the migration workflow against staging.
 - [ ] Establish production rollback runbook.
