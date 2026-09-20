@@ -578,6 +578,7 @@ cloudRoute = async function (req, env, url) {
   try {
     out = await complianceIntercept(req, env, url);
   } catch (e) {
+    console.error('compliance interception failed', e?.message || e);
     return cloudResponse({ error: 'server_error' }, 500);
   }
   if (out !== undefined) return out;
