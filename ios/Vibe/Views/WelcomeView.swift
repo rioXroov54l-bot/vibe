@@ -2,45 +2,47 @@ import SwiftUI
 
 struct WelcomeView: View {
     var body: some View {
-        ZStack {
-            LinearGradient(
-                colors: [Color(red: 0.42, green: 0.18, blue: 0.58), Color(red: 0.08, green: 0.05, blue: 0.13)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+        NavigationStack {
+            ZStack {
+                LinearGradient(
+                    colors: [Color(red: 0.42, green: 0.18, blue: 0.58), Color(red: 0.08, green: 0.05, blue: 0.13)],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                Spacer()
-                VStack(spacing: 8) {
-                    Text("vibe")
-                        .font(.system(size: 72, weight: .black, design: .rounded))
-                        .tracking(-5)
-                    Text("On the same wavelength.")
-                        .font(.title3.weight(.semibold))
-                        .opacity(0.8)
+                VStack(spacing: 0) {
+                    Spacer()
+                    VStack(spacing: 8) {
+                        Text("vibe")
+                            .font(.system(size: 72, weight: .black, design: .rounded))
+                            .tracking(-5)
+                        Text("On the same wavelength.")
+                            .font(.title3.weight(.semibold))
+                            .opacity(0.8)
+                    }
+                    .foregroundStyle(.white)
+                    Spacer()
+
+                    VStack(spacing: 12) {
+                        Text("By continuing, you agree to our Terms and Privacy Policy.")
+                            .font(.footnote)
+                            .foregroundStyle(.white.opacity(0.7))
+                            .multilineTextAlignment(.center)
+
+                        NavigationLink("Create account") { SignUpView() }
+                            .buttonStyle(PrimaryAuthButtonStyle())
+
+                        NavigationLink("Sign in") { SignInView() }
+                            .buttonStyle(SecondaryAuthButtonStyle())
+
+                        NavigationLink("Trouble signing in?") { RecoveryView() }
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.white.opacity(0.85))
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 28)
                 }
-                .foregroundStyle(.white)
-                Spacer()
-
-                VStack(spacing: 12) {
-                    Text("By continuing, you agree to our Terms and Privacy Policy.")
-                        .font(.footnote)
-                        .foregroundStyle(.white.opacity(0.7))
-                        .multilineTextAlignment(.center)
-
-                    Button("Create account") {}
-                        .buttonStyle(PrimaryAuthButtonStyle())
-
-                    Button("Sign in") {}
-                        .buttonStyle(SecondaryAuthButtonStyle())
-
-                    Button("Trouble signing in?") {}
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.white.opacity(0.85))
-                }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 28)
             }
         }
     }

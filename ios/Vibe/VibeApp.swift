@@ -3,11 +3,13 @@ import SwiftUI
 @main
 struct VibeApp: App {
     @StateObject private var appState = AppState()
+    @StateObject private var authService = AuthService()
 
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environmentObject(appState)
+                .environmentObject(authService)
         }
     }
 }

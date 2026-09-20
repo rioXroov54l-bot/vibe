@@ -9,28 +9,36 @@ final class AppState: ObservableObject {
     @Published var isOnboardingComplete = false
 
     private let supabase = SupabaseService.shared
+    private let keychain = KeychainStore.shared
 
     func restoreSession() async {
         isLoading = true
         defer { isLoading = false }
+        guard let access = keychain.read("vibe.access_token"),
+              let refresh = keychain.read("vibe.refresh_token"),
+              let userID = keychain.read("vibe.user_id") else {
+            session = nil
+            return
+        }
+        session = SupabaseSession(accessToken: access, refreshToken: refresh, userID: userID)
         do {
-            session = try await supabase.restoreSession()
-            if session != nil {
-                try await loadProfile()
-            }
+            try await loadProfile()
         } catch {
             session = nil
+            isOnboardingComplete = false
         }
     }
 
     func loadProfile() async throws {
         guard let token = session?.accessToken else { return }
-        let result: VibeProfile = try await supabase.request(
+        let response: ProfileResponse = try await supabase.request(
             path: "/api/cloud/profile",
             method: "GET",
             token: token
         )
-        profile = result
+        var loadedProfile = response.profile
+        loadedProfile.username = response.account?.username ?? response.profile.username
+        profile = loadedProfile
         isOnboardingComplete = true
     }
 
@@ -43,5 +51,14 @@ final class AppState: ObservableObject {
         session = nil
         profile = nil
         isOnboardingComplete = false
+    }
+
+    private struct ProfileResponse: Decodable {
+        let profile: VibeProfile
+        let account: AccountProfile?
+    }
+
+    private struct AccountProfile: Decodable {
+        let username: String?
     }
 }

@@ -10,7 +10,14 @@ struct VibeProfile: Codable {
     let id: String
     let displayName: String?
     let bio: String?
-    let username: String?
+    var username: String?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case displayName = "display_name"
+        case bio
+        case username
+    }
 }
 
 final class SupabaseService {
