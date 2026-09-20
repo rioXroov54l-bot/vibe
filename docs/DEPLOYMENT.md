@@ -37,6 +37,7 @@ the packaging step must upload it explicitly with
 | **Vibe CI** (`ci.yml`) | push to `main`, pull requests, manual dispatch | `npm ci` → build → `npm test` → `npm run test:cinema` → `npm run preflight` |
 | **Vibe Release Bundle** (`release-bundle.yml`) | manual `workflow_dispatch` only | same build + test + preflight chain, then uploads the `dist/` output |
 | **Configure Supabase Auth Email** (`configure-supabase-auth.yml`) | manual `workflow_dispatch` only | configures Supabase Auth SMTP/OTP templates |
+| **Supabase Migrate** (`supabase-migrate.yml`) | manual `workflow_dispatch` only | links the project and applies `supabase/migrations/` with `supabase db push` |
 
 - **CI does not deploy.** There is no deploy, promote or rollback command in any
   workflow, no publishing credential is consumed by CI, and no workflow claims
@@ -98,6 +99,24 @@ Used by the repository's Supabase Auth email configuration flow (manual
 The Supabase publishable key used by the browser-facing Supabase client is
 public by design; user session JWTs stay in `HttpOnly` cookies and are never
 returned to client code.
+
+## 3.3 Database migrations and backups
+
+Database changes are stored in `supabase/migrations/` and applied with the
+manual **Supabase Migrate** workflow. Production migrations are additive by
+default and must never drop or overwrite user data.
+
+Before applying a production migration:
+
+1. Take a Supabase database backup.
+2. Export the `vibe-media` storage bucket separately; Postgres backups do not
+   include Storage objects.
+3. Apply to staging first and run the RLS/integration tests.
+4. Record the current migration state and confirm a rollback path.
+5. Apply to production only after explicit approval.
+
+If a migration fails, restore from the backup rather than applying untracked
+manual SQL to the production database.
 
 ## 4. Release procedure
 
