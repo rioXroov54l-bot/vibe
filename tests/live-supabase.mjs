@@ -98,6 +98,24 @@ try {
     body: JSON.stringify({ display_name: 'Alpha Updated', bio: 'Live profile', data: { nature: [1], interests: [2], types: [1] } })
   });
   assert.equal(patched.profile.display_name, 'Alpha Updated');
+  const uniqueUsername = `alpha${runId.replace(/-/g, '')}`.slice(0, 39).toLowerCase();
+  const available = await workerJson(`/api/cloud/username?q=${uniqueUsername}`, a.token);
+  assert.equal(available.available, true);
+  await workerJson('/api/cloud/username', a.token, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username: uniqueUsername })
+  });
+  const taken = await workerJson(`/api/cloud/username?q=${uniqueUsername}`, b.token);
+  assert.equal(taken.available, false);
+  const subscription = await workerJson('/api/cloud/subscription', a.token);
+  assert.ok(Array.isArray(subscription.subscriptions));
+  await workerJson('/api/cloud/device-token', a.token, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token: 'live-test-apns-token', platform: 'ios' })
+  });
+  await workerJson('/api/cloud/device-token?token=live-test-apns-token', a.token, { method: 'DELETE' });
   await completeOnboarding(a.token);
   await completeOnboarding(b.token);
 
