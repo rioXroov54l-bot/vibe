@@ -411,7 +411,7 @@ async function complianceReports(req, env, url, method) {
       target_id: targetId,
       reason: reason,
       details: details,
-      status: 'open',
+      status: 'received',
     }),
   });
   if (!res || !res.ok) return cloudResponse({ error: 'report_failed' }, 400);
