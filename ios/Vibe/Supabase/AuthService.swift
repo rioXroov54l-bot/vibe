@@ -40,6 +40,49 @@ final class AuthService: ObservableObject {
         ])
     }
 
+    func verifyOTP(email: String, token: String, kind: String = "signup") async {
+        await authenticate(path: "/api/cloud/auth/verify", body: [
+            "email": email,
+            "token": token,
+            "type": "email"
+        ])
+    }
+
+    func requestRecovery(email: String) async {
+        await authenticate(path: "/api/cloud/auth/recover", body: ["email": email])
+    }
+
+    func signOut() async {
+        if let token = session?.accessToken {
+            try? await backend.requestNoContent(
+                path: "/api/cloud/auth/logout",
+                method: "POST",
+                token: token
+            )
+        }
+        session = nil
+        keychain.delete(Key.access)
+        keychain.delete(Key.refresh)
+        keychain.delete(Key.user)
+    }
+
+    func refreshSession() async {
+        guard let refresh = keychain.read(Key.refresh) else { return }
+        do {
+            let tokens = try await backend.refreshSupabaseToken(refreshToken: refresh)
+            session = SupabaseSession(
+                accessToken: tokens.accessToken,
+                refreshToken: tokens.refreshToken,
+                userID: tokens.user.id
+            )
+            keychain.save(tokens.accessToken, for: Key.access)
+            keychain.save(tokens.refreshToken, for: Key.refresh)
+            keychain.save(tokens.user.id, for: Key.user)
+        } catch {
+            session = nil
+        }
+    }
+
     private func authenticate(path: String, body: [String: Any]) async {
         isLoading = true
         errorMessage = nil
