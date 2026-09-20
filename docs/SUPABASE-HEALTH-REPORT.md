@@ -60,6 +60,15 @@ No data was deleted or overwritten during this audit.
 - Corrected Supabase Auth site URL and password policy.
 - Added idempotent message client ids.
 
+## Live smoke test
+
+- Created a disposable email-confirmed test user with the service role.
+- Verified password login returned an access token.
+- Verified the user’s `vibe_profiles` row was provisioned and readable.
+- Deleted the test user successfully with the service role.
+
+Result: pass. No test data remained.
+
 ## Remaining production items
 
 - Configure production runtime secrets.
