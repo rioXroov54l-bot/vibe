@@ -237,13 +237,13 @@ async function compliancePurgeStorage(env, uid) {
   const prefix = String(uid).replace(/\/+$/, '');
   const rootDepth = prefix.split('/').length;
   const dirs = [prefix];
-  const files = [];
+  const files = new Set();
   let guard = 0;
-  while (dirs.length && files.length < 2000 && guard < 500) {
+  while (dirs.length && guard < 10000) {
     guard += 1;
     const dir = dirs.shift();
     let offset = 0;
-    while (files.length < 2000) {
+    while (true) {
       const res = await complianceServiceFetch(env, '/storage/v1/object/list/' + bucket, {
         method: 'POST',
         headers: complianceSvcHeaders(env, { 'Content-Type': 'application/json' }),
@@ -258,18 +258,18 @@ async function compliancePurgeStorage(env, uid) {
         const full = dir + '/' + e.name;
         if (full !== prefix && full.indexOf(prefix + '/') !== 0) continue;
         if (e.id || e.metadata) {
-          files.push(full);
+          files.add(full);
         } else if (full.split('/').length <= rootDepth + 8) {
           dirs.push(full);
         }
-        if (files.length >= 2000) break;
       }
       if (entries.length < 100) break;
       offset += entries.length;
     }
   }
-  for (let i = 0; i < files.length; i += 100) {
-    const batch = files.slice(i, i + 100);
+  const allFiles = [...files];
+  for (let i = 0; i < allFiles.length; i += 100) {
+    const batch = allFiles.slice(i, i + 100);
     const res = await complianceServiceFetch(env, '/storage/v1/object/' + bucket, {
       method: 'DELETE',
       headers: complianceSvcHeaders(env, { 'Content-Type': 'application/json' }),
