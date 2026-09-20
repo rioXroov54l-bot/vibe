@@ -100,6 +100,67 @@ final class SupabaseService {
         return try JSONDecoder().decode(AuthTokenResponse.self, from: data)
     }
 
+    func supabaseRequest<T: Decodable>(
+        path: String,
+        method: String = "POST",
+        body: Data? = nil,
+        token: String? = nil
+    ) async throws -> T {
+        do {
+            var request = URLRequest(url: URL(string: path, relativeTo: supabaseBaseURL) ?? supabaseBaseURL)
+            request.httpMethod = method
+            request.setValue(anonKey, forHTTPHeaderField: "apikey")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            if let token {
+                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            }
+            request.httpBody = body
+            let (data, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+                let http = response as? HTTPURLResponse
+                let status = http?.statusCode ?? 0
+                let text = String(data: data, encoding: .utf8) ?? ""
+                print("Supabase Auth failed for \(path): HTTP \(status) \(text)")
+                throw VibeAPIError(statusCode: status, code: decodedErrorCode(from: data) ?? "auth_failed", message: text)
+            }
+            return try JSONDecoder().decode(T.self, from: data)
+        } catch {
+            print("Supabase Auth error for \(path): \(error.localizedDescription)")
+            throw error
+        }
+    }
+
+    func supabaseRequestNoContent(
+        path: String,
+        method: String = "POST",
+        body: Data? = nil,
+        token: String? = nil
+    ) async throws {
+        do {
+            var request = URLRequest(url: URL(string: path, relativeTo: supabaseBaseURL) ?? supabaseBaseURL)
+            request.httpMethod = method
+            request.setValue(anonKey, forHTTPHeaderField: "apikey")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            if let token {
+                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            }
+            request.httpBody = body
+            let (data, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+                let http = response as? HTTPURLResponse
+                let status = http?.statusCode ?? 0
+                let text = String(data: data, encoding: .utf8) ?? ""
+                print("Supabase Auth failed for \(path): HTTP \(status) \(text)")
+                throw VibeAPIError(statusCode: status, code: decodedErrorCode(from: data) ?? "auth_failed", message: text)
+            }
+        } catch {
+            print("Supabase Auth error for \(path): \(error.localizedDescription)")
+            throw error
+        }
+    }
+
     func requestNoContent(
         path: String,
         method: String = "POST",

@@ -29,38 +29,91 @@ final class AuthService: ObservableObject {
     func signUp(email: String, password: String, displayName: String) async {
         print("Signup button pressed")
         print("Calling Supabase signup")
-        await authenticate(path: "/api/cloud/auth/signup", body: [
-            "email": email,
-            "password": password,
-            "name": displayName,
-            "accepted": true
-        ], email: email)
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+        do {
+            let body = try JSONSerialization.data(withJSONObject: [
+                "email": email,
+                "password": password,
+                "data": ["display_name": displayName]
+            ])
+            let _: SupabaseSignupResponse = try await backend.supabaseRequest(
+                path: "/auth/v1/signup",
+                method: "POST",
+                body: body
+            )
+            pendingEmail = email
+            needsVerification = true
+            print("OTP email sent")
+        } catch {
+            errorMessage = error.localizedDescription
+            print("Signup failed: \(error.localizedDescription)")
+        }
     }
 
     func signIn(email: String, password: String) async {
         print("Signin button pressed")
-        await authenticate(path: "/api/cloud/auth/login", body: [
-            "email": email,
-            "password": password
-        ])
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+        do {
+            let body = try JSONEncoder().encode(["email": email, "password": password])
+            let tokens: AuthTokenResponse = try await backend.supabaseRequest(
+                path: "/auth/v1/token?grant_type=password",
+                method: "POST",
+                body: body
+            )
+            store(tokens)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
     }
 
     func verifyOTP(email: String, token: String, kind: String = "signup") async {
         print("OTP verification started")
-        await authenticate(path: "/api/cloud/auth/verify", body: [
-            "email": email,
-            "token": token,
-            "type": "email"
-        ])
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+        do {
+            let body = try JSONEncoder().encode(["email": email, "token": token, "type": "email"])
+            let tokens: AuthTokenResponse = try await backend.supabaseRequest(
+                path: "/auth/v1/verify",
+                method: "POST",
+                body: body
+            )
+            store(tokens)
+            needsVerification = false
+            pendingEmail = nil
+            print("Signup completed")
+        } catch {
+            errorMessage = error.localizedDescription
+        }
     }
 
     func requestRecovery(email: String) async {
-        await authenticate(path: "/api/cloud/auth/recover", body: ["email": email])
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+        do {
+            let body = try JSONEncoder().encode(["email": email])
+            try await backend.supabaseRequestNoContent(path: "/auth/v1/recover", method: "POST", body: body)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
     }
 
     func resendOTP(email: String, kind: String = "signup") async {
         print("Resend OTP requested")
-        await authenticate(path: kind == "signup" ? "/api/cloud/auth/resend" : "/api/cloud/auth/otp", body: ["email": email, "type": kind])
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+        do {
+            let body = try JSONEncoder().encode(["email": email, "type": kind])
+            try await backend.supabaseRequestNoContent(path: "/auth/v1/resend", method: "POST", body: body)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
     }
 
     func signOut() async {
@@ -94,52 +147,15 @@ final class AuthService: ObservableObject {
         }
     }
 
-    private func authenticate(path: String, body: [String: Any], email: String? = nil) async {
-        isLoading = true
-        errorMessage = nil
-        defer { isLoading = false }
-        do {
-            let data = try JSONSerialization.data(withJSONObject: body)
-            let response: AuthResponse = try await backend.request(
-                path: path,
-                method: "POST",
-                body: data
-            )
-            if response.confirmationRequired {
-                if let email {
-                    pendingEmail = email
-                    needsVerification = true
-                    print("OTP email sent")
-                }
-                return
-            }
-            if let token = response.accessToken,
-               let refresh = response.refreshToken,
-               let userID = response.userID {
-                session = SupabaseSession(accessToken: token, refreshToken: refresh, userID: userID)
-                keychain.save(token, for: Key.access)
-                keychain.save(refresh, for: Key.refresh)
-                keychain.save(userID, for: Key.user)
-                print("Signup completed")
-            }
-        } catch {
-            errorMessage = error.localizedDescription
-        }
+    private func store(_ tokens: AuthTokenResponse) {
+        session = SupabaseSession(accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, userID: tokens.user.id)
+        keychain.save(tokens.accessToken, for: Key.access)
+        keychain.save(tokens.refreshToken, for: Key.refresh)
+        keychain.save(tokens.user.id, for: Key.user)
     }
 }
 
-private struct AuthResponse: Decodable {
-    let ok: Bool
-    let confirmationRequired: Bool
-    let accessToken: String?
-    let refreshToken: String?
-    let userID: String?
-
-    enum CodingKeys: String, CodingKey {
-        case ok
-        case confirmationRequired = "confirmation_required"
-        case accessToken = "access_token"
-        case refreshToken = "refresh_token"
-        case userID = "user_id"
-    }
+private struct SupabaseSignupResponse: Decodable {
+    let id: String
+    let email: String?
 }
