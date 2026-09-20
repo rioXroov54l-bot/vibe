@@ -101,6 +101,25 @@ try {
   await completeOnboarding(a.token);
   await completeOnboarding(b.token);
 
+  const settings = await workerJson('/api/cloud/settings', a.token);
+  assert.equal(typeof settings.settings, 'object');
+  await workerJson('/api/cloud/settings', a.token, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ appearance: 'dark', smartPhotos: true, hideAge: false, hideDistance: false })
+  });
+
+  await workerJson('/api/cloud/profile-details', a.token, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ living_in: 'Riyadh', height_cm: 175, job: 'Engineer', education: 'BSc', basics: { zodiac: 'Leo' }, lifestyle: { pets: 'cats' } })
+  });
+  await workerJson('/api/cloud/profile-prompts', a.token, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompts: [{ question: 'What matters to me?', answer: 'Kindness' }] })
+  });
+
   const png = Buffer.from(
     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
     'base64'
@@ -123,6 +142,12 @@ try {
     body: JSON.stringify({ title: 'Live test room', category: 1, kind: 'voice' })
   });
   await workerJson(`/api/cloud/membership?room=${room.room.id}`, b.token, { method: 'POST' });
+  const members = await workerJson(`/api/cloud/membership?room=${room.room.id}`, b.token);
+  assert.equal(members.members.length, 2);
+
+  await workerJson(`/api/cloud/likes?id=${room.room.id}`, a.token, { method: 'POST' });
+  const likes = await workerJson('/api/cloud/likes', a.token);
+  assert.ok(likes.items.some((item) => item.room_id === room.room.id));
 
   const message = await workerJson('/api/cloud/messages', a.token, {
     method: 'POST',
@@ -140,6 +165,22 @@ try {
   });
   const inbox = await workerJson('/api/cloud/inbox', b.token);
   assert.ok(inbox.messages.some((m) => m.id === dm.message.id));
+
+  const notifications = await workerJson('/api/cloud/notifications', b.token);
+  assert.ok(Array.isArray(notifications.items));
+
+  await workerJson(`/api/cloud/blocks?id=${b.id}`, a.token, { method: 'POST' });
+  const blocks = await workerJson('/api/cloud/blocks', a.token);
+  assert.ok(blocks.items.some((item) => item.blocked_id === b.id));
+  await workerJson(`/api/cloud/blocks?id=${b.id}`, a.token, { method: 'DELETE' });
+
+  const report = await workerJson('/api/cloud/reports', b.token, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ target_kind: 'user', target_id: a.id, reason: 'Live test report', details: 'Disposable integration check' })
+  });
+  const reports = await workerJson('/api/cloud/reports', b.token);
+  assert.ok(reports.reports.some((r) => r.id === report.report.id));
 
   console.log('PASS: live Supabase auth/profile/media/rooms/messages/reactions/inbox flows.');
 } finally {
