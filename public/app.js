@@ -7,7 +7,7 @@ function on(callback,event='click'){
  handlerMaps[handlerScope].set(id,{callback,event});
  return `data-${event}-id="${id}"`;
 }
-for(const eventType of ['click','dblclick','submit','change','input'])document.addEventListener(eventType,event=>{
+for(const eventType of ['click','dblclick','submit','change','input','keydown','paste'])document.addEventListener(eventType,event=>{
  const node=event.target?.closest?.(`[data-${eventType}-id]`);
  if(!node)return;
  const scope=node.closest('#create')?'dialog':node.closest('#app')?'app':null;
