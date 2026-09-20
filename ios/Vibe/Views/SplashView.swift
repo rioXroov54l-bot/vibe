@@ -3,15 +3,31 @@ import SwiftUI
 struct SplashView: View {
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
-            VStack(spacing: 8) {
-                Text("vibe")
-                    .font(.system(size: 64, weight: .black, design: .rounded))
-                    .tracking(-4)
-                    .foregroundStyle(.white)
+            VibeBackground()
+
+            VStack(spacing: 12) {
+                VibeLogo(size: 76)
                 Text("On the same wavelength.")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.white.opacity(0.7))
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(.white.opacity(0.82))
+            }
+        }
+    }
+}
+
+struct VibeLogo: View {
+    var size: CGFloat
+
+    var body: some View {
+        HStack(spacing: 5) {
+            Text("vibe")
+                .font(.system(size: size, weight: .black, design: .rounded))
+                .tracking(-size * 0.065)
+                .foregroundStyle(.white)
+            VStack(alignment: .leading, spacing: 4) {
+                Capsule().fill(.white.opacity(0.95)).frame(width: size * 0.11, height: size * 0.32)
+                Capsule().fill(.white.opacity(0.72)).frame(width: size * 0.11, height: size * 0.24)
+                Capsule().fill(.white.opacity(0.45)).frame(width: size * 0.11, height: size * 0.16)
             }
         }
     }

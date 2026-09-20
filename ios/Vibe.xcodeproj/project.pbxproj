@@ -31,10 +31,11 @@ C1000000000000000000000039 /* SignInView.swift in Sources */ = {isa = PBXBuildFi
 C100000000000000000000003B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000003A /* SignUpView.swift */; };
 C100000000000000000000003D /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000003C /* SplashView.swift */; };
 C100000000000000000000003F /* UsernameEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000003E /* UsernameEditorView.swift */; };
-C1000000000000000000000041 /* VoiceRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000040 /* VoiceRecorderView.swift */; };
-C1000000000000000000000043 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000042 /* WelcomeView.swift */; };
-D1000000000000000000000045 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000044 /* PrivacyInfo.xcprivacy */; };
-D1000000000000000000000047 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000046 /* Assets.xcassets */; };
+C1000000000000000000000041 /* VibeBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000040 /* VibeBackground.swift */; };
+C1000000000000000000000043 /* VoiceRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000042 /* VoiceRecorderView.swift */; };
+C1000000000000000000000045 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000044 /* WelcomeView.swift */; };
+D1000000000000000000000047 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000046 /* PrivacyInfo.xcprivacy */; };
+D1000000000000000000000049 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000048 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,10 +64,11 @@ C0000000000000000000000038 /* SignInView.swift */ = {isa = PBXFileReference; las
 C000000000000000000000003A /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SignUpView.swift"; path = "Views/SignUpView.swift"; sourceTree = "<group>"; };
 C000000000000000000000003C /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SplashView.swift"; path = "Views/SplashView.swift"; sourceTree = "<group>"; };
 C000000000000000000000003E /* UsernameEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UsernameEditorView.swift"; path = "Views/UsernameEditorView.swift"; sourceTree = "<group>"; };
-C0000000000000000000000040 /* VoiceRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "VoiceRecorderView.swift"; path = "Views/VoiceRecorderView.swift"; sourceTree = "<group>"; };
-C0000000000000000000000042 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "WelcomeView.swift"; path = "Views/WelcomeView.swift"; sourceTree = "<group>"; };
-D0000000000000000000000044 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PrivacyInfo.xcprivacy"; path = "PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
-D0000000000000000000000046 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Assets.xcassets"; path = "Assets.xcassets"; sourceTree = "<group>"; };
+C0000000000000000000000040 /* VibeBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "VibeBackground.swift"; path = "Views/VibeBackground.swift"; sourceTree = "<group>"; };
+C0000000000000000000000042 /* VoiceRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "VoiceRecorderView.swift"; path = "Views/VoiceRecorderView.swift"; sourceTree = "<group>"; };
+C0000000000000000000000044 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "WelcomeView.swift"; path = "Views/WelcomeView.swift"; sourceTree = "<group>"; };
+D0000000000000000000000046 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PrivacyInfo.xcprivacy"; path = "PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
+D0000000000000000000000048 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Assets.xcassets"; path = "Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,8 +127,9 @@ B800000000000000000000000E /* Vibe */ = {
 		C000000000000000000000003E,
 		C0000000000000000000000040,
 		C0000000000000000000000042,
-		D0000000000000000000000044,
-		D0000000000000000000000046
+		C0000000000000000000000044,
+		D0000000000000000000000046,
+		D0000000000000000000000048
 	);
 	path = Vibe;
 	sourceTree = "<group>";
@@ -189,8 +192,8 @@ B0000000000000000000000006 /* Resources */ = {
 	isa = PBXResourcesBuildPhase;
 	buildActionMask = 2147483647;
 	files = (
-		D1000000000000000000000045,
-		D1000000000000000000000047
+		D1000000000000000000000047,
+		D1000000000000000000000049
 	);
 	runOnlyForDeploymentPostprocessing = 0;
 };
@@ -226,7 +229,8 @@ AF000000000000000000000005 /* Sources */ = {
 		C100000000000000000000003D,
 		C100000000000000000000003F,
 		C1000000000000000000000041,
-		C1000000000000000000000043
+		C1000000000000000000000043,
+		C1000000000000000000000045
 	);
 	runOnlyForDeploymentPostprocessing = 0;
 };

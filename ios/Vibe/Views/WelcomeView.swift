@@ -4,24 +4,21 @@ struct WelcomeView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                LinearGradient(
-                    colors: [Color(red: 0.42, green: 0.18, blue: 0.58), Color(red: 0.08, green: 0.05, blue: 0.13)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
+                VibeBackground()
 
-                VStack(spacing: 0) {
+                VStack {
                     Spacer()
-                    VStack(spacing: 8) {
-                        Text("vibe")
-                            .font(.system(size: 72, weight: .black, design: .rounded))
-                            .tracking(-5)
-                        Text("On the same wavelength.")
-                            .font(.title3.weight(.semibold))
-                            .opacity(0.8)
+                    VStack(spacing: 18) {
+                        VibeLogo(size: 86)
+                        Text("Find your kind of people.")
+                            .font(.title2.weight(.bold))
+                            .foregroundStyle(.white)
+                        Text("Join rooms, conversations, and shared moments built around your vibe.")
+                            .font(.body)
+                            .foregroundStyle(.white.opacity(0.7))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 28)
                     }
-                    .foregroundStyle(.white)
                     Spacer()
 
                     VStack(spacing: 12) {
@@ -41,7 +38,7 @@ struct WelcomeView: View {
                             .foregroundStyle(.white.opacity(0.85))
                     }
                     .padding(.horizontal, 24)
-                    .padding(.bottom, 28)
+                    .padding(.bottom, 12)
                 }
             }
         }
