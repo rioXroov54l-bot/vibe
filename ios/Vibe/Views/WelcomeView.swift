@@ -71,17 +71,7 @@ struct SecondaryAuthButtonStyle: ButtonStyle {
     }
 }
 
-struct SplashView: View {
-    var body: some View {
-        ZStack {
-            Color.black.ignoresSafeArea()
-            Text("vibe")
-                .font(.system(size: 64, weight: .black, design: .rounded))
-                .tracking(-4)
-                .foregroundStyle(.white)
-        }
-    }
-}
+
 
 struct OnboardingView: View {
     var body: some View {

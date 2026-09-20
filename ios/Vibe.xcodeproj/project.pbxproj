@@ -29,16 +29,12 @@ C1000000000000000000000035 /* RecoveryView.swift in Sources */ = {isa = PBXBuild
 C1000000000000000000000037 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000036 /* SettingsView.swift */; };
 C1000000000000000000000039 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000038 /* SignInView.swift */; };
 C100000000000000000000003B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000003A /* SignUpView.swift */; };
-C100000000000000000000003D /* UsernameEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000003C /* UsernameEditorView.swift */; };
-C100000000000000000000003F /* VoiceRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000003E /* VoiceRecorderView.swift */; };
-C1000000000000000000000041 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000040 /* WelcomeView.swift */; };
-D1000000000000000000000043 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000042 /* Contents.json */; };
-D1000000000000000000000045 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000044 /* Contents.json */; };
-D1000000000000000000000047 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000046 /* Contents.json */; };
-D1000000000000000000000049 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000048 /* Contents.json */; };
-D100000000000000000000004B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D000000000000000000000004A /* Info.plist */; };
-D100000000000000000000004D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D000000000000000000000004C /* PrivacyInfo.xcprivacy */; };
-D100000000000000000000004F /* Vibe.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = D000000000000000000000004E /* Vibe.entitlements */; };
+C100000000000000000000003D /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000003C /* SplashView.swift */; };
+C100000000000000000000003F /* UsernameEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C000000000000000000000003E /* UsernameEditorView.swift */; };
+C1000000000000000000000041 /* VoiceRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000040 /* VoiceRecorderView.swift */; };
+C1000000000000000000000043 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0000000000000000000000042 /* WelcomeView.swift */; };
+D1000000000000000000000045 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000044 /* PrivacyInfo.xcprivacy */; };
+D1000000000000000000000047 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D0000000000000000000000046 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,16 +61,12 @@ C0000000000000000000000034 /* RecoveryView.swift */ = {isa = PBXFileReference; l
 C0000000000000000000000036 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SettingsView.swift"; path = "Views/SettingsView.swift"; sourceTree = "<group>"; };
 C0000000000000000000000038 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SignInView.swift"; path = "Views/SignInView.swift"; sourceTree = "<group>"; };
 C000000000000000000000003A /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SignUpView.swift"; path = "Views/SignUpView.swift"; sourceTree = "<group>"; };
-C000000000000000000000003C /* UsernameEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UsernameEditorView.swift"; path = "Views/UsernameEditorView.swift"; sourceTree = "<group>"; };
-C000000000000000000000003E /* VoiceRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "VoiceRecorderView.swift"; path = "Views/VoiceRecorderView.swift"; sourceTree = "<group>"; };
-C0000000000000000000000040 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "WelcomeView.swift"; path = "Views/WelcomeView.swift"; sourceTree = "<group>"; };
-D0000000000000000000000042 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Contents.json"; path = "Assets.xcassets/AccentColor.colorset/Contents.json"; sourceTree = "<group>"; };
-D0000000000000000000000044 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Contents.json"; path = "Assets.xcassets/AppIcon.appiconset/Contents.json"; sourceTree = "<group>"; };
-D0000000000000000000000046 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Contents.json"; path = "Assets.xcassets/Contents.json"; sourceTree = "<group>"; };
-D0000000000000000000000048 /* Contents.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = "Contents.json"; path = "Assets.xcassets/LaunchBackground.colorset/Contents.json"; sourceTree = "<group>"; };
-D000000000000000000000004A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info.plist"; path = "Info.plist"; sourceTree = "<group>"; };
-D000000000000000000000004C /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PrivacyInfo.xcprivacy"; path = "PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
-D000000000000000000000004E /* Vibe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = "Vibe.entitlements"; path = "Vibe.entitlements"; sourceTree = "<group>"; };
+C000000000000000000000003C /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "SplashView.swift"; path = "Views/SplashView.swift"; sourceTree = "<group>"; };
+C000000000000000000000003E /* UsernameEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UsernameEditorView.swift"; path = "Views/UsernameEditorView.swift"; sourceTree = "<group>"; };
+C0000000000000000000000040 /* VoiceRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "VoiceRecorderView.swift"; path = "Views/VoiceRecorderView.swift"; sourceTree = "<group>"; };
+C0000000000000000000000042 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "WelcomeView.swift"; path = "Views/WelcomeView.swift"; sourceTree = "<group>"; };
+D0000000000000000000000044 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PrivacyInfo.xcprivacy"; path = "PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
+D0000000000000000000000046 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Assets.xcassets"; path = "Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,13 +124,9 @@ B800000000000000000000000E /* Vibe */ = {
 		C000000000000000000000003C,
 		C000000000000000000000003E,
 		C0000000000000000000000040,
-		D0000000000000000000000042,
+		C0000000000000000000000042,
 		D0000000000000000000000044,
-		D0000000000000000000000046,
-		D0000000000000000000000048,
-		D000000000000000000000004A,
-		D000000000000000000000004C,
-		D000000000000000000000004E
+		D0000000000000000000000046
 	);
 	path = Vibe;
 	sourceTree = "<group>";
@@ -201,13 +189,8 @@ B0000000000000000000000006 /* Resources */ = {
 	isa = PBXResourcesBuildPhase;
 	buildActionMask = 2147483647;
 	files = (
-		D1000000000000000000000043,
 		D1000000000000000000000045,
-		D1000000000000000000000047,
-		D1000000000000000000000049,
-		D100000000000000000000004B,
-		D100000000000000000000004D,
-		D100000000000000000000004F
+		D1000000000000000000000047
 	);
 	runOnlyForDeploymentPostprocessing = 0;
 };
@@ -242,7 +225,8 @@ AF000000000000000000000005 /* Sources */ = {
 		C100000000000000000000003B,
 		C100000000000000000000003D,
 		C100000000000000000000003F,
-		C1000000000000000000000041
+		C1000000000000000000000041,
+		C1000000000000000000000043
 	);
 	runOnlyForDeploymentPostprocessing = 0;
 };
