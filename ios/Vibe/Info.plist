@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>VIBE_SUPABASE_URL</key>
+  <string>$(VIBE_SUPABASE_URL)</string>
+  <key>VIBE_SUPABASE_ANON_KEY</key>
+  <string>$(VIBE_SUPABASE_ANON_KEY)</string>
+  <key>NSCameraUsageDescription</key>
+  <string>Vibe uses the camera to capture profile photos and chat media.</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>Vibe uses the microphone to record voice notes.</string>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>Vibe uses your photo library to let you choose profile photos and chat media.</string>
+</dict>
+</plist>
