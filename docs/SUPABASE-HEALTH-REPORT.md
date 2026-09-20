@@ -58,6 +58,7 @@ No data was deleted or overwritten during this audit.
 - Registered local migrations in Supabase.
 - Added profile search performance index.
 - Corrected Supabase Auth site URL and password policy.
+- Added idempotent message client ids.
 
 ## Remaining production items
 
@@ -65,5 +66,4 @@ No data was deleted or overwritten during this audit.
 - Verify account deletion end-to-end.
 - Add live integration tests.
 - Implement or explicitly disable realtime messaging.
-- Add upload/message idempotency.
 - Feature-flag or remove demo-only Vibe+ surfaces.
