@@ -108,6 +108,15 @@ try {
   });
   const taken = await workerJson(`/api/cloud/username?q=${uniqueUsername}`, b.token);
   assert.equal(taken.available, false);
+  const history = await workerJson('/api/cloud/username-history', a.token);
+  assert.ok(Array.isArray(history.history));
+  const prefs = await workerJson('/api/cloud/notification-preferences', a.token);
+  assert.equal(typeof prefs.preferences, 'object');
+  await workerJson('/api/cloud/notification-preferences', a.token, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ push_enabled: false, messages: true, likes: true, matches: false, security: true, premium: true })
+  });
   const subscription = await workerJson('/api/cloud/subscription', a.token);
   assert.ok(Array.isArray(subscription.subscriptions));
   await workerJson('/api/cloud/device-token', a.token, {
