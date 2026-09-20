@@ -51,19 +51,25 @@ final class SupabaseService {
         body: Data? = nil,
         token: String? = nil
     ) async throws -> T {
-        var request = URLRequest(url: URL(string: path, relativeTo: apiBaseURL) ?? apiBaseURL)
-        request.httpMethod = method
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.setValue(anonKey, forHTTPHeaderField: "apikey")
-        if let token {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        do {
+            var request = URLRequest(url: URL(string: path, relativeTo: apiBaseURL) ?? apiBaseURL)
+            request.httpMethod = method
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            request.setValue(anonKey, forHTTPHeaderField: "apikey")
+            if let token {
+                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            }
+            request.httpBody = body
+            let (data, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+                print("SupabaseService request failed for \(path)")
+                throw URLError(.badServerResponse)
+            }
+            return try JSONDecoder().decode(T.self, from: data)
+        } catch {
+            print("SupabaseService request error for \(path): \(error.localizedDescription)")
+            throw error
         }
-        request.httpBody = body
-        let (data, response) = try await session.data(for: request)
-        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
-            throw URLError(.badServerResponse)
-        }
-        return try JSONDecoder().decode(T.self, from: data)
     }
 
     func refreshSupabaseToken(refreshToken: String) async throws -> AuthTokenResponse {
@@ -86,17 +92,23 @@ final class SupabaseService {
         body: Data? = nil,
         token: String? = nil
     ) async throws {
-        var request = URLRequest(url: URL(string: path, relativeTo: apiBaseURL) ?? apiBaseURL)
-        request.httpMethod = method
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.setValue(anonKey, forHTTPHeaderField: "apikey")
-        if let token {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
-        request.httpBody = body
-        let (_, response) = try await session.data(for: request)
-        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
-            throw URLError(.badServerResponse)
+        do {
+            var request = URLRequest(url: URL(string: path, relativeTo: apiBaseURL) ?? apiBaseURL)
+            request.httpMethod = method
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            request.setValue(anonKey, forHTTPHeaderField: "apikey")
+            if let token {
+                request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            }
+            request.httpBody = body
+            let (_, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+                print("SupabaseService request failed for \(path)")
+                throw URLError(.badServerResponse)
+            }
+        } catch {
+            print("SupabaseService request error for \(path): \(error.localizedDescription)")
+            throw error
         }
     }
 
@@ -106,17 +118,23 @@ final class SupabaseService {
         contentType: String,
         token: String
     ) async throws -> T {
-        var request = URLRequest(url: URL(string: path, relativeTo: apiBaseURL) ?? apiBaseURL)
-        request.httpMethod = "POST"
-        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
-        request.setValue(anonKey, forHTTPHeaderField: "apikey")
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        request.httpBody = data
-        let (responseData, response) = try await session.data(for: request)
-        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
-            throw URLError(.badServerResponse)
+        do {
+            var request = URLRequest(url: URL(string: path, relativeTo: apiBaseURL) ?? apiBaseURL)
+            request.httpMethod = "POST"
+            request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+            request.setValue(anonKey, forHTTPHeaderField: "apikey")
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            request.httpBody = data
+            let (responseData, response) = try await session.data(for: request)
+            guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+                print("SupabaseService upload failed for \(path)")
+                throw URLError(.badServerResponse)
+            }
+            return try JSONDecoder().decode(T.self, from: responseData)
+        } catch {
+            print("SupabaseService upload error for \(path): \(error.localizedDescription)")
+            throw error
         }
-        return try JSONDecoder().decode(T.self, from: responseData)
     }
 }
 
