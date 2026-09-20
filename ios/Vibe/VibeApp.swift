@@ -24,7 +24,7 @@ private struct RootView: View {
             } else if !appState.isOnboardingComplete {
                 OnboardingView()
             } else {
-                MainTabView()
+                MainTabsView()
             }
         }
         .task { await appState.restoreSession() }
