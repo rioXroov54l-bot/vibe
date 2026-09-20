@@ -1,5 +1,15 @@
 import Foundation
 
+struct VibeAPIError: LocalizedError {
+    let statusCode: Int
+    let code: String
+    let message: String
+
+    var errorDescription: String? {
+        message.isEmpty ? "Server returned HTTP \(statusCode)." : message
+    }
+}
+
 struct SupabaseSession: Codable {
     let accessToken: String
     let refreshToken: String
@@ -62,8 +72,12 @@ final class SupabaseService {
             request.httpBody = body
             let (data, response) = try await session.data(for: request)
             guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
-                print("SupabaseService request failed for \(path)")
-                throw URLError(.badServerResponse)
+                let http = response as? HTTPURLResponse
+                let status = http?.statusCode ?? 0
+                let text = String(data: data, encoding: .utf8) ?? ""
+                let code = decodedErrorCode(from: data) ?? "bad_server_response"
+                print("SupabaseService request failed for \(path): HTTP \(status) \(text)")
+                throw VibeAPIError(statusCode: status, code: code, message: text)
             }
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
@@ -101,10 +115,13 @@ final class SupabaseService {
                 request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             }
             request.httpBody = body
-            let (_, response) = try await session.data(for: request)
+            let (data, response) = try await session.data(for: request)
             guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
-                print("SupabaseService request failed for \(path)")
-                throw URLError(.badServerResponse)
+                let http = response as? HTTPURLResponse
+                let status = http?.statusCode ?? 0
+                let text = String(data: data, encoding: .utf8) ?? ""
+                print("SupabaseService request failed for \(path): HTTP \(status) \(text)")
+                throw VibeAPIError(statusCode: status, code: "bad_server_response", message: text)
             }
         } catch {
             print("SupabaseService request error for \(path): \(error.localizedDescription)")
@@ -127,14 +144,22 @@ final class SupabaseService {
             request.httpBody = data
             let (responseData, response) = try await session.data(for: request)
             guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
-                print("SupabaseService upload failed for \(path)")
-                throw URLError(.badServerResponse)
+                let http = response as? HTTPURLResponse
+                let status = http?.statusCode ?? 0
+                let text = String(data: responseData, encoding: .utf8) ?? ""
+                print("SupabaseService upload failed for \(path): HTTP \(status) \(text)")
+                throw VibeAPIError(statusCode: status, code: "bad_server_response", message: text)
             }
             return try JSONDecoder().decode(T.self, from: responseData)
         } catch {
             print("SupabaseService upload error for \(path): \(error.localizedDescription)")
             throw error
         }
+    }
+
+    private func decodedErrorCode(from data: Data) -> String? {
+        guard let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return nil }
+        return object["error"] as? String ?? object["code"] as? String
     }
 }
 
