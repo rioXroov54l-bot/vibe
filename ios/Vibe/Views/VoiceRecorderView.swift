@@ -39,26 +39,30 @@ struct VoiceRecorderView: View {
     @StateObject private var model = VoiceRecorderModel()
 
     var body: some View {
-        VStack(spacing: 20) {
-            Button {
-                Task {
-                    if model.isRecording {
-                        model.stopRecording()
-                    } else {
-                        await model.startRecording()
+        ZStack {
+            Color(.systemBackground).ignoresSafeArea()
+            VStack(spacing: 20) {
+                Button {
+                    Task {
+                        if model.isRecording {
+                            model.stopRecording()
+                        } else {
+                            await model.startRecording()
+                        }
                     }
+                } label: {
+                    Image(systemName: model.isRecording ? "stop.circle.fill" : "mic.circle.fill")
+                        .font(.system(size: 68))
+                        .foregroundStyle(model.isRecording ? .red : .purple)
                 }
-            } label: {
-                Image(systemName: model.isRecording ? "stop.circle.fill" : "mic.circle.fill")
-                    .font(.system(size: 68))
-                    .foregroundStyle(model.isRecording ? .red : .purple)
-            }
 
-            if let url = model.recordingURL {
-                Text(url.lastPathComponent)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                if let url = model.recordingURL {
+                    Text(url.lastPathComponent)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .padding()
     }

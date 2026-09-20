@@ -7,47 +7,52 @@ struct OTPView: View {
     @EnvironmentObject private var auth: AuthService
 
     var body: some View {
-        VStack(spacing: 24) {
-            Text("Verify your account")
-                .font(.largeTitle.bold())
-            Text("Enter the 6-digit code sent to your email.")
-                .foregroundStyle(.secondary)
+        ZStack {
+            Color(.systemBackground).ignoresSafeArea()
+            VStack(spacing: 24) {
+                Text("Verify your account")
+                    .font(.largeTitle.bold())
+                Text("Enter the 6-digit code sent to your email.")
+                    .foregroundStyle(.secondary)
 
-            HStack(spacing: 10) {
-                ForEach(0..<6, id: \.self) { index in
-                    TextField("", text: Binding(
-                        get: { digits[index] },
-                        set: { newValue in
-                            let value = String(newValue.prefix(1)).filter(\.isNumber)
-                            digits[index] = value
-                            if !value.isEmpty, index < 5 {
-                                focusedField = index + 1
+                HStack(spacing: 10) {
+                    ForEach(0..<6, id: \.self) { index in
+                        TextField("", text: Binding(
+                            get: { digits[index] },
+                            set: { newValue in
+                                let value = String(newValue.prefix(1)).filter(\.isNumber)
+                                digits[index] = value
+                                if !value.isEmpty, index < 5 {
+                                    focusedField = index + 1
+                                }
                             }
-                        }
-                    ))
-                    .keyboardType(.numberPad)
-                    .textContentType(.oneTimeCode)
-                    .multilineTextAlignment(.center)
-                    .font(.title2.bold())
-                    .frame(width: 48, height: 58)
-                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 14))
-                    .focused($focusedField, equals: index)
+                        ))
+                        .keyboardType(.numberPad)
+                        .textContentType(.oneTimeCode)
+                        .multilineTextAlignment(.center)
+                        .font(.title2.bold())
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 58)
+                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 14))
+                        .focused($focusedField, equals: index)
+                    }
                 }
-            }
 
-            Button {
-                Task { await auth.verifyOTP(email: email, token: digits.joined()) }
-            } label: {
-                if auth.isLoading {
-                    ProgressView()
-                } else {
-                    Text("Verify")
+                Button {
+                    Task { await auth.verifyOTP(email: email, token: digits.joined()) }
+                } label: {
+                    if auth.isLoading {
+                        ProgressView()
+                    } else {
+                        Text("Verify")
+                    }
                 }
+                    .buttonStyle(PrimaryAuthButtonStyle())
+                    .disabled(digits.joined().count < 6)
             }
-                .buttonStyle(PrimaryAuthButtonStyle())
-                .disabled(digits.joined().count < 6)
+            .padding(24)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
-        .padding(24)
         .onAppear { focusedField = 0 }
     }
 }

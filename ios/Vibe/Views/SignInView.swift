@@ -8,49 +8,53 @@ struct SignInView: View {
     @EnvironmentObject private var auth: AuthService
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 22) {
-                Text("Welcome back")
-                    .font(.largeTitle.bold())
-                Text("Sign in to continue your Vibe experience.")
-                    .foregroundStyle(.secondary)
+        ZStack {
+            Color(.systemBackground).ignoresSafeArea()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 22) {
+                    Text("Welcome back")
+                        .font(.largeTitle.bold())
+                    Text("Sign in to continue your Vibe experience.")
+                        .foregroundStyle(.secondary)
 
-                AuthTextField(title: "Email", text: $email, contentType: .emailAddress)
-                VStack(alignment: .leading) {
-                    Text("Password")
-                        .font(.subheadline.weight(.semibold))
-                    HStack {
-                        if showPassword {
-                            TextField("Password", text: $password)
+                    AuthTextField(title: "Email", text: $email, contentType: .emailAddress)
+                    VStack(alignment: .leading) {
+                        Text("Password")
+                            .font(.subheadline.weight(.semibold))
+                        HStack {
+                            if showPassword {
+                                TextField("Password", text: $password)
+                            } else {
+                                SecureField("Password", text: $password)
+                            }
+                            Button { showPassword.toggle() } label: {
+                                Image(systemName: showPassword ? "eye.slash" : "eye")
+                            }
+                        }
+                        .padding()
+                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
+                    }
+
+                    Button {
+                        Task { await auth.signIn(email: email, password: password) }
+                    } label: {
+                        if auth.isLoading {
+                            ProgressView()
                         } else {
-                            SecureField("Password", text: $password)
-                        }
-                        Button { showPassword.toggle() } label: {
-                            Image(systemName: showPassword ? "eye.slash" : "eye")
+                            Text("Sign in")
                         }
                     }
-                    .padding()
-                    .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 16))
-                }
+                    .buttonStyle(PrimaryAuthButtonStyle())
 
-                Button {
-                    Task { await auth.signIn(email: email, password: password) }
-                } label: {
-                    if auth.isLoading {
-                        ProgressView()
-                    } else {
-                        Text("Sign in")
+                    if let error = auth.errorMessage {
+                        Text(error)
+                            .font(.footnote)
+                            .foregroundStyle(.red)
                     }
                 }
-                .buttonStyle(PrimaryAuthButtonStyle())
-
-                if let error = auth.errorMessage {
-                    Text(error)
-                        .font(.footnote)
-                        .foregroundStyle(.red)
-                }
+                .padding(24)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
-            .padding(24)
         }
     }
 }
