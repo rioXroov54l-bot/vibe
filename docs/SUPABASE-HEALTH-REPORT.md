@@ -59,6 +59,7 @@ No data was deleted or overwritten during this audit.
 - Added profile search performance index.
 - Corrected Supabase Auth site URL and password policy.
 - Added idempotent message client ids.
+- Restored missing `service_role` privileges required for account deletion.
 
 ## Live smoke test
 
@@ -66,6 +67,18 @@ No data was deleted or overwritten during this audit.
 - Verified password login returned an access token.
 - Verified the user’s `vibe_profiles` row was provisioned and readable.
 - Deleted the test user successfully with the service role.
+
+Result: pass. No test data remained.
+
+## Account deletion smoke test
+
+- Created a disposable email-confirmed test user.
+- Logged in and called the local Worker `/api/cloud/account-delete` endpoint with
+  the service-role runtime key.
+- Initially failed with `account_deletion_failed` because `service_role` lacked
+  DELETE privileges on several profile tables.
+- Applied `20260920000005_restore_service_role_grants.sql`.
+- Re-ran deletion and received `200 {"ok":true,"deleted":true}`.
 
 Result: pass. No test data remained.
 
