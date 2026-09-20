@@ -51,7 +51,7 @@ struct PrimaryAuthButtonStyle: ButtonStyle {
             .font(.headline)
             .foregroundStyle(.black)
             .frame(maxWidth: .infinity)
-            .frame(height: 58)
+            .frame(minHeight: 54)
             .background(.white, in: Capsule())
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
     }
@@ -63,7 +63,7 @@ struct SecondaryAuthButtonStyle: ButtonStyle {
             .font(.headline)
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
-            .frame(height: 58)
+            .frame(minHeight: 54)
             .background(.white.opacity(0.08), in: Capsule())
             .overlay(Capsule().stroke(.white.opacity(0.7), lineWidth: 1.5))
             .scaleEffect(configuration.isPressed ? 0.98 : 1)

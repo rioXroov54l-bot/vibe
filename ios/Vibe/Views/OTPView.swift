@@ -32,7 +32,7 @@ struct OTPView: View {
                         .multilineTextAlignment(.center)
                         .font(.title2.bold())
                         .frame(maxWidth: .infinity)
-                        .frame(height: 58)
+                        .frame(minHeight: 58)
                         .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 14))
                         .focused($focusedField, equals: index)
                     }
