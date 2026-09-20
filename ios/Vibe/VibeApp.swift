@@ -24,7 +24,7 @@ private struct RootView: View {
             } else if appState.session == nil {
                 WelcomeView()
             } else if !appState.isOnboardingComplete {
-                OnboardingView()
+                OnboardingFlowView()
             } else {
                 MainTabsView()
             }
