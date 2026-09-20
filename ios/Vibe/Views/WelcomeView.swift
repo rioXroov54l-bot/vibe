@@ -72,22 +72,3 @@ struct SecondaryAuthButtonStyle: ButtonStyle {
             .scaleEffect(configuration.isPressed ? 0.98 : 1)
     }
 }
-
-
-
-struct OnboardingView: View {
-    var body: some View {
-        Text("Onboarding")
-    }
-}
-
-struct MainTabView: View {
-    var body: some View {
-        TabView {
-            Text("Discover").tabItem { Label("Discover", systemImage: "sparkles") }
-            Text("Chat").tabItem { Label("Chat", systemImage: "bubble.left.and.bubble.right") }
-            Text("Rooms").tabItem { Label("Rooms", systemImage: "person.3") }
-            Text("Profile").tabItem { Label("Profile", systemImage: "person.crop.circle") }
-        }
-    }
-}
