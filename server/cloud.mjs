@@ -21,7 +21,7 @@ async function cloudRoute(req,env,url){const action=url.pathname.slice('/api/clo
   if(['auth/login','auth/signup','auth/recover','auth/verify','auth/otp','auth/resend'].includes(action)&&method==='POST'){
    const b=await readBody(req);if(typeof b.email!=='string'||b.email.length>254||!/^\S+@\S+\.\S+$/.test(b.email))return cloudResponse({error:'invalid_email'},400);
    let path,payload;
-   if(action==='auth/verify'){if(typeof b.token!=='string'||!/^\d{6,10}$/.test(b.token))return cloudResponse({error:'invalid_code'},400);path='/auth/v1/verify';payload={email:b.email,token:b.token,type:'email'};}
+   if(action==='auth/verify'){if(typeof b.token!=='string'||!/^\d{6}$/.test(b.token))return cloudResponse({error:'invalid_code'},400);path='/auth/v1/verify';payload={email:b.email,token:b.token,type:'email'};}
    else if(action==='auth/otp'){path='/auth/v1/otp';payload={email:b.email,create_user:false};}
    else if(action==='auth/resend'){path='/auth/v1/resend';payload={email:b.email,type:'signup'};}
    else if(action==='auth/recover'){path='/auth/v1/recover?redirect_to='+encodeURIComponent(url.origin+'/?recovery=1');payload={email:b.email};}
