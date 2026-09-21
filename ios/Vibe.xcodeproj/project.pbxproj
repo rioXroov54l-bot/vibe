@@ -1,0 +1,408 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D97D5FAF5FFD96C11E194026 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB86BA5B1C4DBB1820FD99A /* Theme.swift */; };
+		01E1CADAA2945EE9DA4C8A65 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC612242711C61AB4702779D /* AppState.swift */; };
+		16AAE5C6CB3F6A942BC19BC4 /* VibeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADBE66469BBD0AF73E40654 /* VibeApp.swift */; };
+		2659D69615F167C0B928F743 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCA1B543C3F727DA656604D /* AuthService.swift */; };
+		EED903CDEA502B2FF26BECD8 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF82CB718B3D39EE2457493 /* DataService.swift */; };
+		5DB489F7611D601969528969 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF55A4332BDFCD68D3D9CEE /* KeychainStore.swift */; };
+		70871AAAEC76102122871EFF /* SupabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6E6C93673133A76AF24A31 /* SupabaseClient.swift */; };
+		2F70E62C4F7355C5E48F9813 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A1F601045BA700DEE3268F /* Models.swift */; };
+		C138061FFFE091CF3ADCE5C3 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D3B83E006E8C811130C1A7 /* RootView.swift */; };
+		6367F9D46F0E306809D04E81 /* AuthComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD3416A3082FAB6367C1497 /* AuthComponents.swift */; };
+		16E9481B884A6865638F5801 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328D5CBC5B05169ADC891331 /* ForgotPasswordView.swift */; };
+		4C7C4F8D6746E3E850E61D9A /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6984D36E4381DF2C8CD6A30F /* LoginView.swift */; };
+		8540F834EAD3F3B9FC98EED7 /* OTPView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD8F7C2546022F2F19D112A /* OTPView.swift */; };
+		5258E9B02A2BABB39C4EB47B /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FC3D443C0E03723696C07A /* ResetPasswordView.swift */; };
+		9F4C3AF0640614C987EA2EE9 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37E331C0D95F7E811D899AE /* SignUpView.swift */; };
+		953BECD14E06822BD75B7A26 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE1CCB0744C7340B7944ECD /* WelcomeView.swift */; };
+		C3D540D2090DC187D7CF7721 /* DiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D92EA5C298F96F2A4F57A0FE /* DiscoveryView.swift */; };
+		66B160AB4BF70E14FB893F4E /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C7EE0702E4C45CE2BCC28F /* MainTabView.swift */; };
+		574791895ECB8F8B7EC1C6A0 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE988C250F05837B03CE1919 /* ProfileView.swift */; };
+		20A959F38033A27ACDB337A1 /* RoomChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B3D7204F77388412E5832D /* RoomChatView.swift */; };
+		37198F8D7E28ED73DADF0EDE /* RoomsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4A587EE4684DBED0F5A3E4 /* RoomsView.swift */; };
+		40F1359330B2A01ADC4C7E47 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75367211661EFFE54C3D3C51 /* OnboardingView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5FB86BA5B1C4DBB1820FD99A /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		BC612242711C61AB4702779D /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		1ADBE66469BBD0AF73E40654 /* VibeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibeApp.swift; sourceTree = "<group>"; };
+		8DCA1B543C3F727DA656604D /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		6AF82CB718B3D39EE2457493 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
+		9AF55A4332BDFCD68D3D9CEE /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		CB6E6C93673133A76AF24A31 /* SupabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClient.swift; sourceTree = "<group>"; };
+		32A1F601045BA700DEE3268F /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		82D3B83E006E8C811130C1A7 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		1AD3416A3082FAB6367C1497 /* AuthComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthComponents.swift; sourceTree = "<group>"; };
+		328D5CBC5B05169ADC891331 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
+		6984D36E4381DF2C8CD6A30F /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		7AD8F7C2546022F2F19D112A /* OTPView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPView.swift; sourceTree = "<group>"; };
+		12FC3D443C0E03723696C07A /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
+		F37E331C0D95F7E811D899AE /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		3FE1CCB0744C7340B7944ECD /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		D92EA5C298F96F2A4F57A0FE /* DiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryView.swift; sourceTree = "<group>"; };
+		B6C7EE0702E4C45CE2BCC28F /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		BE988C250F05837B03CE1919 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		92B3D7204F77388412E5832D /* RoomChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomChatView.swift; sourceTree = "<group>"; };
+		FD4A587EE4684DBED0F5A3E4 /* RoomsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomsView.swift; sourceTree = "<group>"; };
+		75367211661EFFE54C3D3C51 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		7B594B6DB375E1BF3F23CDD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		02688DC74EFFB59DBC8F36FC /* Vibe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vibe.entitlements; sourceTree = "<group>"; };
+		D957E19B16B69713B7749A90 /* Vibe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vibe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		69680EDE0CF9B24DB8DBFE04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		870B3294C0CBD48AF6BBCC1B = {
+			isa = PBXGroup;
+			children = (
+				CB3BEA8752EDEF0D1F581A76 /* Vibe */,
+				615B463D1028E4E24B674CF7 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		615B463D1028E4E24B674CF7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D957E19B16B69713B7749A90 /* Vibe.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CB3BEA8752EDEF0D1F581A76 /* Vibe */ = {
+			isa = PBXGroup;
+			children = (
+				9886C73569CDD36B516E59AE,
+				4173F1A1247482A6D76E7C12,
+				77C21781EB4D41AEB980E637,
+				AD2C25B47F036C530BA7461E,
+				837E32C92F67DEF6C5864EC0,
+				CCE9C0B69CEE04F55004FED0,
+				02688DC74EFFB59DBC8F36FC,
+			);
+			path = Vibe;
+			sourceTree = "<group>";
+		};
+		9886C73569CDD36B516E59AE /* App */ = {
+			isa = PBXGroup;
+			children = (
+				BC612242711C61AB4702779D,
+				1ADBE66469BBD0AF73E40654,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		4173F1A1247482A6D76E7C12 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				5FB86BA5B1C4DBB1820FD99A,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		77C21781EB4D41AEB980E637 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				32A1F601045BA700DEE3268F,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		AD2C25B47F036C530BA7461E /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				8DCA1B543C3F727DA656604D,
+				6AF82CB718B3D39EE2457493,
+				9AF55A4332BDFCD68D3D9CEE,
+				CB6E6C93673133A76AF24A31,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		837E32C92F67DEF6C5864EC0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7B594B6DB375E1BF3F23CDD6,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		CCE9C0B69CEE04F55004FED0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7AC8B8948F77222AC5C8A812,
+				5FCB3FBAC02CF1EF263E82E2,
+				106AD59B5AE053BE14B53E86,
+				82D3B83E006E8C811130C1A7,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7AC8B8948F77222AC5C8A812 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				1AD3416A3082FAB6367C1497,
+				328D5CBC5B05169ADC891331,
+				6984D36E4381DF2C8CD6A30F,
+				7AD8F7C2546022F2F19D112A,
+				12FC3D443C0E03723696C07A,
+				F37E331C0D95F7E811D899AE,
+				3FE1CCB0744C7340B7944ECD,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		5FCB3FBAC02CF1EF263E82E2 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				D92EA5C298F96F2A4F57A0FE,
+				B6C7EE0702E4C45CE2BCC28F,
+				BE988C250F05837B03CE1919,
+				92B3D7204F77388412E5832D,
+				FD4A587EE4684DBED0F5A3E4,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		106AD59B5AE053BE14B53E86 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				75367211661EFFE54C3D3C51,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0E8A3AD980EC179856012B7E /* Vibe */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DE97F2CECB2601227982F09 /* Build configuration list for PBXNativeTarget "Vibe" */;
+			buildPhases = (
+				F612CD2E22E187AC48B5913C /* Sources */,
+				69680EDE0CF9B24DB8DBFE04 /* Frameworks */,
+				86F6FE2DD6E869C1842A14B3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Vibe;
+			productName = Vibe;
+			productReference = D957E19B16B69713B7749A90 /* Vibe.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		98F54143AB4E86B28C3AFEE0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					0E8A3AD980EC179856012B7E = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = 6650A2B5E24FA7522CE6B81C /* Build configuration list for PBXProject "Vibe" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 870B3294C0CBD48AF6BBCC1B;
+			productRefGroup = 615B463D1028E4E24B674CF7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0E8A3AD980EC179856012B7E /* Vibe */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		86F6FE2DD6E869C1842A14B3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F612CD2E22E187AC48B5913C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D97D5FAF5FFD96C11E194026 /* Theme.swift in Sources */,
+				01E1CADAA2945EE9DA4C8A65 /* AppState.swift in Sources */,
+				16AAE5C6CB3F6A942BC19BC4 /* VibeApp.swift in Sources */,
+				2659D69615F167C0B928F743 /* AuthService.swift in Sources */,
+				EED903CDEA502B2FF26BECD8 /* DataService.swift in Sources */,
+				5DB489F7611D601969528969 /* KeychainStore.swift in Sources */,
+				70871AAAEC76102122871EFF /* SupabaseClient.swift in Sources */,
+				2F70E62C4F7355C5E48F9813 /* Models.swift in Sources */,
+				C138061FFFE091CF3ADCE5C3 /* RootView.swift in Sources */,
+				6367F9D46F0E306809D04E81 /* AuthComponents.swift in Sources */,
+				16E9481B884A6865638F5801 /* ForgotPasswordView.swift in Sources */,
+				4C7C4F8D6746E3E850E61D9A /* LoginView.swift in Sources */,
+				8540F834EAD3F3B9FC98EED7 /* OTPView.swift in Sources */,
+				5258E9B02A2BABB39C4EB47B /* ResetPasswordView.swift in Sources */,
+				9F4C3AF0640614C987EA2EE9 /* SignUpView.swift in Sources */,
+				953BECD14E06822BD75B7A26 /* WelcomeView.swift in Sources */,
+				C3D540D2090DC187D7CF7721 /* DiscoveryView.swift in Sources */,
+				66B160AB4BF70E14FB893F4E /* MainTabView.swift in Sources */,
+				574791895ECB8F8B7EC1C6A0 /* ProfileView.swift in Sources */,
+				20A959F38033A27ACDB337A1 /* RoomChatView.swift in Sources */,
+				37198F8D7E28ED73DADF0EDE /* RoomsView.swift in Sources */,
+				40F1359330B2A01ADC4C7E47 /* OnboardingView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		D12546C7310DEE778E55E187 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AA23A758EC6A71B7321371F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E1698793B8B09B32821D3120 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = Vibe/Vibe.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Vibe/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vibe.social;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+			};
+			name = Debug;
+		};
+		FFACE85B9B63AB569355131D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = Vibe/Vibe.entitlements;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Vibe/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vibe.social;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6650A2B5E24FA7522CE6B81C /* Build configuration list for PBXProject "Vibe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D12546C7310DEE778E55E187 /* Debug */,
+				AA23A758EC6A71B7321371F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7DE97F2CECB2601227982F09 /* Build configuration list for PBXNativeTarget "Vibe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E1698793B8B09B32821D3120 /* Debug */,
+				FFACE85B9B63AB569355131D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 98F54143AB4E86B28C3AFEE0 /* Project object */;
+}
