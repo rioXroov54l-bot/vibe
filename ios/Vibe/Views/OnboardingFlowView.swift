@@ -79,6 +79,21 @@ struct OnboardingFlowView: View {
     @EnvironmentObject private var appState: AppState
     @StateObject private var model = OnboardingViewModel()
 
+    private let interestOptions: [(emoji: String, title: String)] = [
+        ("🎵", "Music"),
+        ("🎬", "Movies"),
+        ("🎮", "Gaming"),
+        ("✈️", "Travel"),
+        ("🍔", "Food"),
+        ("🏋️", "Fitness"),
+        ("📸", "Photography"),
+        ("🎨", "Art"),
+        ("💻", "Technology"),
+        ("📚", "Books"),
+        ("⚽", "Sports"),
+        ("👗", "Fashion")
+    ]
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -137,32 +152,52 @@ struct OnboardingFlowView: View {
     }
 
     private var interestsStep: some View {
-        VStack(spacing: 16) {
-            Text("Choose your interests")
-                .font(.title2.bold())
-            ForEach(["Music", "Games", "Languages", "Art", "Fitness", "Travel"], id: \.self) { interest in
-                Button {
-                    let index = ["Music", "Games", "Languages", "Art", "Fitness", "Travel"].firstIndex(of: interest) ?? 0
-                    if model.interests.contains(index) {
-                        model.interests.removeAll { $0 == index }
-                    } else {
-                        model.interests.append(index)
-                    }
-                } label: {
-                    HStack {
-                        Text(interest)
-                        Spacer()
-                        if model.interests.contains(["Music", "Games", "Languages", "Art", "Fitness", "Travel"].firstIndex(of: interest) ?? 0) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(.purple)
+        ScrollView {
+            VStack(spacing: 18) {
+                Text("Choose your interests")
+                    .font(.title2.bold())
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 92), spacing: 16)], spacing: 18) {
+                    ForEach(Array(interestOptions.enumerated()), id: \.offset) { index, item in
+                        let selected = model.interests.contains(index)
+                        Button {
+                            withAnimation(.spring(response: 0.28, dampingFraction: 0.7)) {
+                                if selected {
+                                    model.interests.removeAll { $0 == index }
+                                } else {
+                                    model.interests.append(index)
+                                }
+                            }
+                        } label: {
+                            VStack(spacing: 8) {
+                                Text(item.emoji)
+                                    .font(.system(size: 34))
+                                Text(item.title)
+                                    .font(.caption.weight(.semibold))
+                                    .lineLimit(1)
+                            }
+                            .frame(width: 92, height: 92)
+                            .background(
+                                selected ? Color.purple.opacity(0.22) : Color(.secondarySystemBackground),
+                                in: Circle()
+                            )
+                            .overlay(
+                                Circle().stroke(
+                                    selected ? Color.purple : Color.clear,
+                                    lineWidth: 3
+                                )
+                            )
+                            .shadow(
+                                color: selected ? Color.purple.opacity(0.8) : Color.clear,
+                                radius: selected ? 10 : 0
+                            )
+                            .scaleEffect(selected ? 1.06 : 1.0)
                         }
+                        .buttonStyle(.plain)
                     }
-                    .padding()
-                    .background(.background, in: RoundedRectangle(cornerRadius: 14))
                 }
             }
+            .padding()
         }
-        .padding()
     }
 
     private var profileStep: some View {
