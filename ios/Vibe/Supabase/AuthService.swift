@@ -96,11 +96,14 @@ final class AuthService: ObservableObject {
         errorMessage = nil
         defer { isLoading = false }
         do {
-            let body = try JSONEncoder().encode([
-                "email": email,
-                "redirect_to": "vibe://reset-password"
-            ])
-            try await backend.supabaseRequestNoContent(path: "/auth/v1/recover", method: "POST", body: body)
+            let redirect = "vibe://reset-password"
+                .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "vibe://reset-password"
+            let body = try JSONEncoder().encode(["email": email])
+            try await backend.supabaseRequestNoContent(
+                path: "/auth/v1/recover?redirect_to=\(redirect)",
+                method: "POST",
+                body: body
+            )
             print("Supabase reset request sent")
         } catch {
             errorMessage = error.localizedDescription
