@@ -117,7 +117,7 @@ final class SupabaseClient {
             let error: String?
             let errorDescription: String?
             let errorCode: String?
-            let code: String?
+            let code: JSONValue?
             enum CodingKeys: String, CodingKey {
                 case msg, message, error, code
                 case errorDescription = "error_description"
@@ -126,7 +126,7 @@ final class SupabaseClient {
         }
         if let payload = try? JSONDecoder().decode(Payload.self, from: data) {
             let raw = payload.msg ?? payload.message ?? payload.error ?? payload.errorDescription ?? "Request failed."
-            let code = payload.errorCode ?? payload.code
+            let code = payload.errorCode ?? payload.code?.stringValue ?? payload.code?.numberValue.map { String(Int($0)) }
             return SupabaseError(message: raw, code: code, status: status)
         }
         return SupabaseError(message: "Request failed with status \(status).", code: nil, status: status)

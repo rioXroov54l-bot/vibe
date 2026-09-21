@@ -294,7 +294,7 @@ final class AppState: ObservableObject {
         do {
             try await operation()
         } catch {
-            errorMessage = (error as? SupabaseError)?.message ?? error.localizedDescription
+            errorMessage = (error as? SupabaseError)?.friendlyMessage ?? error.localizedDescription
         }
     }
 }
