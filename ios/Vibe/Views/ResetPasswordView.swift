@@ -6,6 +6,7 @@ struct ResetPasswordView: View {
     @State private var confirmPassword = ""
     @State private var showPassword = false
     @State private var errorMessage: String?
+    @State private var success = false
     @EnvironmentObject private var auth: AuthService
 
     var body: some View {
@@ -45,7 +46,12 @@ struct ResetPasswordView: View {
                             errorMessage = "Passwords do not match."
                             return
                         }
-                        Task { await auth.updatePassword(password, accessToken: accessToken) }
+                        Task {
+                            await auth.updatePassword(password, accessToken: accessToken)
+                            if auth.errorMessage == nil {
+                                success = true
+                            }
+                        }
                     } label: {
                         if auth.isLoading {
                             ProgressView()
@@ -59,6 +65,15 @@ struct ResetPasswordView: View {
                         Text(error)
                             .font(.footnote)
                             .foregroundStyle(.red)
+                    }
+
+                    if success {
+                        Text("Password updated successfully.")
+                            .foregroundStyle(.green)
+                        NavigationLink("Return to sign in") {
+                            SignInView()
+                        }
+                        .buttonStyle(PrimaryAuthButtonStyle())
                     }
                 }
                 .padding(24)
