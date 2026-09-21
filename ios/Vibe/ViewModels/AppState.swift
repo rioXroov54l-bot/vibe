@@ -211,6 +211,14 @@ final class AppState: ObservableObject {
                 completed: true,
                 token: session.accessToken
             )
+            try await self.data.saveInterests(
+                userId: id,
+                nature: nature,
+                interests: interests,
+                types: types,
+                token: session.accessToken
+            )
+            try await self.data.completeOnboarding(userId: id, token: session.accessToken)
             let profile = Profile(id: id, displayName: name, bio: bio, data: dataPayload)
             self.profile = profile
             self.needsOnboarding = false

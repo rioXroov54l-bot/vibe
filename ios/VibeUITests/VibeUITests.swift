@@ -66,9 +66,22 @@ final class VibeUITests: XCTestCase {
         attach(app.screenshot(), named: "08-main")
 
         // 7. Verify tabs + navigate.
+        XCTAssertTrue(app.tabBars.buttons["Discover"].exists, "Discover tab missing")
+        app.tabBars.buttons["Discover"].tap()
+        attach(app.screenshot(), named: "08-discover")
+
+        // Rooms list.
         XCTAssertTrue(app.tabBars.buttons["Rooms"].exists, "Rooms tab missing")
         app.tabBars.buttons["Rooms"].tap()
+        XCTAssertTrue(app.staticTexts["Late Night Talk"].waitForExistence(timeout: 10), "Rooms list missing")
         attach(app.screenshot(), named: "09-rooms")
+
+        // Open a room chat.
+        app.staticTexts["Late Night Talk"].tap()
+        XCTAssertTrue(app.navigationBars["Late Night Talk"].waitForExistence(timeout: 10), "Room chat not opened")
+        attach(app.screenshot(), named: "10-chat")
+
+        // Profile.
         app.tabBars.buttons["Profile"].tap()
         attach(app.screenshot(), named: "10-profile-tab")
     }

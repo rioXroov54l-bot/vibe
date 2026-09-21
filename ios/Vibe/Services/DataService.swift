@@ -146,6 +146,47 @@ final class DataService {
         }
     }
 
+    /// Mark onboarding complete on the new `profiles` row. The live database's
+    /// RLS policies (e.g. `onboarding_required` on `messages`) read this.
+    func completeOnboarding(userId: String, token: String) async throws {
+        let body: [String: JSONValue] = [
+            "onboarding_step": .number(3),
+            "onboarding_completed_at": .string(ISO8601DateFormatter().string(from: Date()))
+        ]
+        try await client.sendNoContent(
+            "rest/v1/profiles?id=eq.\(userId)",
+            method: "PATCH",
+            token: token,
+            body: body
+        )
+    }
+
+    /// Persist onboarding selections to `user_interests`. The live database's
+    /// RLS policies require rows in each of `nature`, `interests` and `types`.
+    func saveInterests(userId: String, nature: [Int], interests: [Int], types: [Int], token: String) async throws {
+        let groups: [(String, [Int])] = [
+            ("nature", nature),
+            ("interests", interests),
+            ("types", types)
+        ]
+        for (category, values) in groups {
+            for value in values {
+                let body: [String: JSONValue] = [
+                    "user_id": .string(userId),
+                    "category": .string(category),
+                    "value": .number(Double(value))
+                ]
+                try await client.sendNoContent(
+                    "rest/v1/user_interests",
+                    method: "POST",
+                    token: token,
+                    body: body,
+                    extraHeaders: ["Prefer": "return=minimal,resolution=ignore-duplicates"]
+                )
+            }
+        }
+    }
+
     // MARK: People
 
     func fetchPeople(excluding id: String, token: String) async throws -> [Profile] {
