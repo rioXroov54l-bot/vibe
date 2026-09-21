@@ -55,7 +55,11 @@ The password-reset deep link scheme is `vibe://reset-password`.
 
 ## Notes
 
-- The asset catalog is intentionally empty (no App Icon yet). Add your 1024x1024
-  app icon under `Assets.xcassets/AppIcon.appiconset` before App Store submission.
+- The asset catalog is intentionally empty (no App Icon yet). It is currently
+  not referenced by the generated project, so the CLI build does not require a
+  simulator runtime. To enable it, add your 1024x1024 app icon under
+  `Assets.xcassets/AppIcon.appiconset` and drag `Assets.xcassets` into the Xcode
+  project navigator (or add it back to `ios/gen_project.py`), then set
+  `ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon`.
 - For the full signup/OTP flow to deliver email, the Supabase Auth **SMTP email
   provider must be configured** in the dashboard (Authentication → Email).
