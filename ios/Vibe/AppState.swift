@@ -15,7 +15,19 @@ final class AppState: ObservableObject {
     func restoreSession() async {
         isLoading = true
         defer { isLoading = false }
-        session = nil
+        guard let access = keychain.read("vibe.access_token"),
+              let refresh = keychain.read("vibe.refresh_token"),
+              let userID = keychain.read("vibe.user_id") else {
+            session = nil
+            return
+        }
+        session = SupabaseSession(accessToken: access, refreshToken: refresh, userID: userID)
+        do {
+            try await loadProfile()
+        } catch {
+            session = nil
+            isOnboardingComplete = false
+        }
     }
 
     func loadProfile() async throws {

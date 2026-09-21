@@ -23,19 +23,7 @@ final class AuthService: ObservableObject {
         guard let access = keychain.read(Key.access),
               let refresh = keychain.read(Key.refresh),
               let userID = keychain.read(Key.user) else { return }
-        do {
-            let _: SupabaseUser = try await backend.supabaseRequest(
-                path: "/auth/v1/user",
-                method: "GET",
-                token: access
-            )
-            session = SupabaseSession(accessToken: access, refreshToken: refresh, userID: userID)
-        } catch {
-            session = nil
-            keychain.delete(Key.access)
-            keychain.delete(Key.refresh)
-            keychain.delete(Key.user)
-        }
+        session = SupabaseSession(accessToken: access, refreshToken: refresh, userID: userID)
     }
 
     func signUp(email: String, password: String, displayName: String) async {
