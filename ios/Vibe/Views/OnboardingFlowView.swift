@@ -80,6 +80,12 @@ final class OnboardingViewModel: ObservableObject {
             try await backend.requestNoContent(path: "/api/cloud/onboarding", method: "POST", body: step2, token: accessToken)
             let step3 = try JSONSerialization.data(withJSONObject: ["step": 3])
             try await backend.requestNoContent(path: "/api/cloud/onboarding", method: "POST", body: step3, token: accessToken)
+            let preferences = try JSONSerialization.data(withJSONObject: [
+                "selected_interests": interests,
+                "personality_answers": personality,
+                "onboarding_completed": true
+            ])
+            try await backend.requestNoContent(path: "/api/cloud/preferences", method: "POST", body: preferences, token: accessToken)
             try await appState.loadProfile()
             appState.isOnboardingComplete = true
         } catch {
