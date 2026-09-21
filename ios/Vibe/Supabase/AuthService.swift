@@ -101,8 +101,10 @@ final class AuthService: ObservableObject {
                 "redirect_to": "vibe://reset-password"
             ])
             try await backend.supabaseRequestNoContent(path: "/auth/v1/recover", method: "POST", body: body)
+            print("Supabase reset request sent")
         } catch {
             errorMessage = error.localizedDescription
+            print("Supabase reset request failed: \(error.localizedDescription)")
         }
     }
 

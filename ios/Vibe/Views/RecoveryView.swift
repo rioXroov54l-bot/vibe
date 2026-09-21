@@ -2,6 +2,9 @@ import SwiftUI
 
 struct RecoveryView: View {
     @State private var email = ""
+    @State private var success = false
+    @State private var localError: String?
+    @FocusState private var emailFocused: Bool
     @EnvironmentObject private var auth: AuthService
 
     var body: some View {
@@ -14,8 +17,24 @@ struct RecoveryView: View {
                     Text("Enter the email associated with your account. We'll send you a verification link.")
                         .foregroundStyle(.secondary)
                     AuthTextField(title: "Email", text: $email, contentType: .emailAddress)
+                        .focused($emailFocused)
                     Button {
-                        Task { await auth.requestRecovery(email: email) }
+                        localError = nil
+                        emailFocused = false
+                        let trimmed = email.trimmingCharacters(in: .whitespacesAndNewlines)
+                        guard isValidEmail(trimmed) else {
+                            localError = "Enter a valid email address."
+                            return
+                        }
+                        print("Recovery button pressed")
+                        print("Email captured")
+                        print("Reset request started")
+                        Task {
+                            await auth.requestRecovery(email: trimmed)
+                            if auth.errorMessage == nil {
+                                success = true
+                            }
+                        }
                     } label: {
                         if auth.isLoading {
                             ProgressView()
@@ -24,11 +43,27 @@ struct RecoveryView: View {
                         }
                     }
                     .buttonStyle(PrimaryAuthButtonStyle())
-                    .disabled(email.isEmpty)
+                    .disabled(auth.isLoading)
+
+                    if let error = localError ?? auth.errorMessage {
+                        Text(error)
+                            .font(.footnote)
+                            .foregroundStyle(.red)
+                    }
+
+                    if success {
+                        Text("If this email is registered, a recovery link has been sent.")
+                            .foregroundStyle(.green)
+                    }
                 }
                 .padding(24)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
         }
+    }
+
+    private func isValidEmail(_ value: String) -> Bool {
+        let pattern = #"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"#
+        return value.range(of: pattern, options: .regularExpression) != nil
     }
 }
