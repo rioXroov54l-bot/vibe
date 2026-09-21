@@ -21,18 +21,22 @@ final class DataService {
     /// Create or update the profile row for a user.
     func upsertProfile(id: String, displayName: String, bio: String, data: [String: JSONValue], token: String) async throws {
         let body: [String: JSONValue] = [
-            "id": .string(id),
             "display_name": .string(displayName),
             "bio": .string(bio),
             "data": .object(data)
         ]
-        let _: [Profile] = try await client.send(
-            "rest/v1/vibe_profiles",
-            method: "POST",
+        // The live database grants UPDATE (not INSERT) on vibe_profiles, and a
+        // trigger already creates the profile row at signup, so update via PATCH.
+        let rows: [Profile] = try await client.send(
+            "rest/v1/vibe_profiles?id=eq.\(id)",
+            method: "PATCH",
             token: token,
             body: body,
-            extraHeaders: ["Prefer": "return=representation,resolution=merge-duplicates"]
+            extraHeaders: ["Prefer": "return=representation"]
         )
+        guard !rows.isEmpty else {
+            throw SupabaseError(message: "Profile could not be updated.", code: "update_failed", status: 404)
+        }
     }
 
     // MARK: Rooms
@@ -82,20 +86,20 @@ final class DataService {
 
     func fetchMessages(roomId: String, token: String) async throws -> [Message] {
         try await client.send(
-            "rest/v1/vibe_messages?room_id=eq.\(roomId)&order=created_at.desc&limit=60",
+            "rest/v1/messages?room_id=eq.\(roomId)&order=created_at.desc&limit=60",
             token: token
         )
     }
 
     func sendRoomMessage(authorId: String, roomId: String, body: String, token: String) async throws -> Message {
         let payload: [String: JSONValue] = [
-            "author_id": .string(authorId),
+            "sender_id": .string(authorId),
             "room_id": .string(roomId),
             "kind": .string("text"),
-            "body": .string(body)
+            "content": .string(body)
         ]
         let rows: [Message] = try await client.send(
-            "rest/v1/vibe_messages",
+            "rest/v1/messages",
             method: "POST",
             token: token,
             body: payload,
@@ -105,6 +109,41 @@ final class DataService {
             throw SupabaseError(message: "Message was not sent.", code: "send_failed", status: 500)
         }
         return message
+    }
+
+    // MARK: Preferences / onboarding
+
+    func fetchPreferences(userId: String, token: String) async throws -> Preferences? {
+        let rows: [Preferences] = try await client.send(
+            "rest/v1/preferences?user_id=eq.\(userId)",
+            token: token
+        )
+        return rows.first
+    }
+
+    func upsertPreferences(
+        userId: String,
+        selectedInterests: [Int],
+        personalityAnswers: [Int],
+        completed: Bool,
+        token: String
+    ) async throws {
+        let body: [String: JSONValue] = [
+            "user_id": .string(userId),
+            "selected_interests": .array(selectedInterests.map { .number(Double($0)) }),
+            "personality_answers": .array(personalityAnswers.map { .number(Double($0)) }),
+            "onboarding_completed": .bool(completed)
+        ]
+        let rows: [Preferences] = try await client.send(
+            "rest/v1/preferences",
+            method: "POST",
+            token: token,
+            body: body,
+            extraHeaders: ["Prefer": "return=representation,resolution=merge-duplicates"]
+        )
+        if rows.isEmpty {
+            throw SupabaseError(message: "Preferences could not be saved.", code: "save_failed", status: 500)
+        }
     }
 
     // MARK: People

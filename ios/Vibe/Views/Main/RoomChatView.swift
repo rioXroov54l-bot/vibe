@@ -46,10 +46,10 @@ struct RoomChatView: View {
 
     @ViewBuilder
     private func bubble(_ message: Message) -> some View {
-        let mine = message.authorId == appState.userId
+        let mine = message.senderId == appState.userId
         HStack {
             if mine { Spacer(minLength: 50) }
-            Text(message.body)
+            Text(message.content)
                 .font(.body)
                 .foregroundStyle(.white)
                 .padding(.horizontal, 14)

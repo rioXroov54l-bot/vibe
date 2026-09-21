@@ -120,22 +120,37 @@ struct Room: Codable, Identifiable {
 /// A `vibe_messages` row.
 struct Message: Codable, Identifiable {
     let id: String
-    let authorId: String
+    let senderId: String
     let roomId: String?
-    let recipientId: String?
+    let receiverId: String?
     let kind: String
-    let body: String
+    let content: String
     let objectPath: String?
     let createdAt: String
 
     enum CodingKeys: String, CodingKey {
         case id
-        case authorId = "author_id"
+        case senderId = "sender_id"
         case roomId = "room_id"
-        case recipientId = "recipient_id"
-        case kind, body
+        case receiverId = "receiver_id"
+        case kind, content
         case objectPath = "object_path"
         case createdAt = "created_at"
+    }
+}
+
+/// The `preferences` row that tracks onboarding completion and selections.
+struct Preferences: Codable {
+    let userId: String
+    let selectedInterests: [JSONValue]?
+    let personalityAnswers: [JSONValue]?
+    let onboardingCompleted: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case userId = "user_id"
+        case selectedInterests = "selected_interests"
+        case personalityAnswers = "personality_answers"
+        case onboardingCompleted = "onboarding_completed"
     }
 }
 

@@ -172,7 +172,8 @@ final class AppState: ObservableObject {
         do {
             let profile = try await data.fetchProfile(id: session.user.id, token: session.accessToken)
             self.profile = profile
-            self.needsOnboarding = profile.nature.isEmpty && profile.interests.isEmpty && profile.types.isEmpty
+            let prefs = try? await data.fetchPreferences(userId: session.user.id, token: session.accessToken)
+            self.needsOnboarding = !(prefs?.onboardingCompleted ?? false)
             self.authFlow = .welcome
         } catch {
             // A brand-new account has no profile row yet; onboarding is required.
@@ -195,9 +196,6 @@ final class AppState: ObservableObject {
                 name = "Vibe member"
             }
             let dataPayload: [String: JSONValue] = [
-                "nature": .array(nature.map { .number(Double($0)) }),
-                "interests": .array(interests.map { .number(Double($0)) }),
-                "types": .array(types.map { .number(Double($0)) }),
                 "emoji": .string(emoji),
                 "avatar": .string(self.profile?.avatarPath ?? ""),
                 "gallery": .array([]),
@@ -206,6 +204,13 @@ final class AppState: ObservableObject {
                 "useGallery": .bool(false)
             ]
             try await self.data.upsertProfile(id: id, displayName: name, bio: bio, data: dataPayload, token: session.accessToken)
+            try await self.data.upsertPreferences(
+                userId: id,
+                selectedInterests: interests,
+                personalityAnswers: types,
+                completed: true,
+                token: session.accessToken
+            )
             let profile = Profile(id: id, displayName: name, bio: bio, data: dataPayload)
             self.profile = profile
             self.needsOnboarding = false

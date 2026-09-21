@@ -58,6 +58,19 @@ def build_pbxproj():
     target_release_id = uid("target-release")
     info_plist_id = uid("Info.plist")
     entitlements_id = uid("Vibe.entitlements")
+    uitest_target_id = uid("ui-test-target")
+    uitest_product_ref_id = uid("ui-test-product-ref")
+    uitest_group_id = uid("group-VibeUITests")
+    uitest_sources_phase = uid("ui-test-sources")
+    uitest_frameworks_phase = uid("ui-test-frameworks")
+    uitest_cfg_list = uid("ui-test-config-list")
+    uitest_debug = uid("ui-test-debug")
+    uitest_release = uid("ui-test-release")
+    uitest_dependency = uid("ui-test-dependency")
+    uitest_proxy = uid("ui-test-proxy")
+    uitest_file = "VibeUITests/VibeUITests.swift"
+    uitest_file_ref = uid("fr-" + uitest_file)
+    uitest_file_build = uid("bf-" + uitest_file)
 
     # File references / build files / groups.
     file_refs = {}
@@ -97,6 +110,7 @@ def build_pbxproj():
         fid = uid("bf-" + rel)
         build_files[rel] = fid
         a(f"\t\t{fid} /* {os.path.basename(rel)} in Resources */ = {{isa = PBXBuildFile; fileRef = {file_refs.get(rel, uid('fr-' + rel))} /* {os.path.basename(rel)} */; }};")
+    a(f"\t\t{uitest_file_build} /* VibeUITests.swift in Sources */ = {{isa = PBXBuildFile; fileRef = {uitest_file_ref} /* VibeUITests.swift */; }};")
     a("/* End PBXBuildFile section */")
     a("")
 
@@ -116,12 +130,21 @@ def build_pbxproj():
     a(f"\t\t{info_plist_id} /* Info.plist */ = {{isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = \"<group>\"; }};")
     a(f"\t\t{entitlements_id} /* Vibe.entitlements */ = {{isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vibe.entitlements; sourceTree = \"<group>\"; }};")
     a(f"\t\t{product_ref_id} /* Vibe.app */ = {{isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vibe.app; sourceTree = BUILT_PRODUCTS_DIR; }};")
+    a(f"\t\t{uitest_file_ref} /* VibeUITests.swift */ = {{isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibeUITests.swift; sourceTree = \"<group>\"; }};")
+    a(f"\t\t{uitest_product_ref_id} /* VibeUITests.xctest */ = {{isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VibeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; }};")
     a("/* End PBXFileReference section */")
     a("")
 
     # PBXFrameworksBuildPhase
     a("/* Begin PBXFrameworksBuildPhase section */")
     a(f"\t\t{frameworks_phase_id} /* Frameworks */ = {{")
+    a("\t\t\tisa = PBXFrameworksBuildPhase;")
+    a("\t\t\tbuildActionMask = 2147483647;")
+    a("\t\t\tfiles = (")
+    a("\t\t\t);")
+    a("\t\t\trunOnlyForDeploymentPostprocessing = 0;")
+    a("\t\t};")
+    a(f"\t\t{uitest_frameworks_phase} /* Frameworks */ = {{")
     a("\t\t\tisa = PBXFrameworksBuildPhase;")
     a("\t\t\tbuildActionMask = 2147483647;")
     a("\t\t\tfiles = (")
@@ -138,6 +161,7 @@ def build_pbxproj():
     a("\t\t\tisa = PBXGroup;")
     a("\t\t\tchildren = (")
     a(f"\t\t\t\t{uid('group-Vibe')} /* Vibe */,")
+    a(f"\t\t\t\t{uitest_group_id} /* VibeUITests */,")
     a(f"\t\t\t\t{products_group_id} /* Products */,")
     a("\t\t\t);")
     a("\t\t\tsourceTree = \"<group>\";")
@@ -146,8 +170,17 @@ def build_pbxproj():
     a("\t\t\tisa = PBXGroup;")
     a("\t\t\tchildren = (")
     a(f"\t\t\t\t{product_ref_id} /* Vibe.app */,")
+    a(f"\t\t\t\t{uitest_product_ref_id} /* VibeUITests.xctest */,")
     a("\t\t\t);")
     a("\t\t\tname = Products;")
+    a("\t\t\tsourceTree = \"<group>\";")
+    a("\t\t};")
+    a(f"\t\t{uitest_group_id} /* VibeUITests */ = {{")
+    a("\t\t\tisa = PBXGroup;")
+    a("\t\t\tchildren = (")
+    a(f"\t\t\t\t{uitest_file_ref} /* VibeUITests.swift */,")
+    a("\t\t\t);")
+    a("\t\t\tpath = VibeUITests;")
     a("\t\t\tsourceTree = \"<group>\";")
     a("\t\t};")
 
@@ -221,7 +254,44 @@ def build_pbxproj():
     a(f"\t\t\tproductReference = {product_ref_id} /* Vibe.app */;")
     a("\t\t\tproductType = \"com.apple.product-type.application\";")
     a("\t\t};")
+    a(f"\t\t{uitest_target_id} /* VibeUITests */ = {{")
+    a("\t\t\tisa = PBXNativeTarget;")
+    a(f"\t\t\tbuildConfigurationList = {uitest_cfg_list} /* Build configuration list for PBXNativeTarget \"VibeUITests\" */;")
+    a("\t\t\tbuildPhases = (")
+    a(f"\t\t\t\t{uitest_sources_phase} /* Sources */,")
+    a(f"\t\t\t\t{uitest_frameworks_phase} /* Frameworks */,")
+    a("\t\t\t);")
+    a("\t\t\tbuildRules = (")
+    a("\t\t\t);")
+    a("\t\t\tdependencies = (")
+    a(f"\t\t\t\t{uitest_dependency} /* PBXTargetDependency */,")
+    a("\t\t\t);")
+    a("\t\t\tname = VibeUITests;")
+    a("\t\t\tproductName = VibeUITests;")
+    a(f"\t\t\tproductReference = {uitest_product_ref_id} /* VibeUITests.xctest */;")
+    a("\t\t\tproductType = \"com.apple.product-type.bundle.ui-testing\";")
+    a("\t\t};")
     a("/* End PBXNativeTarget section */")
+    a("")
+
+    # PBXContainerItemProxy + PBXTargetDependency
+    a("/* Begin PBXContainerItemProxy section */")
+    a(f"\t\t{uitest_proxy} /* PBXContainerItemProxy */ = {{")
+    a("\t\t\tisa = PBXContainerItemProxy;")
+    a("\t\t\tcontainerPortal = " + project_id + " /* Project object */;")
+    a("\t\t\tproxyType = 1;")
+    a("\t\t\tremoteGlobalIDString = " + target_id + ";")
+    a("\t\t\tremoteInfo = Vibe;")
+    a("\t\t};")
+    a("/* End PBXContainerItemProxy section */")
+    a("")
+    a("/* Begin PBXTargetDependency section */")
+    a(f"\t\t{uitest_dependency} /* PBXTargetDependency */ = {{")
+    a("\t\t\tisa = PBXTargetDependency;")
+    a(f"\t\t\ttarget = {target_id} /* Vibe */;")
+    a(f"\t\t\ttargetProxy = {uitest_proxy} /* PBXContainerItemProxy */;")
+    a("\t\t};")
+    a("/* End PBXTargetDependency section */")
     a("")
 
     # PBXProject
@@ -235,6 +305,10 @@ def build_pbxproj():
     a("\t\t\t\tTargetAttributes = {")
     a(f"\t\t\t\t\t{target_id} = {{")
     a("\t\t\t\t\t\tCreatedOnToolsVersion = 16.0;")
+    a("\t\t\t\t\t};")
+    a(f"\t\t\t\t\t{uitest_target_id} = {{")
+    a("\t\t\t\t\t\tCreatedOnToolsVersion = 16.0;")
+    a(f"\t\t\t\t\t\tTestTargetID = {target_id};")
     a("\t\t\t\t\t};")
     a("\t\t\t\t};")
     a("\t\t\t};")
@@ -252,6 +326,7 @@ def build_pbxproj():
     a("\t\t\tprojectRoot = \"\";")
     a("\t\t\ttargets = (")
     a(f"\t\t\t\t{target_id} /* Vibe */,")
+    a(f"\t\t\t\t{uitest_target_id} /* VibeUITests */,")
     a("\t\t\t);")
     a("\t\t};")
     a("/* End PBXProject section */")
@@ -279,6 +354,14 @@ def build_pbxproj():
     a("\t\t\tfiles = (")
     for rel in swift_files:
         a(f"\t\t\t\t{build_files[rel]} /* {os.path.basename(rel)} in Sources */,")
+    a("\t\t\t);")
+    a("\t\t\trunOnlyForDeploymentPostprocessing = 0;")
+    a("\t\t};")
+    a(f"\t\t{uitest_sources_phase} /* Sources */ = {{")
+    a("\t\t\tisa = PBXSourcesBuildPhase;")
+    a("\t\t\tbuildActionMask = 2147483647;")
+    a("\t\t\tfiles = (")
+    a(f"\t\t\t\t{uitest_file_build} /* VibeUITests.swift in Sources */,")
     a("\t\t\t);")
     a("\t\t\trunOnlyForDeploymentPostprocessing = 0;")
     a("\t\t};")
@@ -386,6 +469,32 @@ def build_pbxproj():
         a("\t\t\t};")
         a(f"\t\t\tname = {cfg_name};")
         a("\t\t};")
+    uitest_settings = [
+        "\t\t\t\tCODE_SIGN_STYLE = Automatic;",
+        "\t\t\t\tCURRENT_PROJECT_VERSION = 1;",
+        "\t\t\t\tGENERATE_INFOPLIST_FILE = YES;",
+        "\t\t\t\tIPHONEOS_DEPLOYMENT_TARGET = 17.0;",
+        "\t\t\t\tMARKETING_VERSION = 1.0;",
+        "\t\t\t\tPRODUCT_BUNDLE_IDENTIFIER = com.vibe.social.uitests;",
+        "\t\t\t\tPRODUCT_NAME = \"$(TARGET_NAME)\";",
+        "\t\t\t\tSWIFT_VERSION = 5.0;",
+        "\t\t\t\tTARGETED_DEVICE_FAMILY = 1;",
+        f"\t\t\t\tTEST_TARGET_NAME = Vibe;",
+    ]
+    for cfg_id, cfg_name, extra in [
+        (uitest_debug, "Debug", ""),
+        (uitest_release, "Release", ""),
+    ]:
+        a(f"\t\t{cfg_id} /* {cfg_name} */ = {{")
+        a("\t\t\tisa = XCBuildConfiguration;")
+        a("\t\t\tbuildSettings = {")
+        for s in uitest_settings:
+            a(s)
+        if extra:
+            a(extra)
+        a("\t\t\t};")
+        a(f"\t\t\tname = {cfg_name};")
+        a("\t\t};")
     a("/* End XCBuildConfiguration section */")
     a("")
 
@@ -405,6 +514,15 @@ def build_pbxproj():
     a("\t\t\tbuildConfigurations = (")
     a(f"\t\t\t\t{target_debug_id} /* Debug */,")
     a(f"\t\t\t\t{target_release_id} /* Release */,")
+    a("\t\t\t);")
+    a("\t\t\tdefaultConfigurationIsVisible = 0;")
+    a("\t\t\tdefaultConfigurationName = Release;")
+    a("\t\t};")
+    a(f"\t\t{uitest_cfg_list} /* Build configuration list for PBXNativeTarget \"VibeUITests\" */ = {{")
+    a("\t\t\tisa = XCConfigurationList;")
+    a("\t\t\tbuildConfigurations = (")
+    a(f"\t\t\t\t{uitest_debug} /* Debug */,")
+    a(f"\t\t\t\t{uitest_release} /* Release */,")
     a("\t\t\t);")
     a("\t\t\tdefaultConfigurationIsVisible = 0;")
     a("\t\t\tdefaultConfigurationName = Release;")
@@ -429,6 +547,7 @@ def main():
     os.makedirs(scheme_dir, exist_ok=True)
     scheme = os.path.join(scheme_dir, "Vibe.xcscheme")
     target_id = uid("target")
+    uitest_target_id = uid("ui-test-target")
     scheme_xml = f'''<?xml version="1.0" encoding="UTF-8"?>
 <Scheme LastUpgradeVersion="1600" version="1.7">
   <BuildAction parallelizeBuildables="YES" buildImplicitDependencies="YES">
@@ -440,6 +559,9 @@ def main():
   </BuildAction>
   <TestAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.DebuggerFoundation.Launcher.LLDB" shouldUseLaunchSchemeArgsEnv="YES">
     <Testables>
+      <TestableReference skipped="NO">
+        <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="{uitest_target_id}" BuildableName="VibeUITests.xctest" BlueprintName="VibeUITests" ReferencedContainer="container:Vibe.xcodeproj"/>
+      </TestableReference>
     </Testables>
   </TestAction>
   <LaunchAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.DebuggerFoundation.Launcher.LLDB" launchStyle="0" useCustomWorkingDirectory="NO" ignoresPersistentStateOnLaunch="NO" debugDocumentVersioning="YES" debugServiceExtension="internal" allowLocationSimulation="YES">

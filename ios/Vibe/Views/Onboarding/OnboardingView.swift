@@ -303,6 +303,8 @@ private struct InterestCircle: View {
             .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isSelected)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(option.title)
+        .accessibilityValue(isSelected ? "selected" : "not selected")
     }
 }
 
@@ -336,5 +338,7 @@ private struct PersonalityCard: View {
             .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(option.title)
+        .accessibilityValue(isSelected ? "selected" : "not selected")
     }
 }
