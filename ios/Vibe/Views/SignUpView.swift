@@ -36,15 +36,19 @@ struct SignUpView: View {
                     }
 
                     Button {
+                        print("Signup flow: user entered information")
                         localError = nil
                         guard accepted else {
+                            print("Signup flow: terms not accepted")
                             localError = "Please accept the terms and privacy policy."
                             return
                         }
                         guard password == confirmPassword else {
+                            print("Signup flow: password mismatch")
                             localError = "Passwords do not match."
                             return
                         }
+                        print("Signup flow: validation passed")
                         Task { await auth.signUp(email: email, password: password, displayName: displayName) }
                     } label: {
                         if auth.isLoading {
