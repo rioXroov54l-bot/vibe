@@ -8,15 +8,6 @@ enum SupabaseConfig {
     static let resetRedirectURL = "vibe://reset-password"
 }
 
-/// A typed error surfaced from Supabase or the network.
-struct SupabaseError: Error, LocalizedError {
-    let message: String
-    let code: String?
-    let status: Int
-
-    var errorDescription: String? { message }
-}
-
 /// Thin native HTTP client for Supabase Auth, PostgREST and Storage.
 /// Replicates the same request shape as the production Worker.
 final class SupabaseClient {

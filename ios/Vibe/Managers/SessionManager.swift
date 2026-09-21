@@ -1,11 +1,39 @@
 import Foundation
 import Security
 
-/// Minimal Keychain-backed secure storage for session tokens.
-enum KeychainStore {
-    private static let service = "com.vibe.social.auth"
+/// Manages the persisted authentication session using the Keychain.
+/// Access and refresh tokens are the only secrets stored, written with
+/// `kSecAttrAccessibleAfterFirstUnlock`.
+final class SessionManager {
+    static let shared = SessionManager()
 
-    static func save(_ value: String, for key: String) {
+    private let service = "com.vibe.social.auth"
+
+    private enum Key {
+        static let accessToken = "vibe.accessToken"
+        static let refreshToken = "vibe.refreshToken"
+    }
+
+    func save(_ session: AuthSession) {
+        save(session.accessToken, for: Key.accessToken)
+        save(session.refreshToken, for: Key.refreshToken)
+    }
+
+    func load() -> (accessToken: String, refreshToken: String)? {
+        guard let access = read(Key.accessToken), let refresh = read(Key.refreshToken) else {
+            return nil
+        }
+        return (access, refresh)
+    }
+
+    func clear() {
+        delete(Key.accessToken)
+        delete(Key.refreshToken)
+    }
+
+    // MARK: Keychain primitives
+
+    private func save(_ value: String, for key: String) {
         let data = Data(value.utf8)
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -19,7 +47,7 @@ enum KeychainStore {
         SecItemAdd(attributes as CFDictionary, nil)
     }
 
-    static func read(_ key: String) -> String? {
+    private func read(_ key: String) -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,
@@ -33,7 +61,7 @@ enum KeychainStore {
         return String(data: data, encoding: .utf8)
     }
 
-    static func delete(_ key: String) {
+    private func delete(_ key: String) {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,

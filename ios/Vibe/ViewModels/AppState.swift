@@ -33,11 +33,6 @@ final class AppState: ObservableObject {
     private let auth = AuthService()
     private let data = DataService()
 
-    private enum Key {
-        static let accessToken = "vibe.accessToken"
-        static let refreshToken = "vibe.refreshToken"
-    }
-
     var userId: String? { session?.user.id ?? profile?.id }
 
     /// Restore a previous session from the Keychain on launch.
@@ -45,10 +40,11 @@ final class AppState: ObservableObject {
         isLoading = true
         defer { isLoading = false }
 
-        guard let accessToken = KeychainStore.read(Key.accessToken),
-              let refreshToken = KeychainStore.read(Key.refreshToken) else {
+        guard let tokens = SessionManager.shared.load() else {
             return
         }
+        let accessToken = tokens.accessToken
+        let refreshToken = tokens.refreshToken
 
         // Validate the cached access token; refresh it if it has expired.
         if let user = try? await auth.currentUser(token: accessToken) {
@@ -264,8 +260,7 @@ final class AppState: ObservableObject {
     // MARK: Helpers
 
     private func persist(session: AuthSession) {
-        KeychainStore.save(session.accessToken, for: Key.accessToken)
-        KeychainStore.save(session.refreshToken, for: Key.refreshToken)
+        SessionManager.shared.save(session)
     }
 
     private func clearSession() {
@@ -274,8 +269,7 @@ final class AppState: ObservableObject {
         isAuthenticated = false
         needsOnboarding = false
         authFlow = .welcome
-        KeychainStore.delete(Key.accessToken)
-        KeychainStore.delete(Key.refreshToken)
+        SessionManager.shared.clear()
     }
 
     /// Run an async task, showing a busy state and surfacing errors.

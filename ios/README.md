@@ -24,14 +24,18 @@ Set your own Development Team and Bundle Identifier before running on a device.
 
 ```
 Vibe/
-  App/            VibeApp entry point + AppState (session / navigation)
-  Core/           VibeTheme design tokens
+  App/            VibeApp entry point
   Models/         Profile, Room, Message, AuthSession, AuthUser
-  Networking/     SupabaseClient, AuthService, DataService, KeychainStore
+  ViewModels/     AppState (root observable / navigation state)
+  Services/       AuthService, DataService (business logic)
+  Managers/       SessionManager (Keychain session persistence)
+  Supabase/       SupabaseClient (Auth + PostgREST HTTP client)
+  Networking/     APIError (typed error model)
+  Components/     Theme, AuthComponents, FlowLayout, RoomCard
   Views/
     Auth/         Welcome, Login, SignUp, OTP, Forgot/Reset password
     Onboarding/   Welcome → interests → personality → profile
-    Main/         Discover, Rooms, Room chat, Profile
+    Main/         Discover, Rooms, Chat, Cinema, Podcast, Games, Profile
   Resources/      Info.plist + Assets.xcassets
 ```
 
