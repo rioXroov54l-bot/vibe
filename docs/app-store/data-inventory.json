@@ -2,7 +2,7 @@
   "version": "2026.09",
   "generated_for": "Vibe",
   "tracking_evidence": "none_in_current_runtime",
-  "native_ios_target_present": false,
+  "native_ios_target_present": true,
   "categories": [
     {
       "id": "account_email_auth",
