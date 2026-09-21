@@ -116,14 +116,11 @@ struct OnboardingFlowView: View {
                 Text("Welcome to Vibe")
                     .font(.largeTitle.bold())
                     .foregroundStyle(.white)
-                Text("Find your kind of people. Complete a few steps to personalize your experience.")
+                Text("We want to understand your interests and personality to create your perfect experience.")
                     .font(.body)
                     .foregroundStyle(.white.opacity(0.82))
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 32)
-                Text("You’re in. Now make it yours.")
-                    .font(.headline)
-                    .foregroundStyle(.white.opacity(0.92))
             }
         }
     }
@@ -212,6 +209,7 @@ struct OnboardingFlowView: View {
             } else {
                 Button("Continue") { model.next() }
                     .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
                     .disabled(!model.canContinue)
             }
         }
