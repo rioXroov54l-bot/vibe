@@ -20,17 +20,11 @@ struct MainTabsView: View {
 struct DiscoverView: View {
     var body: some View {
         NavigationStack {
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 16)], spacing: 16) {
-                    ForEach(0..<12, id: \.self) { index in
-                        RoundedRectangle(cornerRadius: 20)
-                            .fill(.thinMaterial)
-                            .frame(height: 190)
-                            .overlay(Text("\(index + 1)").font(.largeTitle.bold()))
-                    }
-                }
-                .padding()
-            }
+            ContentUnavailableView(
+                "No rooms yet",
+                systemImage: "sparkles",
+                description: Text("Rooms you join will appear here.")
+            )
             .navigationTitle("Discover")
         }
     }
@@ -39,12 +33,11 @@ struct DiscoverView: View {
 struct RoomsView: View {
     var body: some View {
         NavigationStack {
-            List(1...6, id: \.self) { index in
-                HStack {
-                    Image(systemName: "person.3.fill")
-                    Text("Room \(index)")
-                }
-            }
+            ContentUnavailableView(
+                "Rooms will appear here",
+                systemImage: "person.3",
+                description: Text("Join a room to start talking.")
+            )
             .navigationTitle("Rooms")
         }
     }
