@@ -1,6 +1,6 @@
 # Release Readiness Status
 
-**Status date:** current phase. The final verdict section is authoritative.
+**Status date:** 2026-09-21. The final verdict section is authoritative.
 
 ## READY IN PRODUCT
 
@@ -18,8 +18,7 @@
 
 ## REPOSITORY VALIDATION
 
-- **PASS:** Vibe CI completed successfully with Build, core tests, Cinema tests, Release preflight, and App Store compliance checks all green on the release-readiness branch.
-- This PASS applies to repository/product readiness only. It is not an App Store approval claim.
+- Repository checks cover web behavior and readiness documentation; they do not establish native binary or App Store readiness. Run them against the exact publication source.
 
 ## BLOCKED UNTIL RUNTIME CONFIG
 
@@ -27,10 +26,10 @@
 - VIBE_MODERATION_BLOCKLIST — content-filter configuration.
 - Production backend, Resend, and Spotify configuration as applicable.
 
-## BLOCKED UNTIL NATIVE IOS TARGET
+## BLOCKED UNTIL NATIVE IOS VALIDATION
 
-- Xcode project; bundle ID/team/signing; Info.plist purpose strings; PrivacyInfo.xcprivacy; SDK manifests/signatures; icon and assets; device QA; TestFlight.
-- No native iOS target or Xcode files exist.
+- A native iOS Xcode target, SwiftUI sources, Info.plist and initial PrivacyInfo.xcprivacy now exist.
+- Signed archive, device QA, final privacy/API/SDK assessment, signing and TestFlight verification remain unverified. See NATIVE_IOS_GAP.md.
 
 ## MANUAL APP STORE CONNECT
 
@@ -51,11 +50,11 @@
 ## Guideline mapping
 
 - Apple 1.2 UGC — report/block/moderation controls present; operations still required.
-- Apple 2.1 completeness — no native binary yet.
+- Apple 2.1 completeness — native signed binary and device validation remain unverified.
 - Apple 3.1 payments — not applicable now (no live IAP; Vibe+ preview only); guardrail if monetization goes live.
 - Apple 4.8 — not triggered by current first-party-only auth; no live social-login trigger for Sign in with Apple.
-- Apple 5.1.1 privacy — deletion and privacy surfaces exist; privacy manifests conditional on native packaging.
+- Apple 5.1.1 privacy — deletion and privacy surfaces exist; initial native manifest requires an actual API/data/SDK assessment.
 
 ## Final verdict
 
-"Repository and web/product readiness: PASS for the implemented code and CI checks. App Store submission: BLOCKED until native iOS packaging, production runtime deletion/moderation configuration, owner/legal decisions, and manual App Store Connect tasks are complete."
+"Repository/web validation must pass for the exact release source. App Store submission: BLOCKED until native iOS packaging, production runtime deletion/moderation configuration, owner/legal decisions, and manual App Store Connect tasks are complete."
