@@ -56,7 +56,7 @@ for (const marker of ['terms_version','privacy_version','community_guidelines_ve
 }
 
 const inventory=JSON.parse(await read('docs/app-store/data-inventory.json'));
-assert.equal(inventory.native_ios_target_present,false);
+assert.equal(inventory.native_ios_target_present,true);
 assert.ok(Array.isArray(inventory.categories) && inventory.categories.length>=10,'data inventory must cover product data categories');
 assert.ok(inventory.categories.every(x=>x && x.tracking===false),'current inventory must not claim tracking for any category');
 assert.match(String(inventory.tracking_evidence||''),/none/i);
@@ -100,7 +100,10 @@ async function walk(dir,out=[]){
 }
 const repoFiles=await walk('.');
 const nativeFiles=repoFiles.filter(p=>/(\.xcodeproj|\.xcworkspace|\.swift$|\.m$|\.mm$|Package\.swift$|Info\.plist$|PrivacyInfo\.xcprivacy$)/i.test(p));
-assert.equal(nativeFiles.length,0,'native iOS target appeared; update NATIVE_IOS_GAP and privacy-manifest assessment before submission');
+assert.ok(nativeFiles.length>0,'native iOS target must exist before App Store submission');
+assert.ok(nativeFiles.some(p=>p.endsWith('PrivacyInfo.xcprivacy')),'PrivacyInfo.xcprivacy missing');
+assert.ok(nativeFiles.some(p=>p.endsWith('Info.plist')),'Info.plist missing');
+assert.ok(await exists('ios/Vibe.xcodeproj/project.pbxproj'),'Xcode project missing');
 
 assert.ok(JSON.parse(pkg).scripts['appstore:check'],'package must expose appstore:check');
 
