@@ -4,6 +4,7 @@ enum OnboardingStep: Int, CaseIterable {
     case welcome
     case identity
     case interests
+    case personality
     case profile
     case review
 }
@@ -17,6 +18,9 @@ final class OnboardingViewModel: ObservableObject {
     @Published var nature: [Int] = []
     @Published var interests: [Int] = []
     @Published var types: [Int] = []
+    @Published var personality: [String] = []
+    @Published var favoriteActivities = ""
+    @Published var communityPreference = ""
     @Published var isLoading = false
     @Published var errorMessage: String?
 
@@ -32,8 +36,10 @@ final class OnboardingViewModel: ObservableObject {
                 && username.count >= 3
         case .interests:
             return !interests.isEmpty
+        case .personality:
+            return !personality.isEmpty
         case .profile:
-            return !bio.trimmingCharacters(in: .whitespaces).isEmpty
+            return !favoriteActivities.trimmingCharacters(in: .whitespaces).isEmpty
         case .review:
             return true
         }
@@ -58,7 +64,14 @@ final class OnboardingViewModel: ObservableObject {
             try await profileService.updateProfile(
                 displayName: displayName,
                 bio: bio,
-                data: ["nature": nature, "interests": interests, "types": types],
+                data: [
+                    "nature": nature,
+                    "interests": interests,
+                    "types": types,
+                    "personality": personality,
+                    "favorite_activities": favoriteActivities,
+                    "community_preference": communityPreference
+                ],
                 token: accessToken
             )
             let step1 = try JSONSerialization.data(withJSONObject: ["step": 1, "values": nature])
@@ -94,6 +107,15 @@ struct OnboardingFlowView: View {
         ("👗", "Fashion")
     ]
 
+    private let personalityOptions = [
+        "Creative",
+        "Funny",
+        "Adventurous",
+        "Calm",
+        "Social",
+        "Intellectual"
+    ]
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -109,6 +131,8 @@ struct OnboardingFlowView: View {
                         identityStep
                     case .interests:
                         interestsStep
+                    case .personality:
+                        personalityStep
                     case .profile:
                         profileStep
                     case .review:
@@ -204,17 +228,71 @@ struct OnboardingFlowView: View {
         Form {
             Section("About you") {
                 TextEditor(text: $model.bio)
-                    .frame(height: 120)
+                    .frame(height: 90)
             }
+            Section("Favorite activities") {
+                TextField("e.g. Music, hiking, gaming", text: $model.favoriteActivities)
+            }
+            Section("Community preferences") {
+                TextField("e.g. Calm and friendly rooms", text: $model.communityPreference)
+            }
+        }
+    }
+
+    private var personalityStep: some View {
+        ScrollView {
+            VStack(spacing: 18) {
+                Text("What type of people do you enjoy meeting?")
+                    .font(.title2.bold())
+                    .multilineTextAlignment(.center)
+
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 14)], spacing: 14) {
+                    ForEach(personalityOptions, id: \.self) { option in
+                        let selected = model.personality.contains(option)
+                        Button {
+                            withAnimation(.spring(response: 0.28, dampingFraction: 0.7)) {
+                                if selected {
+                                    model.personality.removeAll { $0 == option }
+                                } else {
+                                    model.personality.append(option)
+                                }
+                            }
+                        } label: {
+                            Text(option)
+                                .font(.headline)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 18)
+                                .background(
+                                    selected ? Color.purple.opacity(0.22) : Color(.secondarySystemBackground),
+                                    in: RoundedRectangle(cornerRadius: 18)
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 18)
+                                        .stroke(selected ? Color.purple : Color.clear, lineWidth: 2)
+                                )
+                                .shadow(
+                                    color: selected ? Color.purple.opacity(0.6) : Color.clear,
+                                    radius: selected ? 8 : 0
+                                )
+                                .scaleEffect(selected ? 1.04 : 1.0)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+            .padding()
         }
     }
 
     private var reviewStep: some View {
         List {
             Section("Review") {
+                Text("Your Vibe is ready")
+                    .font(.title2.bold())
                 LabeledContent("Name", value: model.displayName)
                 LabeledContent("Username", value: "@\(model.username.lowercased())")
                 LabeledContent("Interests", value: "\(model.interests.count) selected")
+                LabeledContent("Personality", value: "\(model.personality.count) selected")
             }
         }
     }
@@ -236,7 +314,7 @@ struct OnboardingFlowView: View {
                     if model.isLoading {
                         ProgressView()
                     } else {
-                        Text("Finish")
+                        Text("Enter Vibe")
                     }
                 }
                 .buttonStyle(.borderedProminent)
