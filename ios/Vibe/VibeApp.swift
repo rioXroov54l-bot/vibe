@@ -10,6 +10,15 @@ struct VibeApp: App {
             RootView()
                 .environmentObject(appState)
                 .environmentObject(authService)
+                .onOpenURL { url in
+                    guard url.scheme == "vibe", url.host == "reset-password" else { return }
+                    let fragment = url.fragment ?? ""
+                    let params = URLComponents(string: "?" + fragment)?.queryItems ?? []
+                    let token = params.first(where: { $0.name == "access_token" })?.value
+                    if let token {
+                        appState.resetAccessToken = token
+                    }
+                }
         }
     }
 }
@@ -19,7 +28,9 @@ private struct RootView: View {
 
     var body: some View {
         Group {
-            if appState.isLoading {
+            if let resetToken = appState.resetAccessToken {
+                ResetPasswordView(accessToken: resetToken)
+            } else if appState.isLoading {
                 SplashView()
             } else if appState.session == nil {
                 WelcomeView()

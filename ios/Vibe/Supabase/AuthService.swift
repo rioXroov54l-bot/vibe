@@ -98,7 +98,7 @@ final class AuthService: ObservableObject {
         do {
             let body = try JSONEncoder().encode([
                 "email": email,
-                "redirect_to": "https://vibe-social-nights.bb0949.chatgpt.site/?recovery=1"
+                "redirect_to": "vibe://reset-password"
             ])
             try await backend.supabaseRequestNoContent(path: "/auth/v1/recover", method: "POST", body: body)
         } catch {

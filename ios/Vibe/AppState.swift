@@ -7,6 +7,7 @@ final class AppState: ObservableObject {
     @Published var session: SupabaseSession?
     @Published var profile: VibeProfile?
     @Published var isOnboardingComplete = false
+    @Published var resetAccessToken: String?
 
     private let supabase = SupabaseService.shared
     private let keychain = KeychainStore.shared
