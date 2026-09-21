@@ -3,8 +3,15 @@ import SwiftUI
 struct SplashView: View {
     var body: some View {
         ZStack {
-            VibeBackground()
-
+            LinearGradient(
+                colors: [
+                    Color(red: 0.20, green: 0.07, blue: 0.38),
+                    Color(red: 0.06, green: 0.03, blue: 0.12)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
             VStack(spacing: 12) {
                 VibeLogo(size: 76)
                 Text("On the same wavelength.")
