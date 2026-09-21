@@ -40,7 +40,8 @@ final class AppState: ObservableObject {
         var loadedProfile = response.profile
         loadedProfile.username = response.account?.username ?? response.profile.username
         profile = loadedProfile
-        isOnboardingComplete = true
+        let step = response.account?.onboardingStep ?? 0
+        isOnboardingComplete = step >= 3
     }
 
     func signOut() async {
@@ -61,5 +62,13 @@ final class AppState: ObservableObject {
 
     private struct AccountProfile: Decodable {
         let username: String?
+        let onboardingStep: Int?
+        let onboardingCompletedAt: String?
+
+        enum CodingKeys: String, CodingKey {
+            case username
+            case onboardingStep = "onboarding_step"
+            case onboardingCompletedAt = "onboarding_completed_at"
+        }
     }
 }
