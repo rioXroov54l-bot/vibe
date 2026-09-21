@@ -96,7 +96,10 @@ final class AuthService: ObservableObject {
         errorMessage = nil
         defer { isLoading = false }
         do {
-            let body = try JSONEncoder().encode(["email": email])
+            let body = try JSONEncoder().encode([
+                "email": email,
+                "redirect_to": "https://vibe-social-nights.bb0949.chatgpt.site/?recovery=1"
+            ])
             try await backend.supabaseRequestNoContent(path: "/auth/v1/recover", method: "POST", body: body)
         } catch {
             errorMessage = error.localizedDescription
@@ -111,6 +114,18 @@ final class AuthService: ObservableObject {
         do {
             let body = try JSONEncoder().encode(["email": email, "type": kind])
             try await backend.supabaseRequestNoContent(path: "/auth/v1/resend", method: "POST", body: body)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func updatePassword(_ password: String, accessToken: String) async {
+        isLoading = true
+        errorMessage = nil
+        defer { isLoading = false }
+        do {
+            let body = try JSONEncoder().encode(["password": password])
+            try await backend.supabaseRequestNoContent(path: "/auth/v1/user", method: "PUT", body: body, token: accessToken)
         } catch {
             errorMessage = error.localizedDescription
         }

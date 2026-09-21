@@ -51,6 +51,11 @@ struct SignInView: View {
                             .font(.footnote)
                             .foregroundStyle(.red)
                     }
+
+                    NavigationLink("Forgot password?") {
+                        RecoveryView()
+                    }
+                    .font(.subheadline.weight(.semibold))
                 }
                 .padding(24)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
