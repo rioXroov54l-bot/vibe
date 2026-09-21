@@ -25,6 +25,7 @@ struct VibeApp: App {
 
 private struct RootView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var authService: AuthService
 
     var body: some View {
         Group {
@@ -32,7 +33,7 @@ private struct RootView: View {
                 ResetPasswordView(accessToken: resetToken)
             } else if appState.isLoading {
                 SplashView()
-            } else if appState.session == nil {
+            } else if authService.session == nil {
                 WelcomeView()
             } else if !appState.isOnboardingComplete {
                 OnboardingFlowView()
@@ -40,6 +41,16 @@ private struct RootView: View {
                 MainTabsView()
             }
         }
-        .task { await appState.restoreSession() }
+        .onChange(of: authService.session?.userID) { _, _ in
+            guard authService.session != nil else { return }
+            appState.session = authService.session
+            Task {
+                try? await appState.loadProfile()
+            }
+        }
+        .task {
+            await authService.restoreSession()
+            await appState.restoreSession()
+        }
     }
 }

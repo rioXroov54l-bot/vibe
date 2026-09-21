@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var authService: AuthService
 
     var body: some View {
         NavigationStack {
@@ -15,7 +16,10 @@ struct SettingsView: View {
                 }
                 Section {
                     Button("Sign out") {
-                        Task { await appState.signOut() }
+                        Task {
+                            await authService.signOut()
+                            await appState.signOut()
+                        }
                     }
                     .foregroundStyle(.red)
                 }
