@@ -22,11 +22,17 @@ def collect_files():
     resources = []
     for dirpath, dirnames, filenames in os.walk(SRC):
         dirnames[:] = [d for d in dirnames if d != ".DS_Store"]
+        # Asset catalogs are directories.
+        for d in list(dirnames):
+            if d.endswith(".xcassets"):
+                rel = os.path.relpath(os.path.join(dirpath, d), ROOT)
+                resources.append(rel)
         for name in sorted(filenames):
             full = os.path.join(dirpath, name)
             rel = os.path.relpath(full, ROOT)
             if name.endswith(".swift"):
                 swift.append(rel)
+    resources = sorted(set(resources))
     return swift, resources
 
 
@@ -346,6 +352,8 @@ def build_pbxproj():
 
     # Target build settings (shared).
     target_settings = [
+        "\t\t\t\tASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;",
+        "\t\t\t\tASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;",
         "\t\t\t\tCODE_SIGN_STYLE = Automatic;",
         f"\t\t\t\tCODE_SIGN_ENTITLEMENTS = Vibe/Vibe.entitlements;",
         "\t\t\t\tCURRENT_PROJECT_VERSION = 1;",
