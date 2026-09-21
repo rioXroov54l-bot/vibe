@@ -50,7 +50,13 @@ private struct RootView: View {
         }
         .task {
             await authService.restoreSession()
-            await appState.restoreSession()
+            if let session = authService.session {
+                appState.session = session
+                try? await appState.loadProfile()
+                appState.isLoading = false
+            } else {
+                appState.isLoading = false
+            }
         }
     }
 }
