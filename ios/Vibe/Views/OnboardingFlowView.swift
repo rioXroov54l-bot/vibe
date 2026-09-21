@@ -109,14 +109,22 @@ struct OnboardingFlowView: View {
     }
 
     private var welcomeStep: some View {
-        VStack(spacing: 18) {
-            Text("Welcome to Vibe")
-                .font(.largeTitle.bold())
-            Text("Find your kind of people. Complete a few steps to personalize your experience.")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 28)
+        ZStack {
+            VibeBackground()
+            VStack(spacing: 22) {
+                VibeLogo(size: 68)
+                Text("Welcome to Vibe")
+                    .font(.largeTitle.bold())
+                    .foregroundStyle(.white)
+                Text("Find your kind of people. Complete a few steps to personalize your experience.")
+                    .font(.body)
+                    .foregroundStyle(.white.opacity(0.82))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+                Text("You’re in. Now make it yours.")
+                    .font(.headline)
+                    .foregroundStyle(.white.opacity(0.92))
+            }
         }
     }
 
