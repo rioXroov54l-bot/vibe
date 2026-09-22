@@ -6,5 +6,7 @@
 	<array>
 		<string>applinks:vibe-social-nights.bb0949.chatgpt.site</string>
 	</array>
+	<key>com.apple.developer.default-data-protection</key>
+	<string>NSFileProtectionComplete</string>
 </dict>
 </plist>

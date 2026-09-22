@@ -17,7 +17,11 @@ final class SupabaseClient {
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 20
         config.waitsForConnectivity = false
-        self.session = URLSession(configuration: config)
+        self.session = URLSession(
+            configuration: config,
+            delegate: PinnedURLSessionDelegate(),
+            delegateQueue: nil
+        )
     }
 
     private func request(
