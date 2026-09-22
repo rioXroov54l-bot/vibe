@@ -1,19 +1,19 @@
 import SwiftUI
 import AVKit
-import PhotosUI
 
-/// Local video/audio playback without upload, matching the web Cinema room.
+/// Vibe Cinema: shared media room with URL loading and a chat zone.
 struct CinemaView: View {
-    @State private var selectedItem: PhotosPickerItem?
+    @State private var urlString = ""
     @State private var player: AVPlayer?
 
     var body: some View {
         ZStack {
-            VibeTheme.backgroundGradient.ignoresSafeArea()
-            VStack(spacing: 20) {
+            CosmicBackground()
+            VStack(spacing: 16) {
+                // Upper zone: player
                 if let player {
                     VideoPlayer(player: player)
-                        .frame(height: 280)
+                        .frame(height: 250)
                         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                         .overlay(
                             RoundedRectangle(cornerRadius: 20, style: .continuous)
@@ -21,51 +21,78 @@ struct CinemaView: View {
                         )
                 } else {
                     RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .fill(VibeTheme.card)
-                        .frame(height: 280)
+                        .fill(VibeTheme.card.opacity(0.7))
+                        .frame(height: 250)
                         .overlay(
                             VStack(spacing: 12) {
                                 Image(systemName: "film.stack")
                                     .font(.system(size: 52))
                                     .foregroundStyle(VibeTheme.lavender)
-                                Text("Pick a video to watch together")
+                                Text(L10n.vibeCinema)
                                     .font(.headline)
                                     .foregroundStyle(.white)
                             }
                         )
                 }
 
-                PhotosPicker(selection: $selectedItem, matching: .videos) {
-                    Text("Choose a video")
-                        .vibePrimaryButton()
+                // URL input
+                HStack(spacing: 10) {
+                    TextField(L10n.pasteVideoLink, text: $urlString)
+                        .vibeField()
+                        .keyboardType(.URL)
+                        .textInputAutocapitalization(.never)
+                    Button {
+                        loadURL()
+                    } label: {
+                        Text(L10n.play)
+                            .font(.headline.weight(.semibold))
+                            .foregroundStyle(.black)
+                            .padding(.horizontal, 18)
+                            .padding(.vertical, 14)
+                            .background(Capsule().fill(.white))
+                    }
+                    .disabled(urlString.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
 
-                Text("Vibe Cinema plays local video files on this device without uploading them.")
-                    .font(.footnote)
-                    .foregroundStyle(VibeTheme.textMuted)
-                    .multilineTextAlignment(.center)
+                // Lower zone: participants + chat hint
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack(spacing: 8) {
+                        ForEach(["😎", "🧑‍🚀", "🦊", "🐼"], id: \.self) { emoji in
+                            Text(emoji)
+                                .font(.system(size: 24))
+                                .frame(width: 42, height: 42)
+                                .background(Circle().fill(VibeTheme.primary.opacity(0.3)))
+                        }
+                        Spacer()
+                        Text("Watch together")
+                            .font(.footnote)
+                            .foregroundStyle(VibeTheme.textMuted)
+                    }
+                    Text("Supports direct MP4 / HLS video URLs. YouTube and Vimeo links are not yet playable natively.")
+                        .font(.caption)
+                        .foregroundStyle(VibeTheme.textMuted)
+                }
+                .padding(16)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .fill(VibeTheme.surface.opacity(0.7))
+                        .overlay(RoundedRectangle(cornerRadius: 18).stroke(VibeTheme.strokeStrong, lineWidth: 1))
+                )
 
                 Spacer()
             }
             .padding(20)
+            .padding(.bottom, 90)
         }
-        .navigationTitle("Cinema")
+        .navigationTitle(L10n.vibeCinema)
         .navigationBarTitleDisplayMode(.inline)
-        .onChange(of: selectedItem) { _, newItem in
-            Task { await loadVideo(from: newItem) }
-        }
     }
 
-    @MainActor
-    private func loadVideo(from item: PhotosPickerItem?) async {
-        guard let item, let data = try? await item.loadTransferable(type: Data.self) else { return }
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("vibe-cinema-\(UUID().uuidString).mov")
-        do {
-            try data.write(to: url)
-            player = AVPlayer(url: url)
-            player?.play()
-        } catch {
-            player = nil
-        }
+    private func loadURL() {
+        let trimmed = urlString.trimmingCharacters(in: .whitespaces)
+        guard let url = URL(string: trimmed) else { return }
+        player = AVPlayer(url: url)
+        player?.play()
     }
 }
