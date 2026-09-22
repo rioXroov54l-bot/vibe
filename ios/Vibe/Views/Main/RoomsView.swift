@@ -89,6 +89,13 @@ struct CreateRoomView: View {
                             .font(.system(size: 26, weight: .bold, design: .rounded))
                             .foregroundStyle(.white)
 
+                        if let error = appState.errorMessage {
+                            Text(error)
+                                .font(.footnote.weight(.medium))
+                                .foregroundStyle(VibeTheme.pink)
+                                .multilineTextAlignment(.leading)
+                        }
+
                         // Room type quick-select cards
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                             ForEach(roomTypes, id: \.kind) { type in
