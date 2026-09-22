@@ -30,9 +30,11 @@ final class AppState: ObservableObject {
     @Published var rooms: [Room] = []
     @Published var memberCounts: [String: Int] = [:]
     @Published var activeRoomMessages: [Message] = []
+    @Published var currentRoomId: String?
 
     private let auth = AuthService()
     private let data = DataService()
+    private let realtime = RealtimeService()
 
     var userId: String? { session?.user.id ?? profile?.id }
 
@@ -275,22 +277,49 @@ final class AppState: ObservableObject {
     func leaveRoom(_ roomId: String) async {
         guard let token = session?.accessToken, let id = userId else { return }
         try? await data.leaveRoom(roomId: roomId, userId: id, token: token)
+        currentRoomId = nil
+        realtime.disconnect()
     }
 
     func loadMessages(roomId: String) async {
         guard let token = session?.accessToken else { return }
+        currentRoomId = roomId
         do {
             activeRoomMessages = try await data.fetchMessages(roomId: roomId, token: token).reversed()
         } catch {
             activeRoomMessages = []
         }
+        realtime.disconnect()
+        realtime.connect(token: token) { [weak self] message in
+            guard let self, self.currentRoomId == message.roomId else { return }
+            if !self.activeRoomMessages.contains(where: { $0.id == message.id }) {
+                self.activeRoomMessages.append(message)
+            }
+        }
     }
 
     func sendMessage(roomId: String, body: String) async {
         guard let token = session?.accessToken, let id = userId else { return }
+        // Optimistic local message: appear instantly, then confirm from server.
+        let optimisticID = UUID().uuidString
+        let optimistic = Message(
+            id: optimisticID,
+            senderId: id,
+            roomId: roomId,
+            receiverId: nil,
+            kind: "text",
+            content: body,
+            objectPath: nil,
+            createdAt: ISO8601DateFormatter().string(from: Date())
+        )
+        activeRoomMessages.append(optimistic)
         await run {
             let message = try await self.data.sendRoomMessage(authorId: id, roomId: roomId, body: body, token: token)
-            self.activeRoomMessages.append(message)
+            if let index = self.activeRoomMessages.firstIndex(where: { $0.id == optimisticID }) {
+                self.activeRoomMessages[index] = message
+            } else {
+                self.activeRoomMessages.append(message)
+            }
         }
     }
 

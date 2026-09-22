@@ -50,6 +50,7 @@
 		40F1359330B2A01ADC4C7E47 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75367211661EFFE54C3D3C51 /* OnboardingView.swift */; };
 		D214C0B18FE5DE5F55452168 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDAD37B438DEF19033CEAC5A /* AuthService.swift */; };
 		B6FA5ACD6D500AC875390848 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FCADD2F8D5DA3F51A6C443A /* DataService.swift */; };
+		74EE9A7F9059CB427D283E46 /* RealtimeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CEA2C9E504AEBA5BC822CF4 /* RealtimeService.swift */; };
 		EECD03B25E695EA8A8E210FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 39BFAB7D0E2086E6EBE1AB45 /* Assets.xcassets */; };
 		0BBC401D6B2F7DBFC4684181 /* VibeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDB7583270DBC97A4902018 /* VibeUITests.swift */; };
 /* End PBXBuildFile section */
@@ -98,6 +99,7 @@
 		75367211661EFFE54C3D3C51 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		BDAD37B438DEF19033CEAC5A /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		7FCADD2F8D5DA3F51A6C443A /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
+		0CEA2C9E504AEBA5BC822CF4 /* RealtimeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealtimeService.swift; sourceTree = "<group>"; };
 		39BFAB7D0E2086E6EBE1AB45 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7B594B6DB375E1BF3F23CDD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02688DC74EFFB59DBC8F36FC /* Vibe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vibe.entitlements; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 			children = (
 				BDAD37B438DEF19033CEAC5A,
 				7FCADD2F8D5DA3F51A6C443A,
+				0CEA2C9E504AEBA5BC822CF4,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -459,6 +462,7 @@
 				40F1359330B2A01ADC4C7E47 /* OnboardingView.swift in Sources */,
 				D214C0B18FE5DE5F55452168 /* AuthService.swift in Sources */,
 				B6FA5ACD6D500AC875390848 /* DataService.swift in Sources */,
+				74EE9A7F9059CB427D283E46 /* RealtimeService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

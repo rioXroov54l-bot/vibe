@@ -220,29 +220,37 @@ struct RoomView: View {
                     .foregroundStyle(.white)
                     .padding(.vertical, 16)
 
-                ScrollView {
-                    VStack(spacing: 12) {
-                        if appState.activeRoomMessages.isEmpty {
-                            Text(L10n.startConversation)
-                                .font(.footnote)
-                                .foregroundStyle(VibeTheme.textMuted)
-                                .padding(.top, 40)
-                        } else {
-                            ForEach(appState.activeRoomMessages) { message in
-                                HStack {
-                                    if message.senderId == appState.userId { Spacer(minLength: 40) }
-                                    Text(message.content)
-                                        .font(.body)
-                                        .foregroundStyle(.white)
-                                        .padding(.horizontal, 14)
-                                        .padding(.vertical, 9)
-                                        .background(RoundedRectangle(cornerRadius: 16).fill(message.senderId == appState.userId ? VibeTheme.primary.opacity(0.55) : VibeTheme.surface))
-                                    if message.senderId != appState.userId { Spacer(minLength: 40) }
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: 12) {
+                            if appState.activeRoomMessages.isEmpty {
+                                Text(L10n.startConversation)
+                                    .font(.footnote)
+                                    .foregroundStyle(VibeTheme.textMuted)
+                                    .padding(.top, 40)
+                            } else {
+                                ForEach(appState.activeRoomMessages) { message in
+                                    HStack {
+                                        if message.senderId == appState.userId { Spacer(minLength: 40) }
+                                        Text(message.content)
+                                            .font(.body)
+                                            .foregroundStyle(.white)
+                                            .padding(.horizontal, 14)
+                                            .padding(.vertical, 9)
+                                            .background(RoundedRectangle(cornerRadius: 16).fill(message.senderId == appState.userId ? VibeTheme.primary.opacity(0.55) : VibeTheme.surface))
+                                        if message.senderId != appState.userId { Spacer(minLength: 40) }
+                                    }
+                                    .id(message.id)
                                 }
                             }
                         }
+                        .padding(16)
                     }
-                    .padding(16)
+                    .onChange(of: appState.activeRoomMessages.count) { _, _ in
+                        if let last = appState.activeRoomMessages.last {
+                            withAnimation { proxy.scrollTo(last.id, anchor: .bottom) }
+                        }
+                    }
                 }
 
                 HStack(spacing: 10) {
