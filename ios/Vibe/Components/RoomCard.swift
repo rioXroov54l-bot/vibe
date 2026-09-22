@@ -50,4 +50,15 @@ extension Room {
         default: return "Social"
         }
     }
+
+    /// Maps the room to a lobby filter category key.
+    var filterKey: String {
+        switch kind {
+        case "game": return "games"
+        case "cinema": return "sessions"
+        case "echo": return "music"
+        case "voice", "flash": return "discussions"
+        default: return "sessions"
+        }
+    }
 }

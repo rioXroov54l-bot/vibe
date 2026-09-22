@@ -11,7 +11,7 @@ struct ExploreView: View {
     @State private var pendingPrivateRoom: Room?
     @State private var showingPasscode = false
 
-    private let filters = ["all", "sessions", "music", "games", "discussions"]
+    private let filters = ["all", "sessions", "music", "games", "languages", "discussions"]
 
     private var userName: String {
         appState.profile?.displayName ?? appState.session?.user.displayName ?? "Ray"
@@ -28,9 +28,7 @@ struct ExploreView: View {
 
     private var filteredRooms: [Room] {
         guard selectedFilter != "all" else { return dynamicRooms }
-        return dynamicRooms.filter { room in
-            room.categoryName.lowercased().contains(selectedFilter)
-        }
+        return dynamicRooms.filter { $0.filterKey == selectedFilter }
     }
 
     var body: some View {
@@ -202,6 +200,7 @@ struct ExploreView: View {
         case "sessions": return L10n.sessions
         case "music": return L10n.music
         case "games": return L10n.games
+        case "languages": return L10n.languages
         default: return L10n.discussions
         }
     }
