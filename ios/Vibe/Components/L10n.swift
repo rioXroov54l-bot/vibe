@@ -74,4 +74,33 @@ enum L10n {
     static var interestsSubtitle: String { ar ? "اختر 3 اهتمامات على الأقل للعثور على أشخاص يشاركونك نفس الاهتمامات." : "Choose at least 3 interests to find people who like similar things." }
     static var selectAtLeastThree: String { ar ? "اختر 3 اهتمامات على الأقل." : "Select at least 3 interests." }
     static var selectedCount: String { ar ? "تم اختيار %d من 3" : "%d of 3 selected" }
+
+    // Main app
+    static var explore: String { ar ? "استكشف" : "Explore" }
+    static var likes: String { ar ? "الإعجابات" : "Likes" }
+    static var chat: String { ar ? "الدردشة" : "Chat" }
+    static var profile: String { ar ? "الملف الشخصي" : "Profile" }
+    static var goodVibes: String { ar ? "أجواء رائعة" : "Good vibes" }
+    static var onSameWavelength: String { ar ? "على نفس الموجة" : "ON THE SAME WAVELENGTH" }
+    static var joinTheNight: String { ar ? "انضم لليلة ←" : "Join the night ←" }
+    static var flashRooms: String { ar ? "رومات فلاش" : "Flash Rooms" }
+    static var vibeCinema: String { ar ? "سينما فايب" : "Vibe Cinema" }
+    static var gamesRooms: String { ar ? "رومات الألعاب" : "Games Rooms" }
+    static var echoStage: String { ar ? "مسرح إيكو" : "Echo Stage" }
+    static var all: String { ar ? "الكل" : "All" }
+    static var hangouts: String { ar ? "جلسات" : "Hangouts" }
+    static var music: String { ar ? "موسيقى" : "Music" }
+    static var games: String { ar ? "ألعاب" : "Games" }
+    static var languages: String { ar ? "لغات" : "Languages" }
+    static var discussions: String { ar ? "نقاشات" : "Discussions" }
+    static var joinTheVibe: String { ar ? "انضم للفايب ←" : "Join the vibe ←" }
+    static var createRoom: String { ar ? "أنشئ غرفة" : "Create a room" }
+    static var raiseHand: String { ar ? "ارفع اليد" : "Raise hand" }
+    static var mute: String { ar ? "كتم" : "Mute" }
+    static var unmute: String { ar ? "إلغاء الكتم" : "Unmute" }
+    static var gift: String { ar ? "هدية" : "Gift" }
+    static var leave: String { ar ? "مغادرة ←" : "Leave ←" }
+    static var roomChat: String { ar ? "دردشة الغرفة" : "Room chat" }
+    static var pasteVideoLink: String { ar ? "الصق رابط يوتيوب أو فيديو هنا..." : "Paste YouTube or video link here..." }
+    static var play: String { ar ? "تشغيل" : "Play" }
 }

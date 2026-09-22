@@ -29,9 +29,12 @@
 		5258E9B02A2BABB39C4EB47B /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FC3D443C0E03723696C07A /* ResetPasswordView.swift */; };
 		9F4C3AF0640614C987EA2EE9 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F37E331C0D95F7E811D899AE /* SignUpView.swift */; };
 		953BECD14E06822BD75B7A26 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE1CCB0744C7340B7944ECD /* WelcomeView.swift */; };
+		CE2870FE0B9B5DFD3236DEAD /* ChatInboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA3CFFDA55925A3ABCB49AC2 /* ChatInboxView.swift */; };
 		91E8109CD25848F7EC0907CE /* CinemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC7D33346169C67A62EB0DE /* CinemaView.swift */; };
 		C3D540D2090DC187D7CF7721 /* DiscoveryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D92EA5C298F96F2A4F57A0FE /* DiscoveryView.swift */; };
+		3BACA906C5CDE1C344D1BF08 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C6E436DDAA70DFE574EAA1 /* ExploreView.swift */; };
 		94636059BB20F6473808D42F /* GamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6793242A690940788B1804CC /* GamesView.swift */; };
+		029268C43EECE4A86BBD21DC /* LikesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B845C89D040AA29FC6212871 /* LikesView.swift */; };
 		66B160AB4BF70E14FB893F4E /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C7EE0702E4C45CE2BCC28F /* MainTabView.swift */; };
 		B16606F19F1DE3768DD4FE48 /* PodcastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61164815ED05474BE534C0E0 /* PodcastView.swift */; };
 		574791895ECB8F8B7EC1C6A0 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE988C250F05837B03CE1919 /* ProfileView.swift */; };
@@ -67,9 +70,12 @@
 		12FC3D443C0E03723696C07A /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		F37E331C0D95F7E811D899AE /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		3FE1CCB0744C7340B7944ECD /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		BA3CFFDA55925A3ABCB49AC2 /* ChatInboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInboxView.swift; sourceTree = "<group>"; };
 		CAC7D33346169C67A62EB0DE /* CinemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CinemaView.swift; sourceTree = "<group>"; };
 		D92EA5C298F96F2A4F57A0FE /* DiscoveryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryView.swift; sourceTree = "<group>"; };
+		07C6E436DDAA70DFE574EAA1 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
 		6793242A690940788B1804CC /* GamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesView.swift; sourceTree = "<group>"; };
+		B845C89D040AA29FC6212871 /* LikesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesView.swift; sourceTree = "<group>"; };
 		B6C7EE0702E4C45CE2BCC28F /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		61164815ED05474BE534C0E0 /* PodcastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastView.swift; sourceTree = "<group>"; };
 		BE988C250F05837B03CE1919 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -257,9 +263,12 @@
 		5FCB3FBAC02CF1EF263E82E2 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				BA3CFFDA55925A3ABCB49AC2,
 				CAC7D33346169C67A62EB0DE,
 				D92EA5C298F96F2A4F57A0FE,
+				07C6E436DDAA70DFE574EAA1,
 				6793242A690940788B1804CC,
+				B845C89D040AA29FC6212871,
 				B6C7EE0702E4C45CE2BCC28F,
 				61164815ED05474BE534C0E0,
 				BE988C250F05837B03CE1919,
@@ -408,9 +417,12 @@
 				5258E9B02A2BABB39C4EB47B /* ResetPasswordView.swift in Sources */,
 				9F4C3AF0640614C987EA2EE9 /* SignUpView.swift in Sources */,
 				953BECD14E06822BD75B7A26 /* WelcomeView.swift in Sources */,
+				CE2870FE0B9B5DFD3236DEAD /* ChatInboxView.swift in Sources */,
 				91E8109CD25848F7EC0907CE /* CinemaView.swift in Sources */,
 				C3D540D2090DC187D7CF7721 /* DiscoveryView.swift in Sources */,
+				3BACA906C5CDE1C344D1BF08 /* ExploreView.swift in Sources */,
 				94636059BB20F6473808D42F /* GamesView.swift in Sources */,
+				029268C43EECE4A86BBD21DC /* LikesView.swift in Sources */,
 				66B160AB4BF70E14FB893F4E /* MainTabView.swift in Sources */,
 				B16606F19F1DE3768DD4FE48 /* PodcastView.swift in Sources */,
 				574791895ECB8F8B7EC1C6A0 /* ProfileView.swift in Sources */,
