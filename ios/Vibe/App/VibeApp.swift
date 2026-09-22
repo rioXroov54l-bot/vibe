@@ -11,7 +11,14 @@ struct VibeApp: App {
                 .environmentObject(appState)
                 .environmentObject(localization)
                 .environment(\.layoutDirection, localization.layoutDirection)
-                .task { await appState.bootstrap() }
+                .task {
+                    if ProcessInfo.processInfo.arguments.contains("-UITestAutoLogin") {
+                        appState.isLoading = false
+                        await appState.signIn(email: "vibe.devtest@vibeapp.dev", password: "VibeDevTest123!")
+                    } else {
+                        await appState.bootstrap()
+                    }
+                }
         }
     }
 }
