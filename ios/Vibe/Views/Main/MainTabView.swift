@@ -21,7 +21,15 @@ struct MainTabView: View {
         ZStack(alignment: .bottom) {
             CosmicBackground()
 
-            content
+            ZStack {
+                content
+                    .id(selectedTab)
+                    .transition(.asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .scale(scale: 0.96).combined(with: .opacity)
+                    ))
+            }
+            .animation(.spring(response: 0.36, dampingFraction: 0.86), value: selectedTab)
 
             GlassTabBar(selected: $selectedTab)
         }
