@@ -10,7 +10,9 @@ enum CoreRooms {
             title: "Late-night conversations",
             category: 1,
             kind: "voice",
-            createdAt: ""
+            createdAt: "",
+            isPrivate: false,
+            passcodeHash: nil
         ),
         Room(
             id: "10000000-0000-4000-8000-000000000002",
@@ -18,7 +20,9 @@ enum CoreRooms {
             title: "A slower kind of night ♫",
             category: 4,
             kind: "cinema",
-            createdAt: ""
+            createdAt: "",
+            isPrivate: false,
+            passcodeHash: nil
         ),
         Room(
             id: "10000000-0000-4000-8000-000000000003",
@@ -26,7 +30,9 @@ enum CoreRooms {
             title: "Game night with the crew 🎮",
             category: 3,
             kind: "game",
-            createdAt: ""
+            createdAt: "",
+            isPrivate: false,
+            passcodeHash: nil
         ),
         Room(
             id: "10000000-0000-4000-8000-000000000004",
@@ -34,7 +40,9 @@ enum CoreRooms {
             title: "Voices worth hearing ✦",
             category: 2,
             kind: "echo",
-            createdAt: ""
+            createdAt: "",
+            isPrivate: true,
+            passcodeHash: "1234"
         )
     ]
 }

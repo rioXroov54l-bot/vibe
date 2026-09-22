@@ -255,8 +255,11 @@ final class AppState: ObservableObject {
     func createRoom(title: String, category: Int, kind: String) async {
         guard let token = session?.accessToken, let id = userId else { return }
         await run {
-            _ = try await self.data.createRoom(ownerId: id, title: title, category: category, kind: kind, token: token)
-            await self.loadRooms()
+            let room = try await self.data.createRoom(ownerId: id, title: title, category: category, kind: kind, token: token)
+            // Optimistic UI: prepend the new room immediately without a full reload.
+            if !self.rooms.contains(where: { $0.id == room.id }) {
+                self.rooms.insert(room, at: 0)
+            }
         }
     }
 

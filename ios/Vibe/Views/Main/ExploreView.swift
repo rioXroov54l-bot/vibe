@@ -8,6 +8,8 @@ struct ExploreView: View {
     @State private var joiningRoom: Room?
     @State private var showingPreJoin = false
     @State private var activeRoom: Room?
+    @State private var pendingPrivateRoom: Room?
+    @State private var showingPasscode = false
 
     private let filters = ["all", "hangouts", "music", "games", "languages", "discussions"]
 
@@ -67,6 +69,16 @@ struct ExploreView: View {
             }
             .fullScreenCover(item: $activeRoom) { room in
                 RoomView(room: room)
+            }
+            .sheet(isPresented: $showingPasscode) {
+                if let pendingPrivateRoom {
+                    PasscodeSheet(room: pendingPrivateRoom) {
+                        showingPasscode = false
+                        joiningRoom = pendingPrivateRoom
+                        showingPreJoin = true
+                    }
+                    .presentationDetents([.height(320)])
+                }
             }
         }
         .task { await appState.loadRooms() }
@@ -211,8 +223,13 @@ struct ExploreView: View {
         LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
             ForEach(filteredRooms) { room in
                 ExploreRoomCard(room: room, memberCount: appState.memberCounts[room.id] ?? 0) {
-                    joiningRoom = room
-                    showingPreJoin = true
+                    if room.isPrivate {
+                        pendingPrivateRoom = room
+                        showingPasscode = true
+                    } else {
+                        joiningRoom = room
+                        showingPreJoin = true
+                    }
                 }
             }
         }
@@ -227,26 +244,37 @@ private struct ExploreRoomCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(room.title)
-                .font(.headline.weight(.bold))
-                .foregroundStyle(.white)
-                .lineLimit(2)
-                .minimumScaleFactor(0.8)
+            HStack(alignment: .top, spacing: 6) {
+                Text(room.title)
+                    .font(.headline.weight(.bold))
+                    .foregroundStyle(.white)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+                Spacer(minLength: 0)
+                if room.isPrivate {
+                    Image(systemName: "lock.fill")
+                        .font(.caption)
+                        .foregroundStyle(Color(red: 1.0, green: 0.76, blue: 0.03)) // #FFC107
+                }
+            }
 
             Text(room.categoryName)
-                .font(.caption.weight(.semibold))
+                .font(.caption2.weight(.bold))
                 .foregroundStyle(VibeTheme.lavender)
+                .padding(.horizontal, 9)
+                .padding(.vertical, 4)
+                .background(Capsule().fill(VibeTheme.primary.opacity(0.3)))
 
             Spacer(minLength: 8)
 
             HStack {
                 HStack(spacing: -8) {
-                    ForEach(["😎", "🦊", "🐼"], id: \.self) { emoji in
+                    ForEach(["😎", "🦊", "🐼", "🐱"], id: \.self) { emoji in
                         Text(emoji)
-                            .font(.system(size: 16))
-                            .frame(width: 28, height: 28)
-                            .background(Circle().fill(VibeTheme.primary.opacity(0.45)))
-                            .overlay(Circle().stroke(VibeTheme.surface, lineWidth: 1))
+                            .font(.system(size: 14))
+                            .frame(width: 26, height: 26)
+                            .background(Circle().fill(VibeTheme.primary.opacity(0.5)))
+                            .overlay(Circle().stroke(VibeTheme.primaryDark, lineWidth: 1.5))
                     }
                 }
                 Spacer()
@@ -261,10 +289,12 @@ private struct ExploreRoomCard: View {
 
             Button(action: onJoin) {
                 HStack(spacing: 6) {
-                    Text(L10n.joinTheVibe)
-                    Image(systemName: "arrow.right")
+                    Text(L10n.joinRoom)
+                    Image(systemName: "arrow.forward")
+                        .font(.caption.weight(.bold))
                         .flipsForRightToLeftLayoutDirection(true)
                 }
+                .padding(.horizontal, 8)
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.black)
                 .frame(maxWidth: .infinity)
@@ -277,7 +307,14 @@ private struct ExploreRoomCard: View {
         .frame(maxWidth: .infinity, minHeight: 205, alignment: .topLeading)
         .background(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(LinearGradient(colors: [VibeTheme.primaryDeep.opacity(0.7), VibeTheme.card.opacity(0.85)], startPoint: .top, endPoint: .bottom))
+                .fill(LinearGradient(
+                    colors: [
+                        Color(red: 46/255, green: 26/255, blue: 71/255),   // #2E1A47
+                        Color(red: 21/255, green: 8/255, blue: 36/255)     // #150824
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                ))
                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(VibeTheme.strokeStrong, lineWidth: 1))
         )
     }

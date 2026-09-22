@@ -94,6 +94,7 @@ enum L10n {
     static var languages: String { ar ? "لغات" : "Languages" }
     static var discussions: String { ar ? "نقاشات" : "Discussions" }
     static var joinTheVibe: String { ar ? "انضم للفايب ←" : "Join the vibe ←" }
+    static var joinRoom: String { ar ? "انضم لروم" : "Join Room" }
     static var createRoom: String { ar ? "أنشئ غرفة" : "Create a room" }
     static var raiseHand: String { ar ? "ارفع اليد" : "Raise hand" }
     static var mute: String { ar ? "كتم" : "Mute" }
@@ -136,4 +137,8 @@ enum L10n {
     static var request: String { ar ? "طلب" : "Request" }
     static var listener: String { ar ? "مستمع" : "Listener" }
     static var listeningAnonymouslyStatus: String { ar ? "أنت تستمع بشكل مجهول" : "You are listening anonymously" }
+    static var privateRoom: String { ar ? "غرفة خاصة" : "Private room" }
+    static var enterPasscode: String { ar ? "أدخل رمز الدخول" : "Enter passcode" }
+    static var wrongPasscode: String { ar ? "رمز الدخول غير صحيح" : "Incorrect passcode" }
+    static var unlock: String { ar ? "فتح" : "Unlock" }
 }

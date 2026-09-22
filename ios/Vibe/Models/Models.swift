@@ -108,12 +108,16 @@ struct Room: Codable, Identifiable {
     let category: Int
     let kind: String
     let createdAt: String
+    let isPrivate: Bool
+    let passcodeHash: String?
 
     enum CodingKeys: String, CodingKey {
         case id
         case ownerId = "owner_id"
         case title, category, kind
         case createdAt = "created_at"
+        case isPrivate = "is_private"
+        case passcodeHash = "passcode_hash"
     }
 }
 
