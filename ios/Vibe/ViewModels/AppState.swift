@@ -272,6 +272,11 @@ final class AppState: ObservableObject {
         }
     }
 
+    func leaveRoom(_ roomId: String) async {
+        guard let token = session?.accessToken, let id = userId else { return }
+        try? await data.leaveRoom(roomId: roomId, userId: id, token: token)
+    }
+
     func loadMessages(roomId: String) async {
         guard let token = session?.accessToken else { return }
         do {

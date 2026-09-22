@@ -96,6 +96,15 @@ final class DataService {
         )
     }
 
+    /// Remove the user's membership when leaving a room.
+    func leaveRoom(roomId: String, userId: String, token: String) async throws {
+        try await client.sendNoContent(
+            "rest/v1/vibe_members?room_id=eq.\(roomId)&user_id=eq.\(userId)",
+            method: "DELETE",
+            token: token
+        )
+    }
+
     // MARK: Messages
 
     func fetchMessages(roomId: String, token: String) async throws -> [Message] {

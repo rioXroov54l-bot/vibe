@@ -5,6 +5,7 @@ struct RoomView: View {
     let room: Room
 
     @EnvironmentObject private var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     @State private var isMuted = false
     @State private var isHandRaised = false
     @State private var showingChat = false
@@ -63,6 +64,17 @@ struct RoomView: View {
                     .foregroundStyle(VibeTheme.mint)
             }
             Spacer()
+            Button {
+                leave()
+            } label: {
+                Text(L10n.leave)
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(Capsule().fill(.red))
+            }
+            .contentShape(Rectangle())
         }
         .padding(.horizontal, 20)
         .padding(.top, 8)
@@ -132,9 +144,7 @@ struct RoomView: View {
 
     private var controlBar: some View {
         HStack(spacing: 0) {
-            controlButton(isHandRaised ? "hand.raised.fill" : "hand.raised", isHandRaised, VibeTheme.lavender) {
-                isHandRaised.toggle()
-            }
+            requestButton
             controlButton(isMuted ? "mic.slash.fill" : "mic.fill", isMuted, VibeTheme.pink) {
                 isMuted.toggle()
             }
@@ -146,25 +156,36 @@ struct RoomView: View {
                     .background(Circle().fill(.white.opacity(0.08)))
             }
             .frame(maxWidth: .infinity)
+            .contentShape(Rectangle())
             controlButton("gift.fill", false, VibeTheme.mint) {
                 sendReaction()
             }
             controlButton("bubble.left.fill", showingChat, VibeTheme.cyan) {
                 showingChat = true
             }
-            Button {
-                leave()
-            } label: {
-                Text(L10n.leave)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Capsule().fill(.white))
-            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
+    }
+
+    /// Black circular "Request" button that toggles to a flashing amber cue.
+    private var requestButton: some View {
+        let amber = Color(red: 1.0, green: 0.76, blue: 0.03) // #FFC107
+        return Button {
+            isHandRaised.toggle()
+        } label: {
+            Image(systemName: "mic.fill")
+                .font(.system(size: 19, weight: .semibold))
+                .foregroundStyle(isHandRaised ? .black : .white)
+                .frame(width: 42, height: 42)
+                .background(Circle().fill(isHandRaised ? amber : .black))
+                .overlay(Circle().stroke(.white.opacity(0.2), lineWidth: 1))
+                .shadow(color: isHandRaised ? amber.opacity(0.8) : .clear, radius: 9)
+                .scaleEffect(isHandRaised ? 1.06 : 1.0)
+                .animation(.easeInOut(duration: 0.45).repeatForever(autoreverses: true), value: isHandRaised)
+        }
+        .frame(maxWidth: .infinity)
+        .contentShape(Rectangle())
     }
 
     private func controlButton(_ icon: String, _ active: Bool, _ color: Color, action: @escaping () -> Void) -> some View {
@@ -177,6 +198,7 @@ struct RoomView: View {
                 .shadow(color: active ? color.opacity(0.6) : .clear, radius: 8)
         }
         .frame(maxWidth: .infinity)
+        .contentShape(Rectangle())
     }
 
     private func sendReaction() {
@@ -244,6 +266,11 @@ struct RoomView: View {
     }
 
     private func leave() {
-        // In a real app this would notify the server; here we just pop back.
+        // Atomic teardown: remove membership, purge state, then dismiss.
+        Task {
+            await appState.leaveRoom(room.id)
+            appState.activeRoomMessages = []
+            dismiss()
+        }
     }
 }
