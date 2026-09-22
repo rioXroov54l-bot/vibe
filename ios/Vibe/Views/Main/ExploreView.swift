@@ -44,6 +44,7 @@ struct ExploreView: View {
                     VStack(alignment: .leading, spacing: 22) {
                         header
                         featuredBanner
+                        quickHubs
                         filterChips
                         anchorRoomsSection
                         roomsFeed
@@ -152,6 +153,36 @@ struct ExploreView: View {
             RoundedRectangle(cornerRadius: 22, style: .continuous)
                 .fill(LinearGradient(colors: [VibeTheme.primary.opacity(0.55), VibeTheme.primaryDeep.opacity(0.4)], startPoint: .topLeading, endPoint: .bottomTrailing))
                 .overlay(RoundedRectangle(cornerRadius: 22).stroke(VibeTheme.lavender.opacity(0.35), lineWidth: 1))
+        )
+    }
+
+    // MARK: Quick hubs
+
+    private var quickHubs: some View {
+        HStack(spacing: 10) {
+            NavigationLink { RoomsView(filterKind: "flash") } label: { hubLabel("⚡", L10n.flashRooms) }
+            NavigationLink { CinemaView() } label: { hubLabel("🎬", L10n.vibeCinema) }
+            NavigationLink { GamesView() } label: { hubLabel("🎮", L10n.gamesRooms) }
+            NavigationLink { PodcastView() } label: { hubLabel("🎙️", L10n.echoStage) }
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func hubLabel(_ emoji: String, _ title: String) -> some View {
+        VStack(spacing: 6) {
+            Text(emoji).font(.system(size: 26))
+            Text(title)
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 14)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(VibeTheme.surface.opacity(0.7))
+                .overlay(RoundedRectangle(cornerRadius: 16).stroke(VibeTheme.strokeStrong, lineWidth: 1))
         )
     }
 
