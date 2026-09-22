@@ -41,8 +41,8 @@ enum CoreRooms {
             category: 2,
             kind: "echo",
             createdAt: "",
-            isPrivate: true,
-            passcodeHash: "1234"
+            isPrivate: false,
+            passcodeHash: nil
         )
     ]
 }
