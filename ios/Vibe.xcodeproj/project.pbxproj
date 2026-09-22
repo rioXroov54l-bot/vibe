@@ -22,6 +22,7 @@
 		55F68E16A6897D4F6C8644B6 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14235B6C9E6191F08EBA31D /* L10n.swift */; };
 		2DF313B78EC689D01273DF90 /* RoomCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB27E9EF7E75E7D3F980DA4 /* RoomCard.swift */; };
 		D18381480924FC8EB4F687D9 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74845CA7BFF6F8C40D6FA4A7 /* Theme.swift */; };
+		FEDB43CD0C90E431FA0B98C3 /* YouTubeWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1D5A359CEC98EDD6B2A5BA /* YouTubeWebView.swift */; };
 		C138061FFFE091CF3ADCE5C3 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D3B83E006E8C811130C1A7 /* RootView.swift */; };
 		16E9481B884A6865638F5801 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328D5CBC5B05169ADC891331 /* ForgotPasswordView.swift */; };
 		4C7C4F8D6746E3E850E61D9A /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6984D36E4381DF2C8CD6A30F /* LoginView.swift */; };
@@ -64,6 +65,7 @@
 		D14235B6C9E6191F08EBA31D /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
 		DAB27E9EF7E75E7D3F980DA4 /* RoomCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCard.swift; sourceTree = "<group>"; };
 		74845CA7BFF6F8C40D6FA4A7 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		9A1D5A359CEC98EDD6B2A5BA /* YouTubeWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeWebView.swift; sourceTree = "<group>"; };
 		82D3B83E006E8C811130C1A7 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		328D5CBC5B05169ADC891331 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		6984D36E4381DF2C8CD6A30F /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				D14235B6C9E6191F08EBA31D,
 				DAB27E9EF7E75E7D3F980DA4,
 				74845CA7BFF6F8C40D6FA4A7,
+				9A1D5A359CEC98EDD6B2A5BA,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 				55F68E16A6897D4F6C8644B6 /* L10n.swift in Sources */,
 				2DF313B78EC689D01273DF90 /* RoomCard.swift in Sources */,
 				D18381480924FC8EB4F687D9 /* Theme.swift in Sources */,
+				FEDB43CD0C90E431FA0B98C3 /* YouTubeWebView.swift in Sources */,
 				C138061FFFE091CF3ADCE5C3 /* RootView.swift in Sources */,
 				16E9481B884A6865638F5801 /* ForgotPasswordView.swift in Sources */,
 				4C7C4F8D6746E3E850E61D9A /* LoginView.swift in Sources */,

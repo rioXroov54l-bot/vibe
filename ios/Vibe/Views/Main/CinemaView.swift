@@ -1,46 +1,24 @@
 import SwiftUI
 import AVKit
 
-/// Vibe Cinema: shared media room with URL loading and a chat zone.
+/// Vibe Cinema: paste a link and the media plays immediately.
 struct CinemaView: View {
     @State private var urlString = ""
     @State private var player: AVPlayer?
+    @State private var youtubeID: String?
 
     var body: some View {
         ZStack {
             CosmicBackground()
             VStack(spacing: 16) {
-                // Upper zone: player
-                if let player {
-                    VideoPlayer(player: player)
-                        .frame(height: 250)
-                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                                .stroke(VibeTheme.strokeStrong, lineWidth: 1)
-                        )
-                } else {
-                    RoundedRectangle(cornerRadius: 20, style: .continuous)
-                        .fill(VibeTheme.card.opacity(0.7))
-                        .frame(height: 250)
-                        .overlay(
-                            VStack(spacing: 12) {
-                                Image(systemName: "film.stack")
-                                    .font(.system(size: 52))
-                                    .foregroundStyle(VibeTheme.lavender)
-                                Text(L10n.vibeCinema)
-                                    .font(.headline)
-                                    .foregroundStyle(.white)
-                            }
-                        )
-                }
+                mediaZone
 
-                // URL input
                 HStack(spacing: 10) {
                     TextField(L10n.pasteVideoLink, text: $urlString)
                         .vibeField()
                         .keyboardType(.URL)
                         .textInputAutocapitalization(.never)
+                        .onSubmit { loadURL() }
                     Button {
                         loadURL()
                     } label: {
@@ -54,7 +32,6 @@ struct CinemaView: View {
                     .disabled(urlString.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
 
-                // Lower zone: participants + chat hint
                 VStack(alignment: .leading, spacing: 12) {
                     HStack(spacing: 8) {
                         ForEach(["😎", "🧑‍🚀", "🦊", "🐼"], id: \.self) { emoji in
@@ -68,7 +45,7 @@ struct CinemaView: View {
                             .font(.footnote)
                             .foregroundStyle(VibeTheme.textMuted)
                     }
-                    Text("Supports direct MP4 / HLS video URLs. YouTube and Vimeo links are not yet playable natively.")
+                    Text("Supports YouTube and direct MP4 / HLS video URLs.")
                         .font(.caption)
                         .foregroundStyle(VibeTheme.textMuted)
                 }
@@ -89,10 +66,68 @@ struct CinemaView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
+    @ViewBuilder
+    private var mediaZone: some View {
+        if let youtubeID {
+            YouTubeWebView(videoID: youtubeID)
+                .frame(height: 250)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .stroke(VibeTheme.strokeStrong, lineWidth: 1)
+                )
+        } else if let player {
+            VideoPlayer(player: player)
+                .frame(height: 250)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .stroke(VibeTheme.strokeStrong, lineWidth: 1)
+                )
+        } else {
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(VibeTheme.card.opacity(0.7))
+                .frame(height: 250)
+                .overlay(
+                    VStack(spacing: 12) {
+                        Image(systemName: "film.stack")
+                            .font(.system(size: 52))
+                            .foregroundStyle(VibeTheme.lavender)
+                        Text(L10n.vibeCinema)
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                    }
+                )
+        }
+    }
+
     private func loadURL() {
         let trimmed = urlString.trimmingCharacters(in: .whitespaces)
-        guard let url = URL(string: trimmed) else { return }
-        player = AVPlayer(url: url)
-        player?.play()
+        guard !trimmed.isEmpty else { return }
+
+        if let id = youtubeVideoID(from: trimmed) {
+            player = nil
+            youtubeID = id
+        } else if let url = URL(string: trimmed) {
+            youtubeID = nil
+            player = AVPlayer(url: url)
+            player?.play()
+        }
+    }
+
+    private func youtubeVideoID(from string: String) -> String? {
+        guard let url = URL(string: string), let host = url.host else { return nil }
+        let isYouTube = host.contains("youtube.com") || host.contains("youtu.be")
+        guard isYouTube else { return nil }
+
+        if host.contains("youtu.be"), !url.path.isEmpty {
+            return String(url.path.dropFirst())
+        }
+        if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+           let queryItems = components.queryItems,
+           let v = queryItems.first(where: { $0.name == "v" })?.value {
+            return v
+        }
+        return nil
     }
 }
