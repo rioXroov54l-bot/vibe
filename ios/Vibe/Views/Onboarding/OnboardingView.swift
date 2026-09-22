@@ -166,9 +166,11 @@ struct OnboardingView: View {
                     .frame(height: 54)
                     .background(Capsule().fill(.white))
             }
+            .buttonStyle(PressableButtonStyle())
         }
         .padding(.horizontal, 22)
         .padding(.vertical, 16)
+        .zIndex(1)
     }
 
     private func goNext() {
@@ -316,5 +318,15 @@ private struct InterestCategoryView: View {
 
     private var visibleOptions: [OnboardingOption] {
         isExpanded ? group.options : Array(group.options.prefix(collapsedCount))
+    }
+}
+
+/// Provides instant scale + opacity feedback on press for touch reliability.
+private struct PressableButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .opacity(configuration.isPressed ? 0.9 : 1.0)
+            .animation(.spring(response: 0.22, dampingFraction: 0.7), value: configuration.isPressed)
     }
 }
