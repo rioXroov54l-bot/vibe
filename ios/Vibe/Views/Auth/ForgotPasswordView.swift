@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ForgotPasswordView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var localization: LocalizationManager
     @State private var email = ""
 
     private var canSubmit: Bool {
@@ -10,7 +11,7 @@ struct ForgotPasswordView: View {
 
     var body: some View {
         ZStack {
-            VibeTheme.backgroundGradient.ignoresSafeArea()
+            CosmicBackground()
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     header
@@ -22,8 +23,8 @@ struct ForgotPasswordView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Email").font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
-                        TextField("name@example.com", text: $email)
+                        Text(L10n.email).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
+                        TextField(L10n.emailPlaceholder, text: $email)
                             .vibeField()
                             .keyboardType(.emailAddress)
                             .textContentType(.emailAddress)
@@ -32,7 +33,7 @@ struct ForgotPasswordView: View {
                     Button {
                         Task { await appState.resetPasswordForEmail(email: email.trimmingCharacters(in: .whitespaces)) }
                     } label: {
-                        Text(appState.isBusy ? "Sending…" : "Send email")
+                        Text(appState.isBusy ? L10n.sending : L10n.sendEmail)
                             .vibePrimaryButton(canSubmit)
                     }
                     .disabled(!canSubmit)
@@ -40,7 +41,7 @@ struct ForgotPasswordView: View {
                     Button {
                         appState.authFlow = .login
                     } label: {
-                        Text("Back to sign in")
+                        Text(L10n.backToSignIn)
                             .font(.subheadline.weight(.medium))
                             .foregroundStyle(VibeTheme.textPrimary)
                     }
@@ -55,10 +56,10 @@ struct ForgotPasswordView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Let's get you back in…")
+            Text(L10n.letsGetYouBack)
                 .font(.system(size: 28, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
-            Text("Enter the email associated with your account. We'll send you a secure link to regain access.")
+            Text(L10n.forgotSubtitle)
                 .font(.subheadline)
                 .foregroundStyle(VibeTheme.textSecondary)
         }

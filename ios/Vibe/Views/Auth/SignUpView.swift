@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SignUpView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var localization: LocalizationManager
     @State private var name = ""
     @State private var email = ""
     @State private var password = ""
@@ -17,7 +18,7 @@ struct SignUpView: View {
 
     var body: some View {
         ZStack {
-            VibeTheme.backgroundGradient.ignoresSafeArea()
+            CosmicBackground()
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     header
@@ -36,10 +37,10 @@ struct SignUpView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Start your Vibe")
+            Text(L10n.startYourVibe)
                 .font(.system(size: 32, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
-            Text("Create your account and find your people.")
+            Text(L10n.signupSubtitle)
                 .font(.subheadline)
                 .foregroundStyle(VibeTheme.textSecondary)
         }
@@ -48,29 +49,29 @@ struct SignUpView: View {
     private var form: some View {
         VStack(spacing: 14) {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Display name").font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
-                TextField("Your name", text: $name)
+                Text(L10n.displayName).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
+                TextField(L10n.displayNamePlaceholder, text: $name)
                     .vibeField()
                     .textContentType(.nickname)
             }
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("Email").font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
-                TextField("name@example.com", text: $email)
+                Text(L10n.email).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
+                TextField(L10n.emailPlaceholder, text: $email)
                     .vibeField()
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
             }
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("Password").font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
-                SecureField("At least 8 characters", text: $password)
+                Text(L10n.password).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
+                SecureField(L10n.passwordHint, text: $password)
                     .vibeField()
                     .textContentType(.newPassword)
             }
 
             Toggle(isOn: $accepted) {
-                Text("I am 18 or older and agree to the terms, privacy policy and community rules.")
+                Text(L10n.consent)
                     .font(.footnote)
                     .foregroundStyle(VibeTheme.textSecondary)
             }
@@ -85,7 +86,7 @@ struct SignUpView: View {
                     )
                 }
             } label: {
-                Text(appState.isBusy ? "Creating account…" : "Create account")
+                Text(appState.isBusy ? L10n.creatingAccount : L10n.createAccount)
                     .vibePrimaryButton(canSubmit)
             }
             .disabled(!canSubmit)
@@ -93,7 +94,7 @@ struct SignUpView: View {
             Button {
                 appState.authFlow = .login
             } label: {
-                Text("Already have an account? Sign in")
+                Text(L10n.alreadyHaveAccount)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(VibeTheme.textPrimary)
             }

@@ -10,11 +10,14 @@
 		D1A503AA2CE28077E5ED3466 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E6A9DFB7C5D32637F52DB2 /* AppState.swift */; };
 		16AAE5C6CB3F6A942BC19BC4 /* VibeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADBE66469BBD0AF73E40654 /* VibeApp.swift */; };
 		B9039CB32ADECFA81CB9613C /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5F234A45151A315476BA84 /* APIError.swift */; };
+		0B7D16CE63794F38220C1F18 /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF3AAE16FFEB378ECAD50EB /* LocalizationManager.swift */; };
 		59C151FD421C3C6FB171D203 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7103916CCDF01340C804C8D8 /* SessionManager.swift */; };
 		2F70E62C4F7355C5E48F9813 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A1F601045BA700DEE3268F /* Models.swift */; };
 		9914F8ACCD22E29347EB07EE /* SupabaseClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24826C5EE30B4FA1C213BFC /* SupabaseClient.swift */; };
 		B1D7D0A868B7DA3BDA4B4C99 /* AuthComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47B0266A9C186291F005E77 /* AuthComponents.swift */; };
+		9DF72BC7B0ABFD312D838A49 /* CosmicBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C94BAF8A343A40049984648 /* CosmicBackground.swift */; };
 		C47D8801BACFBD59C922D3D6 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD813FF86455BDCDA485CA61 /* FlowLayout.swift */; };
+		55F68E16A6897D4F6C8644B6 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = D14235B6C9E6191F08EBA31D /* L10n.swift */; };
 		2DF313B78EC689D01273DF90 /* RoomCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB27E9EF7E75E7D3F980DA4 /* RoomCard.swift */; };
 		D18381480924FC8EB4F687D9 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74845CA7BFF6F8C40D6FA4A7 /* Theme.swift */; };
 		C138061FFFE091CF3ADCE5C3 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D3B83E006E8C811130C1A7 /* RootView.swift */; };
@@ -43,11 +46,14 @@
 		51E6A9DFB7C5D32637F52DB2 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		1ADBE66469BBD0AF73E40654 /* VibeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibeApp.swift; sourceTree = "<group>"; };
 		0F5F234A45151A315476BA84 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		EEF3AAE16FFEB378ECAD50EB /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
 		7103916CCDF01340C804C8D8 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		32A1F601045BA700DEE3268F /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		B24826C5EE30B4FA1C213BFC /* SupabaseClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseClient.swift; sourceTree = "<group>"; };
 		C47B0266A9C186291F005E77 /* AuthComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthComponents.swift; sourceTree = "<group>"; };
+		6C94BAF8A343A40049984648 /* CosmicBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CosmicBackground.swift; sourceTree = "<group>"; };
 		FD813FF86455BDCDA485CA61 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
+		D14235B6C9E6191F08EBA31D /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
 		DAB27E9EF7E75E7D3F980DA4 /* RoomCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCard.swift; sourceTree = "<group>"; };
 		74845CA7BFF6F8C40D6FA4A7 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		82D3B83E006E8C811130C1A7 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -150,7 +156,9 @@
 			isa = PBXGroup;
 			children = (
 				C47B0266A9C186291F005E77,
+				6C94BAF8A343A40049984648,
 				FD813FF86455BDCDA485CA61,
+				D14235B6C9E6191F08EBA31D,
 				DAB27E9EF7E75E7D3F980DA4,
 				74845CA7BFF6F8C40D6FA4A7,
 			);
@@ -160,6 +168,7 @@
 		1733497EE9B66B4253D84CA0 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				EEF3AAE16FFEB378ECAD50EB,
 				7103916CCDF01340C804C8D8,
 			);
 			path = Managers;
@@ -374,11 +383,14 @@
 				D1A503AA2CE28077E5ED3466 /* AppState.swift in Sources */,
 				16AAE5C6CB3F6A942BC19BC4 /* VibeApp.swift in Sources */,
 				B9039CB32ADECFA81CB9613C /* APIError.swift in Sources */,
+				0B7D16CE63794F38220C1F18 /* LocalizationManager.swift in Sources */,
 				59C151FD421C3C6FB171D203 /* SessionManager.swift in Sources */,
 				2F70E62C4F7355C5E48F9813 /* Models.swift in Sources */,
 				9914F8ACCD22E29347EB07EE /* SupabaseClient.swift in Sources */,
 				B1D7D0A868B7DA3BDA4B4C99 /* AuthComponents.swift in Sources */,
+				9DF72BC7B0ABFD312D838A49 /* CosmicBackground.swift in Sources */,
 				C47D8801BACFBD59C922D3D6 /* FlowLayout.swift in Sources */,
+				55F68E16A6897D4F6C8644B6 /* L10n.swift in Sources */,
 				2DF313B78EC689D01273DF90 /* RoomCard.swift in Sources */,
 				D18381480924FC8EB4F687D9 /* Theme.swift in Sources */,
 				C138061FFFE091CF3ADCE5C3 /* RootView.swift in Sources */,

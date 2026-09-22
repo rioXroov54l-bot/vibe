@@ -46,17 +46,13 @@ struct RootView: View {
 struct LaunchView: View {
     var body: some View {
         ZStack {
-            VibeTheme.backgroundGradient.ignoresSafeArea()
-            VibeTheme.glowGradient
-                .frame(width: 320, height: 320)
+            CosmicBackground()
             VStack(spacing: 16) {
-                Text("Vibe")
+                Text("vibe ///")
                     .font(.system(size: 44, weight: .black, design: .rounded))
-                    .foregroundStyle(
-                        LinearGradient(colors: [VibeTheme.lavender, VibeTheme.pink],
-                                       startPoint: .top, endPoint: .bottom)
-                    )
-                Text("On the same wavelength")
+                    .foregroundStyle(.white)
+                    .shadow(color: Color(red: 0.62, green: 0.32, blue: 1.0).opacity(0.65), radius: 16, y: 0)
+                Text(L10n.brandTagline)
                     .font(.subheadline)
                     .foregroundStyle(VibeTheme.textSecondary)
             }

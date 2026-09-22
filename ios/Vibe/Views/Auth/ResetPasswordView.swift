@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ResetPasswordView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var localization: LocalizationManager
     @State private var password = ""
     @State private var confirm = ""
 
@@ -11,7 +12,7 @@ struct ResetPasswordView: View {
 
     var body: some View {
         ZStack {
-            VibeTheme.backgroundGradient.ignoresSafeArea()
+            CosmicBackground()
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     header
@@ -23,21 +24,21 @@ struct ResetPasswordView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("New password").font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
+                        Text(L10n.newPassword).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
                         SecureField("At least 8 characters", text: $password)
                             .vibeField()
                             .textContentType(.newPassword)
                     }
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Confirm password").font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
+                        Text(L10n.confirmPassword).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
                         SecureField("Re-enter password", text: $confirm)
                             .vibeField()
                             .textContentType(.newPassword)
                     }
 
                     if !password.isEmpty && password != confirm {
-                        Text("Passwords do not match.")
+                        Text(L10n.passwordsDontMatch)
                             .font(.footnote)
                             .foregroundStyle(VibeTheme.pink)
                     }
@@ -45,7 +46,7 @@ struct ResetPasswordView: View {
                     Button {
                         Task { await appState.updatePassword(password) }
                     } label: {
-                        Text(appState.isBusy ? "Saving…" : "Save new password")
+                        Text(appState.isBusy ? L10n.saving : L10n.saveNewPassword)
                             .vibePrimaryButton(canSubmit)
                     }
                     .disabled(!canSubmit)
@@ -60,10 +61,10 @@ struct ResetPasswordView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("New password")
+            Text(L10n.newPassword)
                 .font(.system(size: 28, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
-            Text("Choose a new password for your account.")
+            Text(L10n.chooseNewPassword)
                 .font(.subheadline)
                 .foregroundStyle(VibeTheme.textSecondary)
         }

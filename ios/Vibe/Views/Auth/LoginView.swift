@@ -2,6 +2,7 @@ import SwiftUI
 
 struct LoginView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var localization: LocalizationManager
     @State private var email = ""
     @State private var password = ""
 
@@ -11,7 +12,7 @@ struct LoginView: View {
 
     var body: some View {
         ZStack {
-            VibeTheme.backgroundGradient.ignoresSafeArea()
+            CosmicBackground()
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
                     header
@@ -33,10 +34,10 @@ struct LoginView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Welcome back")
+            Text(L10n.welcomeBack)
                 .font(.system(size: 32, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
-            Text("Sign in and pick up where you left off.")
+            Text(L10n.signInSubtitle)
                 .font(.subheadline)
                 .foregroundStyle(VibeTheme.textSecondary)
         }
@@ -45,16 +46,16 @@ struct LoginView: View {
     private var form: some View {
         VStack(spacing: 14) {
             VStack(alignment: .leading, spacing: 6) {
-                Text("Email").font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
-                TextField("name@example.com", text: $email)
+                Text(L10n.email).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
+                TextField(L10n.emailPlaceholder, text: $email)
                     .vibeField()
                     .keyboardType(.emailAddress)
                     .textContentType(.emailAddress)
             }
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("Password").font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
-                SecureField("Your password", text: $password)
+                Text(L10n.password).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
+                SecureField(L10n.passwordPlaceholder, text: $password)
                     .vibeField()
                     .textContentType(.password)
             }
@@ -62,14 +63,14 @@ struct LoginView: View {
             Button {
                 Task { await appState.signIn(email: email.trimmingCharacters(in: .whitespaces), password: password) }
             } label: {
-                Text(appState.isBusy ? "Signing in…" : "Sign in")
+                Text(appState.isBusy ? L10n.signingIn : L10n.signIn)
                     .vibePrimaryButton(canSubmit)
             }
             .disabled(!canSubmit)
 
             HStack {
                 Spacer()
-                Button("Forgot password?") {
+                Button(L10n.forgotPassword) {
                     appState.authFlow = .forgotPassword
                 }
                 .font(.subheadline)
@@ -78,7 +79,7 @@ struct LoginView: View {
 
             Divider().overlay(VibeTheme.stroke)
 
-            Button("Sign in with an email code") {
+            Button(L10n.signInWithCode) {
                 guard !email.trimmingCharacters(in: .whitespaces).isEmpty else { return }
                 Task { await appState.signInWithOTP(email: email.trimmingCharacters(in: .whitespaces)) }
             }
@@ -89,7 +90,7 @@ struct LoginView: View {
             Button {
                 appState.authFlow = .signup
             } label: {
-                Text("New to Vibe? Create account")
+                Text(L10n.newToVibe)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(VibeTheme.textPrimary)
             }

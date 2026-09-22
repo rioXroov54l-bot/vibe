@@ -5,6 +5,7 @@ struct OTPView: View {
     let mode: AuthFlow.OTPStep
 
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var localization: LocalizationManager
     @State private var code = ""
     @State private var resendCooldown = 0
 
@@ -13,7 +14,7 @@ struct OTPView: View {
 
     var body: some View {
         ZStack {
-            VibeTheme.backgroundGradient.ignoresSafeArea()
+            CosmicBackground()
             ScrollView {
                 VStack(spacing: 22) {
                     header
@@ -38,13 +39,13 @@ struct OTPView: View {
 
     private var header: some View {
         VStack(spacing: 8) {
-            Text("Enter verification code")
+            Text(L10n.enterCode)
                 .font(.system(size: 28, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
             Text(email)
                 .font(.subheadline)
                 .foregroundStyle(VibeTheme.textSecondary)
-            Text("We sent a 6-digit code to your email.")
+            Text(L10n.codeSent)
                 .font(.footnote)
                 .foregroundStyle(VibeTheme.textMuted)
         }
@@ -55,7 +56,7 @@ struct OTPView: View {
         Button {
             Task { await appState.verifyOTP(email: email, token: code) }
         } label: {
-            Text(appState.isBusy ? "Verifying…" : "Verify and continue")
+            Text(appState.isBusy ? L10n.verifying : L10n.verifyContinue)
                 .vibePrimaryButton(isComplete)
         }
         .disabled(!isComplete)
@@ -64,11 +65,11 @@ struct OTPView: View {
     @ViewBuilder
     private var resendButton: some View {
         if resendCooldown > 0 {
-            Text("You can resend in \(resendCooldown)s")
+            Text(String(format: L10n.resendIn, "\(resendCooldown)"))
                 .font(.subheadline)
                 .foregroundStyle(VibeTheme.textMuted)
         } else {
-            Button("Resend code") {
+            Button(L10n.resendCode) {
                 Task { await appState.resendOTP(email: email, mode: mode) }
             }
             .font(.subheadline.weight(.medium))
