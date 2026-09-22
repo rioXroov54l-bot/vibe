@@ -34,7 +34,6 @@ final class AppState: ObservableObject {
 
     private let auth = AuthService()
     private let data = DataService()
-    private let realtime = RealtimeService()
 
     var userId: String? { session?.user.id ?? profile?.id }
 
@@ -171,6 +170,7 @@ final class AppState: ObservableObject {
         self.isAuthenticated = true
         self.errorMessage = nil
         self.notice = nil
+        setupRealtime(token: session.accessToken)
 
         do {
             let profile = try await data.fetchProfile(id: session.user.id, token: session.accessToken)
@@ -183,6 +183,23 @@ final class AppState: ObservableObject {
             self.profile = nil
             self.needsOnboarding = true
             self.authFlow = .welcome
+        }
+    }
+
+    /// Establish the global WebSocket connection and live subscriptions.
+    private func setupRealtime(token: String) {
+        RealtimeService.shared.connect(token: token)
+        RealtimeService.shared.subscribeToMessages { [weak self] message in
+            guard let self, self.currentRoomId == message.roomId else { return }
+            if !self.activeRoomMessages.contains(where: { $0.id == message.id }) {
+                self.activeRoomMessages.append(message)
+            }
+        }
+        RealtimeService.shared.subscribeToRooms { [weak self] room in
+            guard let self else { return }
+            if !self.rooms.contains(where: { $0.id == room.id }) {
+                self.rooms.insert(room, at: 0)
+            }
         }
     }
 
@@ -278,7 +295,6 @@ final class AppState: ObservableObject {
         guard let token = session?.accessToken, let id = userId else { return }
         try? await data.leaveRoom(roomId: roomId, userId: id, token: token)
         currentRoomId = nil
-        realtime.disconnect()
     }
 
     func loadMessages(roomId: String) async {
@@ -288,13 +304,6 @@ final class AppState: ObservableObject {
             activeRoomMessages = try await data.fetchMessages(roomId: roomId, token: token).reversed()
         } catch {
             activeRoomMessages = []
-        }
-        realtime.disconnect()
-        realtime.connect(token: token) { [weak self] message in
-            guard let self, self.currentRoomId == message.roomId else { return }
-            if !self.activeRoomMessages.contains(where: { $0.id == message.id }) {
-                self.activeRoomMessages.append(message)
-            }
         }
     }
 
