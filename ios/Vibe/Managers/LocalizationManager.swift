@@ -13,6 +13,10 @@ final class LocalizationManager: ObservableObject {
     }
 
     init() {
+        if ProcessInfo.processInfo.arguments.contains("-UITestEnglish") {
+            language = .english
+            return
+        }
         let stored = UserDefaults.standard.string(forKey: "app.language") ?? ""
         language = AppLanguage(rawValue: stored) ?? .english
     }

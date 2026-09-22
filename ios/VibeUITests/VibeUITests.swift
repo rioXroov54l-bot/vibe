@@ -9,7 +9,7 @@ final class VibeUITests: XCTestCase {
     /// Full journey: launch → sign in → onboarding → main app.
     func testFullUserJourney() throws {
         let app = XCUIApplication()
-        app.launchArguments = ["-UITestAutoLogin"]
+        app.launchArguments = ["-UITestAutoLogin", "-UITestEnglish"]
         app.launch()
 
         // Main app reached (auto-login skips onboarding for the onboarded account).
@@ -29,7 +29,7 @@ final class VibeUITests: XCTestCase {
     /// Tap through the main app and verify key buttons respond.
     func testMainAppButtons() throws {
         let app = XCUIApplication()
-        app.launchArguments = ["-UITestAutoLogin"]
+        app.launchArguments = ["-UITestAutoLogin", "-UITestEnglish"]
         app.launch()
 
         XCTAssertTrue(app.buttons["Explore"].waitForExistence(timeout: 30), "Explore not reached")
@@ -79,5 +79,27 @@ final class VibeUITests: XCTestCase {
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+    }
+
+    /// Verify a newly created room appears in the lobby feed.
+    func testCreateRoomAppears() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["-UITestAutoLogin", "-UITestEnglish"]
+        app.launch()
+
+        XCTAssertTrue(app.buttons["Explore"].waitForExistence(timeout: 30), "Explore not reached")
+
+        // Open the create-room sheet.
+        app.buttons["Add"].tap()
+        XCTAssertTrue(app.textFields["e.g. Late night talk"].waitForExistence(timeout: 8), "Create sheet not opened")
+        app.textFields["e.g. Late night talk"].tap()
+        app.textFields["e.g. Late night talk"].typeText("My Test Room")
+
+        // Submit.
+        app.buttons["Create a room"].tap()
+
+        // The new room should appear in the feed.
+        XCTAssertTrue(app.staticTexts["My Test Room"].waitForExistence(timeout: 12), "Created room did not appear in feed")
+        attach(app.screenshot(), named: "created-room")
     }
 }

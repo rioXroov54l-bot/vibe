@@ -103,7 +103,7 @@ struct Profile: Codable, Identifiable {
 /// A `vibe_rooms` row.
 struct Room: Codable, Identifiable {
     let id: String
-    let ownerId: String
+    let ownerId: String?
     let title: String
     let category: Int
     let kind: String

@@ -58,7 +58,7 @@ struct ExploreView: View {
             .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $showingCreate) {
                 CreateRoomView()
-                    .presentationDetents([.medium, .large])
+                    .presentationDetents([.large])
             }
             .sheet(isPresented: $showingPreJoin) {
                 if let joiningRoom {

@@ -283,7 +283,6 @@ final class AppState: ObservableObject {
                 passcode: passcode,
                 token: token
             )
-            // Optimistic UI: prepend the new room immediately without a full reload.
             if !self.rooms.contains(where: { $0.id == room.id }) {
                 self.rooms.insert(room, at: 0)
             }
