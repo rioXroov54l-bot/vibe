@@ -9,6 +9,7 @@ struct RoomView: View {
     @State private var isHandRaised = false
     @State private var showingChat = false
     @State private var draft = ""
+    @State private var reactionEmoji: String?
 
     private let speakers = ["😎", "🧑‍🚀", "🦊"]
     private let listeners = ["🐼", "🐱", "👾", "🧙", "🌙", "🎧", "✨", "🪩", "🎤", "💜", "🔥", "🎶"]
@@ -27,6 +28,14 @@ struct RoomView: View {
                     .padding(20)
                 }
                 controlBar
+            }
+
+            if let reactionEmoji {
+                Text(reactionEmoji)
+                    .font(.system(size: 54))
+                    .transition(.scale.combined(with: .opacity))
+                    .animation(.spring(response: 0.3, dampingFraction: 0.6), value: reactionEmoji)
+                    .offset(y: -220)
             }
         }
         .navigationTitle(room.title)
@@ -97,6 +106,7 @@ struct RoomView: View {
             Text(isHost ? L10n.host : L10n.speaker)
                 .font(.caption2.weight(.semibold))
                 .foregroundStyle(VibeTheme.textSecondary)
+            AudioWaveView()
         }
     }
 
@@ -128,8 +138,16 @@ struct RoomView: View {
             controlButton(isMuted ? "mic.slash.fill" : "mic.fill", isMuted, VibeTheme.pink) {
                 isMuted.toggle()
             }
+            ShareLink(item: "🎙️ Join my Vibe room: \(room.title)") {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.system(size: 19, weight: .semibold))
+                    .foregroundStyle(.white.opacity(0.7))
+                    .frame(width: 40, height: 40)
+                    .background(Circle().fill(.white.opacity(0.08)))
+            }
+            .frame(maxWidth: .infinity)
             controlButton("gift.fill", false, VibeTheme.mint) {
-                // send gift
+                sendReaction()
             }
             controlButton("bubble.left.fill", showingChat, VibeTheme.cyan) {
                 showingChat = true
@@ -154,11 +172,19 @@ struct RoomView: View {
             Image(systemName: icon)
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundStyle(active ? .white : .white.opacity(0.7))
-                .frame(width: 46, height: 46)
+                .frame(width: 40, height: 40)
                 .background(Circle().fill(active ? color.opacity(0.6) : .white.opacity(0.08)))
                 .shadow(color: active ? color.opacity(0.6) : .clear, radius: 8)
         }
         .frame(maxWidth: .infinity)
+    }
+
+    private func sendReaction() {
+        let emojis = ["❤️", "🎁", "✨", "💜", "🔥"]
+        reactionEmoji = emojis.randomElement()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+            withAnimation(.easeOut(duration: 0.3)) { reactionEmoji = nil }
+        }
     }
 
     // MARK: Chat drawer
