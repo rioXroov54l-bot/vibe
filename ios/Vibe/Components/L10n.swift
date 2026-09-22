@@ -9,7 +9,7 @@ enum L10n {
     static var languageButton: String { ar ? "English" : "العربية" }
 
     // Welcome
-    static var brandTagline: String { ar ? "أشخاص طيبون. علاقات أفضل." : "Good people. Better connections." }
+    static var brandTagline: String { ar ? "أشخاص رائعون. علاقات أفضل." : "Good people. Better connections." }
     static var createAccount: String { ar ? "إنشاء حساب" : "Create account" }
     static var signIn: String { ar ? "تسجيل الدخول" : "Sign in" }
     static var needHelp: String { ar ? "هل تواجه مشكلة في تسجيل الدخول؟" : "Need help signing in?" }

@@ -11,9 +11,8 @@ struct WelcomeView: View {
             VStack(spacing: 0) {
                 languageToggle
 
-                Spacer()
-
                 logo
+                    .padding(.top, 56)
                     .padding(.bottom, 18)
                 tagline
 
