@@ -39,6 +39,7 @@
 		B16606F19F1DE3768DD4FE48 /* PodcastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61164815ED05474BE534C0E0 /* PodcastView.swift */; };
 		574791895ECB8F8B7EC1C6A0 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE988C250F05837B03CE1919 /* ProfileView.swift */; };
 		20A959F38033A27ACDB337A1 /* RoomChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B3D7204F77388412E5832D /* RoomChatView.swift */; };
+		CECF99F425C855D27668CE6C /* RoomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0929F9292FE48D34258670 /* RoomView.swift */; };
 		37198F8D7E28ED73DADF0EDE /* RoomsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD4A587EE4684DBED0F5A3E4 /* RoomsView.swift */; };
 		40F1359330B2A01ADC4C7E47 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75367211661EFFE54C3D3C51 /* OnboardingView.swift */; };
 		D214C0B18FE5DE5F55452168 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDAD37B438DEF19033CEAC5A /* AuthService.swift */; };
@@ -80,6 +81,7 @@
 		61164815ED05474BE534C0E0 /* PodcastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastView.swift; sourceTree = "<group>"; };
 		BE988C250F05837B03CE1919 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		92B3D7204F77388412E5832D /* RoomChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomChatView.swift; sourceTree = "<group>"; };
+		3F0929F9292FE48D34258670 /* RoomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomView.swift; sourceTree = "<group>"; };
 		FD4A587EE4684DBED0F5A3E4 /* RoomsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomsView.swift; sourceTree = "<group>"; };
 		75367211661EFFE54C3D3C51 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		BDAD37B438DEF19033CEAC5A /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 				61164815ED05474BE534C0E0,
 				BE988C250F05837B03CE1919,
 				92B3D7204F77388412E5832D,
+				3F0929F9292FE48D34258670,
 				FD4A587EE4684DBED0F5A3E4,
 			);
 			path = Main;
@@ -427,6 +430,7 @@
 				B16606F19F1DE3768DD4FE48 /* PodcastView.swift in Sources */,
 				574791895ECB8F8B7EC1C6A0 /* ProfileView.swift in Sources */,
 				20A959F38033A27ACDB337A1 /* RoomChatView.swift in Sources */,
+				CECF99F425C855D27668CE6C /* RoomView.swift in Sources */,
 				37198F8D7E28ED73DADF0EDE /* RoomsView.swift in Sources */,
 				40F1359330B2A01ADC4C7E47 /* OnboardingView.swift in Sources */,
 				D214C0B18FE5DE5F55452168 /* AuthService.swift in Sources */,

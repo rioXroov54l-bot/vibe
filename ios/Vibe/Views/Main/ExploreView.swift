@@ -119,32 +119,30 @@ struct ExploreView: View {
 
     private var quickHubs: some View {
         HStack(spacing: 10) {
-            hub("⚡", L10n.flashRooms) { }
-            hub("🎬", L10n.vibeCinema) { }
-            hub("🎮", L10n.gamesRooms) { }
-            hub("🎙️", L10n.echoStage) { }
-        }
-    }
-
-    private func hub(_ emoji: String, _ title: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            VStack(spacing: 6) {
-                Text(emoji).font(.system(size: 26))
-                Text(title)
-                    .font(.caption2.weight(.semibold))
-                    .foregroundStyle(.white)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(VibeTheme.surface.opacity(0.7))
-                    .overlay(RoundedRectangle(cornerRadius: 16).stroke(VibeTheme.strokeStrong, lineWidth: 1))
-            )
+            NavigationLink { RoomsView(filterKind: "flash") } label: { hubLabel("⚡", L10n.flashRooms) }
+            NavigationLink { CinemaView() } label: { hubLabel("🎬", L10n.vibeCinema) }
+            NavigationLink { GamesView() } label: { hubLabel("🎮", L10n.gamesRooms) }
+            NavigationLink { PodcastView() } label: { hubLabel("🎙️", L10n.echoStage) }
         }
         .buttonStyle(.plain)
+    }
+
+    private func hubLabel(_ emoji: String, _ title: String) -> some View {
+        VStack(spacing: 6) {
+            Text(emoji).font(.system(size: 26))
+            Text(title)
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 14)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(VibeTheme.surface.opacity(0.7))
+                .overlay(RoundedRectangle(cornerRadius: 16).stroke(VibeTheme.strokeStrong, lineWidth: 1))
+        )
     }
 
     // MARK: Filters
@@ -195,7 +193,12 @@ struct ExploreView: View {
         } else {
             VStack(spacing: 12) {
                 ForEach(filteredRooms) { room in
-                    ExploreRoomCard(room: room)
+                    NavigationLink {
+                        RoomView(room: room)
+                    } label: {
+                        ExploreRoomCard(room: room)
+                    }
+                    .buttonStyle(.plain)
                 }
             }
         }
@@ -233,15 +236,12 @@ private struct ExploreRoomCard: View {
                 .font(.subheadline)
                 .foregroundStyle(VibeTheme.textSecondary)
 
-            Button {
-            } label: {
-                Text(L10n.joinTheVibe)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.black)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(Capsule().fill(.white))
-            }
+            Text(L10n.joinTheVibe)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.black)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(Capsule().fill(.white))
         }
         .padding(16)
         .background(
