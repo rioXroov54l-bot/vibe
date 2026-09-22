@@ -92,7 +92,7 @@ struct ExploreView: View {
                 .font(.caption.weight(.black))
                 .tracking(2)
                 .foregroundStyle(VibeTheme.lavender)
-            Text("Vibe global watch party")
+            Text(L10n.globalWatchParty)
                 .font(.title2.weight(.bold))
                 .foregroundStyle(.white)
             Button {
@@ -184,7 +184,7 @@ struct ExploreView: View {
         if filteredRooms.isEmpty {
             VStack(spacing: 10) {
                 Text("🌙").font(.system(size: 42))
-                Text("No rooms right now")
+                Text(L10n.noRoomsRightNow)
                     .font(.headline)
                     .foregroundStyle(VibeTheme.textSecondary)
             }

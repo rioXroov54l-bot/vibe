@@ -14,7 +14,7 @@ struct RoomChatView: View {
                     ScrollView {
                         VStack(spacing: 12) {
                             if appState.activeRoomMessages.isEmpty {
-                                Text("Start the conversation.")
+                                Text(L10n.startConversation)
                                     .font(.footnote)
                                     .foregroundStyle(VibeTheme.textMuted)
                                     .padding(.top, 40)

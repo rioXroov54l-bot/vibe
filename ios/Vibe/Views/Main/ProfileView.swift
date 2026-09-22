@@ -60,7 +60,7 @@ struct ProfileView: View {
         let interests = appState.profile?.interests ?? []
         if !interests.isEmpty {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Interests")
+                Text(L10n.interests)
                     .font(.title3.weight(.bold))
                     .foregroundStyle(.white)
                 FlowLayout(spacing: 8) {
@@ -86,7 +86,7 @@ struct ProfileView: View {
             Button {
                 Task { await appState.signOut() }
             } label: {
-                Text("Sign out")
+                Text(L10n.signOut)
                     .font(.headline.weight(.semibold))
                     .foregroundStyle(VibeTheme.pink)
                     .frame(maxWidth: .infinity)

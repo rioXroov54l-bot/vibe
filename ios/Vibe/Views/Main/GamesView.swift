@@ -16,7 +16,7 @@ struct GamesView: View {
             VibeTheme.backgroundGradient.ignoresSafeArea()
             VStack(spacing: 24) {
                 HStack {
-                    Text("Word Challenge")
+                    Text(L10n.wordChallenge)
                         .font(.system(size: 28, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
                     Spacer()
@@ -26,7 +26,7 @@ struct GamesView: View {
                 }
 
                 VStack(spacing: 18) {
-                    Text("Unscramble this word")
+                    Text(L10n.unscrambleThis)
                         .font(.subheadline)
                         .foregroundStyle(VibeTheme.textSecondary)
 
@@ -55,7 +55,7 @@ struct GamesView: View {
                     Button {
                         check()
                     } label: {
-                        Text("Submit").vibePrimaryButton(!answer.trimmingCharacters(in: .whitespaces).isEmpty)
+                        Text(L10n.submit).vibePrimaryButton(!answer.trimmingCharacters(in: .whitespaces).isEmpty)
                     }
                     .disabled(answer.trimmingCharacters(in: .whitespaces).isEmpty)
                 }

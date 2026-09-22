@@ -16,10 +16,10 @@ struct LikesView: View {
                         VStack(spacing: 16) {
                             Text("💜")
                                 .font(.system(size: 54))
-                            Text("No likes yet")
+                            Text(L10n.noLikesYet)
                                 .font(.headline)
                                 .foregroundStyle(VibeTheme.textSecondary)
-                            Text("When someone likes your profile or room, it shows up here.")
+                            Text(L10n.likesHint)
                                 .font(.subheadline)
                                 .foregroundStyle(VibeTheme.textMuted)
                                 .multilineTextAlignment(.center)

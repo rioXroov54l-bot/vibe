@@ -17,10 +17,10 @@ struct ChatInboxView: View {
                             VStack(spacing: 16) {
                                 Text("💬")
                                     .font(.system(size: 54))
-                                Text("No conversations yet")
+                                Text(L10n.noConversations)
                                     .font(.headline)
                                     .foregroundStyle(VibeTheme.textSecondary)
-                                Text("Join a room or start a chat to see messages here.")
+                                Text(L10n.joinRoomToChat)
                                     .font(.subheadline)
                                     .foregroundStyle(VibeTheme.textMuted)
                                     .multilineTextAlignment(.center)
@@ -50,6 +50,7 @@ struct ChatInboxView: View {
                                             Image(systemName: "chevron.right")
                                                 .font(.footnote)
                                                 .foregroundStyle(VibeTheme.textMuted)
+                                                .flipsForRightToLeftLayoutDirection(true)
                                         }
                                         .padding(14)
                                         .background(

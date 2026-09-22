@@ -58,6 +58,7 @@ struct OnboardingView: View {
                     .foregroundStyle(.white.opacity(0.85))
                     .frame(width: 36, height: 36)
                     .background(Circle().fill(.white.opacity(0.08)))
+                    .flipsForRightToLeftLayoutDirection(true)
             }
 
             Spacer()

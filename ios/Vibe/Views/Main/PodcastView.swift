@@ -21,10 +21,10 @@ struct PodcastView: View {
                         .foregroundStyle(.white)
 
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("🔴 Live voice streaming is not enabled yet")
+                        Text(L10n.liveVoiceNotEnabled)
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(VibeTheme.pink)
-                        Text("Audio rooms are coming soon. Explore the demo episodes below.")
+                        Text(L10n.audioRoomsComingSoon)
                             .font(.footnote)
                             .foregroundStyle(VibeTheme.textMuted)
                     }

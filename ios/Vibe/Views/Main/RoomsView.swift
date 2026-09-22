@@ -20,7 +20,7 @@ struct RoomsView: View {
                         if rooms.isEmpty {
                             VStack(spacing: 10) {
                                 Text("🔊").font(.system(size: 44))
-                                Text("No rooms here")
+                                Text(L10n.noRoomsHere)
                                     .font(.headline)
                                     .foregroundStyle(VibeTheme.textSecondary)
                             }
@@ -84,13 +84,13 @@ struct CreateRoomView: View {
                         .foregroundStyle(.white)
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Room name").font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
+                        Text(L10n.roomName).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
                         TextField("e.g. Late night talk", text: $title)
                             .vibeField()
                     }
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Type").font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
+                        Text(L10n.type).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
                         Picker("Type", selection: $kind) {
                             ForEach(kinds, id: \.self) { kind in
                                 Text(kind.capitalized).tag(kind)
@@ -100,7 +100,7 @@ struct CreateRoomView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Category").font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
+                        Text(L10n.category).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
                         Picker("Category", selection: $category) {
                             ForEach(1...5, id: \.self) { index in
                                 Text(categories[index - 1]).tag(index)

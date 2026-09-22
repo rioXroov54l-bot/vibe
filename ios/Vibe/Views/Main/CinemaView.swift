@@ -41,11 +41,11 @@ struct CinemaView: View {
                                 .background(Circle().fill(VibeTheme.primary.opacity(0.3)))
                         }
                         Spacer()
-                        Text("Watch together")
+                        Text(L10n.watchTogether)
                             .font(.footnote)
                             .foregroundStyle(VibeTheme.textMuted)
                     }
-                    Text("Supports YouTube and direct MP4 / HLS video URLs.")
+                    Text(L10n.supportsLinks)
                         .font(.caption)
                         .foregroundStyle(VibeTheme.textMuted)
                 }

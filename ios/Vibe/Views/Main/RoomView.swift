@@ -49,7 +49,7 @@ struct RoomView: View {
                 Text(room.title)
                     .font(.headline)
                     .foregroundStyle(.white)
-                Text("\(listeners.count) listening")
+                Text(String(format: L10n.listening, listeners.count))
                     .font(.caption)
                     .foregroundStyle(VibeTheme.mint)
             }
@@ -94,7 +94,7 @@ struct RoomView: View {
                         .offset(x: 24, y: -28)
                 }
             }
-            Text(isHost ? "Host" : "Speaker")
+            Text(isHost ? L10n.host : L10n.speaker)
                 .font(.caption2.weight(.semibold))
                 .foregroundStyle(VibeTheme.textSecondary)
         }
@@ -104,7 +104,7 @@ struct RoomView: View {
 
     private var audience: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Audience")
+            Text(L10n.audience)
                 .font(.headline.weight(.semibold))
                 .foregroundStyle(.white)
             FlowLayout(spacing: 10) {
@@ -175,7 +175,7 @@ struct RoomView: View {
                 ScrollView {
                     VStack(spacing: 12) {
                         if appState.activeRoomMessages.isEmpty {
-                            Text("Start the conversation.")
+                            Text(L10n.startConversation)
                                 .font(.footnote)
                                 .foregroundStyle(VibeTheme.textMuted)
                                 .padding(.top, 40)

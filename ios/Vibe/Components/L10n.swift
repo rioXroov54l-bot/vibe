@@ -103,4 +103,28 @@ enum L10n {
     static var roomChat: String { ar ? "دردشة الغرفة" : "Room chat" }
     static var pasteVideoLink: String { ar ? "الصق رابط يوتيوب أو فيديو هنا..." : "Paste YouTube or video link here..." }
     static var play: String { ar ? "تشغيل" : "Play" }
+    static var noConversations: String { ar ? "لا توجد محادثات بعد" : "No conversations yet" }
+    static var joinRoomToChat: String { ar ? "انضم لغرفة أو ابدأ محادثة لرؤية الرسائل هنا." : "Join a room or start a chat to see messages here." }
+    static var watchTogether: String { ar ? "شاهدوا معاً" : "Watch together" }
+    static var supportsLinks: String { ar ? "يدعم روابط يوتيوب وروابط الفيديو المباشر MP4 / HLS." : "Supports YouTube and direct MP4 / HLS video URLs." }
+    static var globalWatchParty: String { ar ? "حفلة المشاهدة العالمية" : "Vibe global watch party" }
+    static var noRoomsRightNow: String { ar ? "لا توجد غرف الآن" : "No rooms right now" }
+    static var wordChallenge: String { ar ? "تحدي الكلمات" : "Word Challenge" }
+    static var unscrambleThis: String { ar ? "أعد ترتيب هذه الكلمة" : "Unscramble this word" }
+    static var submit: String { ar ? "إرسال" : "Submit" }
+    static var noLikesYet: String { ar ? "لا توجد إعجابات بعد" : "No likes yet" }
+    static var likesHint: String { ar ? "عندما يعجب شخص بملفك أو غرفتك، سيظهر هنا." : "When someone likes your profile or room, it shows up here." }
+    static var interests: String { ar ? "الاهتمامات" : "Interests" }
+    static var signOut: String { ar ? "تسجيل الخروج" : "Sign out" }
+    static var host: String { ar ? "المضيف" : "Host" }
+    static var speaker: String { ar ? "متحدث" : "Speaker" }
+    static var audience: String { ar ? "الجمهور" : "Audience" }
+    static var listening: String { ar ? "%d يستمعون" : "%d listening" }
+    static var startConversation: String { ar ? "ابدأ المحادثة." : "Start the conversation." }
+    static var noRoomsHere: String { ar ? "لا توجد غرف هنا" : "No rooms here" }
+    static var roomName: String { ar ? "اسم الغرفة" : "Room name" }
+    static var type: String { ar ? "النوع" : "Type" }
+    static var category: String { ar ? "التصنيف" : "Category" }
+    static var liveVoiceNotEnabled: String { ar ? "🔴 البث الصوتي المباشر غير مفعّل بعد" : "🔴 Live voice streaming is not enabled yet" }
+    static var audioRoomsComingSoon: String { ar ? "الغرف الصوتية قادمة قريباً. استكشف الحلقات التجريبية أدناه." : "Audio rooms are coming soon. Explore the demo episodes below." }
 }
