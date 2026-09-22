@@ -128,4 +128,12 @@ enum L10n {
     static var liveVoiceNotEnabled: String { ar ? "🔴 البث الصوتي المباشر غير مفعّل بعد" : "🔴 Live voice streaming is not enabled yet" }
     static var audioRoomsComingSoon: String { ar ? "الغرف الصوتية قادمة قريباً. استكشف الحلقات التجريبية أدناه." : "Audio rooms are coming soon. Explore the demo episodes below." }
     static var shareCinema: String { ar ? "🎬 انضم لي في سينما فايب! " : "🎬 Join me in Vibe Cinema! " }
+    static var live: String { ar ? "مباشر" : "LIVE" }
+    static var listeningCount: String { ar ? "%d يستمعون" : "%d listening" }
+    static var listenAnonymously: String { ar ? "استمع بشكل مجهول" : "Listen anonymously" }
+    static var anonymousHelper: String { ar ? "أثناء الاستماع المجهول، لن تكون مرئياً ولن تتمكن من التحدث أو إرسال التفاعلات." : "While listening anonymously, you will not be visible, able to speak, or send reactions." }
+    static var startListeningAnonymously: String { ar ? "ابدأ الاستماع بشكل مجهول" : "Start listening anonymously" }
+    static var request: String { ar ? "طلب" : "Request" }
+    static var listener: String { ar ? "مستمع" : "Listener" }
+    static var listeningAnonymouslyStatus: String { ar ? "أنت تستمع بشكل مجهول" : "You are listening anonymously" }
 }

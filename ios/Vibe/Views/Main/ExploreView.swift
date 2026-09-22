@@ -5,6 +5,9 @@ struct ExploreView: View {
     @EnvironmentObject private var localization: LocalizationManager
     @State private var showingCreate = false
     @State private var selectedFilter = "all"
+    @State private var joiningRoom: Room?
+    @State private var showingPreJoin = false
+    @State private var activeRoom: Room?
 
     private let filters = ["all", "hangouts", "music", "games", "languages", "discussions"]
 
@@ -52,6 +55,18 @@ struct ExploreView: View {
             .sheet(isPresented: $showingCreate) {
                 CreateRoomView()
                     .presentationDetents([.medium, .large])
+            }
+            .sheet(isPresented: $showingPreJoin) {
+                if let joiningRoom {
+                    PreJoinView(room: joiningRoom, memberCount: appState.memberCounts[joiningRoom.id] ?? 0) {
+                        showingPreJoin = false
+                        activeRoom = joiningRoom
+                    }
+                    .presentationDetents([.large])
+                }
+            }
+            .fullScreenCover(item: $activeRoom) { room in
+                RoomView(room: room)
             }
         }
         .task { await appState.loadRooms() }
@@ -193,14 +208,12 @@ struct ExploreView: View {
 
     @ViewBuilder
     private var roomsFeed: some View {
-        VStack(spacing: 12) {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
             ForEach(filteredRooms) { room in
-                NavigationLink {
-                    RoomView(room: room)
-                } label: {
-                    ExploreRoomCard(room: room, memberCount: appState.memberCounts[room.id] ?? 0)
+                ExploreRoomCard(room: room, memberCount: appState.memberCounts[room.id] ?? 0) {
+                    joiningRoom = room
+                    showingPreJoin = true
                 }
-                .buttonStyle(.plain)
             }
         }
     }
@@ -210,44 +223,61 @@ struct ExploreView: View {
 private struct ExploreRoomCard: View {
     let room: Room
     let memberCount: Int
+    let onJoin: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(room.title)
+                .font(.headline.weight(.bold))
+                .foregroundStyle(.white)
+                .lineLimit(2)
+                .minimumScaleFactor(0.8)
+
+            Text(room.categoryName)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(VibeTheme.lavender)
+
+            Spacer(minLength: 8)
+
             HStack {
-                Text(room.kindEmoji)
-                    .font(.body)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(Capsule().fill(VibeTheme.primary.opacity(0.3)))
+                HStack(spacing: -8) {
+                    ForEach(["😎", "🦊", "🐼"], id: \.self) { emoji in
+                        Text(emoji)
+                            .font(.system(size: 16))
+                            .frame(width: 28, height: 28)
+                            .background(Circle().fill(VibeTheme.primary.opacity(0.45)))
+                            .overlay(Circle().stroke(VibeTheme.surface, lineWidth: 1))
+                    }
+                }
                 Spacer()
-                HStack(spacing: 4) {
+                HStack(spacing: 3) {
                     Image(systemName: "headphones")
                         .font(.caption2)
                     Text("\(memberCount)")
-                        .font(.caption.weight(.semibold))
+                        .font(.caption.weight(.bold))
                 }
                 .foregroundStyle(VibeTheme.mint)
             }
 
-            Text(room.title)
-                .font(.headline.weight(.semibold))
-                .foregroundStyle(.white)
-
-            Text(room.categoryName)
-                .font(.subheadline)
-                .foregroundStyle(VibeTheme.textSecondary)
-
-            Text(L10n.joinTheVibe)
+            Button(action: onJoin) {
+                HStack(spacing: 6) {
+                    Text(L10n.joinTheVibe)
+                    Image(systemName: "arrow.right")
+                        .flipsForRightToLeftLayoutDirection(true)
+                }
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.black)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
+                .padding(.vertical, 11)
                 .background(Capsule().fill(.white))
+            }
+            .buttonStyle(PressableButtonStyle())
         }
-        .padding(16)
+        .padding(14)
+        .frame(maxWidth: .infinity, minHeight: 205, alignment: .topLeading)
         .background(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .fill(VibeTheme.card.opacity(0.75))
+                .fill(LinearGradient(colors: [VibeTheme.primaryDeep.opacity(0.7), VibeTheme.card.opacity(0.85)], startPoint: .top, endPoint: .bottom))
                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(VibeTheme.strokeStrong, lineWidth: 1))
         )
     }

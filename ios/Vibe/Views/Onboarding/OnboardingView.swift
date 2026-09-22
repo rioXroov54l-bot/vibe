@@ -322,7 +322,7 @@ private struct InterestCategoryView: View {
 }
 
 /// Provides instant scale + opacity feedback on press for touch reliability.
-private struct PressableButtonStyle: ButtonStyle {
+struct PressableButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
