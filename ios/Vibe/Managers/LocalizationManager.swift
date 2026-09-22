@@ -5,7 +5,6 @@ enum AppLanguage: String {
     case arabic = "ar"
 }
 
-@MainActor
 final class LocalizationManager: ObservableObject {
     static let shared = LocalizationManager()
 

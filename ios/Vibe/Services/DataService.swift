@@ -123,15 +123,15 @@ final class DataService {
 
     func upsertPreferences(
         userId: String,
-        selectedInterests: [Int],
-        personalityAnswers: [Int],
+        selectedInterests: [String],
+        personalityAnswers: [String: JSONValue],
         completed: Bool,
         token: String
     ) async throws {
         let body: [String: JSONValue] = [
             "user_id": .string(userId),
-            "selected_interests": .array(selectedInterests.map { .number(Double($0)) }),
-            "personality_answers": .array(personalityAnswers.map { .number(Double($0)) }),
+            "selected_interests": .array(selectedInterests.map { .string($0) }),
+            "personality_answers": .object(personalityAnswers),
             "onboarding_completed": .bool(completed)
         ]
         let rows: [Preferences] = try await client.send(

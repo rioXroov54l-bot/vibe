@@ -59,4 +59,17 @@ enum L10n {
     static var saveNewPassword: String { ar ? "حفظ كلمة المرور الجديدة" : "Save new password" }
     static var saving: String { ar ? "جارٍ الحفظ…" : "Saving…" }
     static var passwordsDontMatch: String { ar ? "كلمتا المرور غير متطابقتين." : "Passwords do not match." }
+
+    // Onboarding
+    static var next: String { ar ? "التالي" : "Next" }
+    static var back: String { ar ? "رجوع" : "Back" }
+    static var skip: String { ar ? "تخطي" : "Skip" }
+    static var showMore: String { ar ? "عرض المزيد" : "Show more" }
+    static var showLess: String { ar ? "عرض أقل" : "Show less" }
+    static var lifestyleTitle: String { ar ? "دعنا نتحدث عن نمط حياتك" : "Let's talk lifestyle habits" }
+    static var lifestyleSubtitle: String { ar ? "هل تتطابق عاداتهم مع عاداتك؟ ابدأ أنت أولاً." : "Do their habits match yours? You go first." }
+    static var personalityTitle: String { ar ? "ما الذي يجعلك مميزاً حقاً؟" : "What else makes you-you?" }
+    static var personalitySubtitle: String { ar ? "لا تتردد. الأصالة تجذب الأصالة." : "Don't hold back. Authenticity attracts authenticity." }
+    static var interestsTitle: String { ar ? "ما هي اهتماماتك؟" : "What are you into?" }
+    static var interestsSubtitle: String { ar ? "اختر 3 اهتمامات على الأقل للعثور على أشخاص يشاركونك نفس الاهتمامات." : "Choose at least 3 interests to find people who like similar things." }
 }

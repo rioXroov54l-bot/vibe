@@ -142,8 +142,8 @@ struct Message: Codable, Identifiable {
 /// The `preferences` row that tracks onboarding completion and selections.
 struct Preferences: Codable {
     let userId: String
-    let selectedInterests: [JSONValue]?
-    let personalityAnswers: [JSONValue]?
+    let selectedInterests: JSONValue?
+    let personalityAnswers: JSONValue?
     let onboardingCompleted: Bool
 
     enum CodingKeys: String, CodingKey {

@@ -183,7 +183,13 @@ final class AppState: ObservableObject {
         }
     }
 
-    func saveOnboarding(nature: [Int], interests: [Int], types: [Int], bio: String, emoji: String) async {
+    func saveOnboarding(
+        lifestyle: [String: [String]],
+        personality: [String: [String]],
+        interests: [String],
+        bio: String,
+        emoji: String
+    ) async {
         await run {
             guard let session = self.session else { return }
             let id = session.user.id
@@ -203,19 +209,27 @@ final class AppState: ObservableObject {
                 "prompts": .array([]),
                 "useGallery": .bool(false)
             ]
+            var answers: [String: JSONValue] = [:]
+            for (key, values) in lifestyle {
+                answers[key] = .array(values.map { .string($0) })
+            }
+            for (key, values) in personality {
+                answers[key] = .array(values.map { .string($0) })
+            }
             try await self.data.upsertProfile(id: id, displayName: name, bio: bio, data: dataPayload, token: session.accessToken)
             try await self.data.upsertPreferences(
                 userId: id,
                 selectedInterests: interests,
-                personalityAnswers: types,
+                personalityAnswers: answers,
                 completed: true,
                 token: session.accessToken
             )
+            // Placeholder integer rows satisfy the live RLS 'onboarding_required' policy.
             try await self.data.saveInterests(
                 userId: id,
-                nature: nature,
-                interests: interests,
-                types: types,
+                nature: [0, 1],
+                interests: [0, 1, 2],
+                types: [0, 1],
                 token: session.accessToken
             )
             try await self.data.completeOnboarding(userId: id, token: session.accessToken)
