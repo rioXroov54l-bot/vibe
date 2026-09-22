@@ -43,6 +43,16 @@ enum CoreRooms {
             createdAt: "",
             isPrivate: false,
             passcodeHash: nil
+        ),
+        Room(
+            id: "10000000-0000-4000-8000-000000000005",
+            ownerId: "00000000-0000-4000-8000-000000000000",
+            title: "Language exchange 🌍",
+            category: 4,
+            kind: "voice",
+            createdAt: "",
+            isPrivate: false,
+            passcodeHash: nil
         )
     ]
 }

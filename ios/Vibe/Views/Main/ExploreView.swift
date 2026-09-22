@@ -21,6 +21,11 @@ struct ExploreView: View {
         CoreRooms.all
     }
 
+    private var filteredAnchorRooms: [Room] {
+        guard selectedFilter != "all" else { return anchorRooms }
+        return anchorRooms.filter { $0.filterKey == selectedFilter }
+    }
+
     private var dynamicRooms: [Room] {
         let coreIDs = Set(CoreRooms.all.map(\.id))
         return appState.rooms.filter { !coreIDs.contains($0.id) }
@@ -158,7 +163,7 @@ struct ExploreView: View {
                 .font(.headline.weight(.bold))
                 .foregroundStyle(.white)
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
-                ForEach(anchorRooms) { room in
+                ForEach(filteredAnchorRooms) { room in
                     ExploreRoomCard(room: room, memberCount: appState.memberCounts[room.id] ?? 0) {
                         if room.isPrivate {
                             pendingPrivateRoom = room

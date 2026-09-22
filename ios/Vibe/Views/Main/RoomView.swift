@@ -174,7 +174,7 @@ struct RoomView: View {
         return Button {
             isHandRaised.toggle()
         } label: {
-            Image(systemName: "mic.fill")
+            Image(systemName: isHandRaised ? "hand.raised.fill" : "hand.raised")
                 .font(.system(size: 19, weight: .semibold))
                 .foregroundStyle(isHandRaised ? .black : .white)
                 .frame(width: 42, height: 42)
