@@ -11,26 +11,24 @@ struct ExploreView: View {
     @State private var pendingPrivateRoom: Room?
     @State private var showingPasscode = false
 
-    private let filters = ["all", "hangouts", "music", "games", "languages", "discussions"]
+    private let filters = ["all", "sessions", "music", "games", "discussions"]
 
     private var userName: String {
         appState.profile?.displayName ?? appState.session?.user.displayName ?? "Ray"
     }
 
-    private var allRooms: [Room] {
-        var seen = Set<String>()
-        var result: [Room] = []
-        for room in CoreRooms.all + appState.rooms {
-            if seen.insert(room.id).inserted {
-                result.append(room)
-            }
-        }
-        return result
+    private var anchorRooms: [Room] {
+        CoreRooms.all
+    }
+
+    private var dynamicRooms: [Room] {
+        let coreIDs = Set(CoreRooms.all.map(\.id))
+        return appState.rooms.filter { !coreIDs.contains($0.id) }
     }
 
     private var filteredRooms: [Room] {
-        guard selectedFilter != "all" else { return allRooms }
-        return allRooms.filter { room in
+        guard selectedFilter != "all" else { return dynamicRooms }
+        return dynamicRooms.filter { room in
             room.categoryName.lowercased().contains(selectedFilter)
         }
     }
@@ -43,7 +41,7 @@ struct ExploreView: View {
                     VStack(alignment: .leading, spacing: 22) {
                         header
                         featuredBanner
-                        quickHubs
+                        anchorRoomsSection
                         filterChips
                         roomsFeed
                     }
@@ -154,34 +152,27 @@ struct ExploreView: View {
         )
     }
 
-    // MARK: Quick hubs
+    // MARK: Anchor rooms
 
-    private var quickHubs: some View {
-        HStack(spacing: 10) {
-            NavigationLink { RoomsView(filterKind: "flash") } label: { hubLabel("⚡", L10n.flashRooms) }
-            NavigationLink { CinemaView() } label: { hubLabel("🎬", L10n.vibeCinema) }
-            NavigationLink { GamesView() } label: { hubLabel("🎮", L10n.gamesRooms) }
-            NavigationLink { PodcastView() } label: { hubLabel("🎙️", L10n.echoStage) }
-        }
-        .buttonStyle(.plain)
-    }
-
-    private func hubLabel(_ emoji: String, _ title: String) -> some View {
-        VStack(spacing: 6) {
-            Text(emoji).font(.system(size: 26))
-            Text(title)
-                .font(.caption2.weight(.semibold))
+    private var anchorRoomsSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(L10n.anchorRooms)
+                .font(.headline.weight(.bold))
                 .foregroundStyle(.white)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
+                ForEach(anchorRooms) { room in
+                    ExploreRoomCard(room: room, memberCount: appState.memberCounts[room.id] ?? 0) {
+                        if room.isPrivate {
+                            pendingPrivateRoom = room
+                            showingPasscode = true
+                        } else {
+                            joiningRoom = room
+                            showingPreJoin = true
+                        }
+                    }
+                }
+            }
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 14)
-        .background(
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(VibeTheme.surface.opacity(0.7))
-                .overlay(RoundedRectangle(cornerRadius: 16).stroke(VibeTheme.strokeStrong, lineWidth: 1))
-        )
     }
 
     // MARK: Filters
@@ -208,10 +199,9 @@ struct ExploreView: View {
     private func filterLabel(_ id: String) -> String {
         switch id {
         case "all": return L10n.all
-        case "hangouts": return L10n.hangouts
+        case "sessions": return L10n.sessions
         case "music": return L10n.music
         case "games": return L10n.games
-        case "languages": return L10n.languages
         default: return L10n.discussions
         }
     }
@@ -220,15 +210,24 @@ struct ExploreView: View {
 
     @ViewBuilder
     private var roomsFeed: some View {
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
-            ForEach(filteredRooms) { room in
-                ExploreRoomCard(room: room, memberCount: appState.memberCounts[room.id] ?? 0) {
-                    if room.isPrivate {
-                        pendingPrivateRoom = room
-                        showingPasscode = true
-                    } else {
-                        joiningRoom = room
-                        showingPreJoin = true
+        VStack(alignment: .leading, spacing: 12) {
+            if filteredRooms.isEmpty {
+                Text(L10n.noRoomsRightNow)
+                    .font(.footnote)
+                    .foregroundStyle(VibeTheme.textMuted)
+                    .padding(.vertical, 12)
+            } else {
+                LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
+                    ForEach(filteredRooms) { room in
+                        ExploreRoomCard(room: room, memberCount: appState.memberCounts[room.id] ?? 0) {
+                            if room.isPrivate {
+                                pendingPrivateRoom = room
+                                showingPasscode = true
+                            } else {
+                                joiningRoom = room
+                                showingPreJoin = true
+                            }
+                        }
                     }
                 }
             }

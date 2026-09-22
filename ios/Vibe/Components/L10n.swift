@@ -89,6 +89,8 @@ enum L10n {
     static var echoStage: String { ar ? "مسرح إيكو" : "Echo Stage" }
     static var all: String { ar ? "الكل" : "All" }
     static var hangouts: String { ar ? "جلسات" : "Hangouts" }
+    static var sessions: String { ar ? "جلسات" : "Sessions" }
+    static var anchorRooms: String { ar ? "الغرف الأساسية" : "Anchor rooms" }
     static var music: String { ar ? "موسيقى" : "Music" }
     static var games: String { ar ? "ألعاب" : "Games" }
     static var languages: String { ar ? "لغات" : "Languages" }
