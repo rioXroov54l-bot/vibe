@@ -39,8 +39,8 @@ struct ExploreView: View {
                     VStack(alignment: .leading, spacing: 22) {
                         header
                         featuredBanner
-                        anchorRoomsSection
                         filterChips
+                        anchorRoomsSection
                         roomsFeed
                     }
                     .padding(.horizontal, 20)
