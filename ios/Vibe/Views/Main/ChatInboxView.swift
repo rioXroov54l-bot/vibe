@@ -42,7 +42,7 @@ struct ChatInboxView: View {
                                                 Text(room.title)
                                                     .font(.headline)
                                                     .foregroundStyle(.white)
-                                                Text(room.categoryName)
+                                                Text(L10n.categoryLabel(room.category))
                                                     .font(.caption)
                                                     .foregroundStyle(VibeTheme.textMuted)
                                             }

@@ -79,8 +79,6 @@ struct CreateRoomView: View {
         ("game", "🎮", L10n.gamesRooms),
         ("echo", "🎙️", L10n.echoStage)
     ]
-    private let categories = ["Social", "Music", "Games", "Cinema", "Podcast"]
-
     var body: some View {
         NavigationStack {
             ZStack {
@@ -126,7 +124,7 @@ struct CreateRoomView: View {
                         Text(L10n.category).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
                         Picker("Category", selection: $category) {
                             ForEach(1...5, id: \.self) { index in
-                                Text(categories[index - 1]).tag(index)
+                                Text(L10n.categoryLabel(index)).tag(index)
                             }
                         }
                         .pickerStyle(.wheel)

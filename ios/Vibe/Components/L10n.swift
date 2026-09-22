@@ -145,4 +145,15 @@ enum L10n {
     static var unlock: String { ar ? "فتح" : "Unlock" }
     static var makePrivate: String { ar ? "اجعلها خاصة" : "Make private" }
     static var passcode: String { ar ? "رمز الدخول" : "Passcode" }
+
+    static func categoryLabel(_ index: Int) -> String {
+        switch index {
+        case 1: return sessions
+        case 2: return music
+        case 3: return games
+        case 4: return languages
+        case 5: return discussions
+        default: return sessions
+        }
+    }
 }

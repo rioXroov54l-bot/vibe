@@ -49,7 +49,7 @@ struct PreJoinView: View {
                 .font(.system(size: 26, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
-            Text(room.categoryName)
+            Text(L10n.categoryLabel(room.category))
                 .font(.subheadline)
                 .foregroundStyle(VibeTheme.lavender)
         }

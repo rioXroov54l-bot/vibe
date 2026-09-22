@@ -257,7 +257,7 @@ private struct ExploreRoomCard: View {
                 }
             }
 
-            Text(room.categoryName)
+            Text(L10n.categoryLabel(room.category))
                 .font(.caption2.weight(.bold))
                 .foregroundStyle(VibeTheme.lavender)
                 .padding(.horizontal, 9)

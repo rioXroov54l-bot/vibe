@@ -42,22 +42,23 @@ extension Room {
 
     var categoryName: String {
         switch category {
-        case 1: return "Social"
+        case 1: return "Sessions"
         case 2: return "Music"
         case 3: return "Games"
-        case 4: return "Cinema"
-        case 5: return "Podcast"
-        default: return "Social"
+        case 4: return "Languages"
+        case 5: return "Discussions"
+        default: return "Sessions"
         }
     }
 
     /// Maps the room to a lobby filter category key.
     var filterKey: String {
-        switch kind {
-        case "game": return "games"
-        case "cinema": return "sessions"
-        case "echo": return "music"
-        case "voice", "flash": return "discussions"
+        switch category {
+        case 1: return "sessions"
+        case 2: return "music"
+        case 3: return "games"
+        case 4: return "languages"
+        case 5: return "discussions"
         default: return "sessions"
         }
     }

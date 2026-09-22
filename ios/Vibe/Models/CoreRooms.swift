@@ -18,7 +18,7 @@ enum CoreRooms {
             id: "10000000-0000-4000-8000-000000000002",
             ownerId: "00000000-0000-4000-8000-000000000000",
             title: "A slower kind of night ♫",
-            category: 4,
+            category: 5,
             kind: "cinema",
             createdAt: "",
             isPrivate: false,
