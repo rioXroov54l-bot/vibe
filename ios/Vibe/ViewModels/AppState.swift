@@ -28,6 +28,7 @@ final class AppState: ObservableObject {
     @Published var needsOnboarding = false
     @Published var recoveryTokenHash: String?
     @Published var rooms: [Room] = []
+    @Published var memberCounts: [String: Int] = [:]
     @Published var activeRoomMessages: [Message] = []
 
     private let auth = AuthService()
@@ -245,6 +246,7 @@ final class AppState: ObservableObject {
         guard let token = session?.accessToken else { return }
         do {
             rooms = try await data.fetchRooms(token: token)
+            memberCounts = (try? await data.fetchMemberCounts(token: token)) ?? [:]
         } catch {
             // Non-fatal: keep the last-known list.
         }

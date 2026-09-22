@@ -48,6 +48,20 @@ final class DataService {
         )
     }
 
+    /// Live participant counts per room, read from the membership table.
+    func fetchMemberCounts(token: String) async throws -> [String: Int] {
+        struct MemberRow: Decodable {
+            let roomId: String
+            enum CodingKeys: String, CodingKey { case roomId = "room_id" }
+        }
+        let rows: [MemberRow] = try await client.send("rest/v1/vibe_members?select=room_id", token: token)
+        var counts: [String: Int] = [:]
+        for row in rows {
+            counts[row.roomId, default: 0] += 1
+        }
+        return counts
+    }
+
     func createRoom(ownerId: String, title: String, category: Int, kind: String, token: String) async throws -> Room {
         let body: [String: JSONValue] = [
             "owner_id": .string(ownerId),

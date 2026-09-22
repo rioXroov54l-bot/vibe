@@ -12,9 +12,20 @@ struct ExploreView: View {
         appState.profile?.displayName ?? appState.session?.user.displayName ?? "Ray"
     }
 
+    private var allRooms: [Room] {
+        var seen = Set<String>()
+        var result: [Room] = []
+        for room in CoreRooms.all + appState.rooms {
+            if seen.insert(room.id).inserted {
+                result.append(room)
+            }
+        }
+        return result
+    }
+
     private var filteredRooms: [Room] {
-        guard selectedFilter != "all" else { return appState.rooms }
-        return appState.rooms.filter { room in
+        guard selectedFilter != "all" else { return allRooms }
+        return allRooms.filter { room in
             room.categoryName.lowercased().contains(selectedFilter)
         }
     }
@@ -40,6 +51,7 @@ struct ExploreView: View {
             .toolbar(.hidden, for: .navigationBar)
             .sheet(isPresented: $showingCreate) {
                 CreateRoomView()
+                    .presentationDetents([.medium, .large])
             }
         }
         .task { await appState.loadRooms() }
@@ -181,25 +193,14 @@ struct ExploreView: View {
 
     @ViewBuilder
     private var roomsFeed: some View {
-        if filteredRooms.isEmpty {
-            VStack(spacing: 10) {
-                Text("🌙").font(.system(size: 42))
-                Text(L10n.noRoomsRightNow)
-                    .font(.headline)
-                    .foregroundStyle(VibeTheme.textSecondary)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 40)
-        } else {
-            VStack(spacing: 12) {
-                ForEach(filteredRooms) { room in
-                    NavigationLink {
-                        RoomView(room: room)
-                    } label: {
-                        ExploreRoomCard(room: room)
-                    }
-                    .buttonStyle(.plain)
+        VStack(spacing: 12) {
+            ForEach(filteredRooms) { room in
+                NavigationLink {
+                    RoomView(room: room)
+                } label: {
+                    ExploreRoomCard(room: room, memberCount: appState.memberCounts[room.id] ?? 0)
                 }
+                .buttonStyle(.plain)
             }
         }
     }
@@ -208,7 +209,7 @@ struct ExploreView: View {
 /// Rich room card for the Explore feed.
 private struct ExploreRoomCard: View {
     let room: Room
-    private let listeners = [64, 128, 32, 96, 205]
+    let memberCount: Int
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -222,7 +223,7 @@ private struct ExploreRoomCard: View {
                 HStack(spacing: 4) {
                     Image(systemName: "headphones")
                         .font(.caption2)
-                    Text("\(listeners[abs(room.title.hashValue) % listeners.count])")
+                    Text("\(memberCount)")
                         .font(.caption.weight(.semibold))
                 }
                 .foregroundStyle(VibeTheme.mint)

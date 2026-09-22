@@ -69,34 +69,55 @@ struct CreateRoomView: View {
 
     @State private var title = ""
     @State private var category = 1
-    @State private var kind = "voice"
+    @State private var kind = "flash"
 
-    private let kinds = ["voice", "flash", "cinema", "game", "echo"]
+    private let roomTypes: [(kind: String, emoji: String, label: String)] = [
+        ("flash", "⚡", L10n.flashRooms),
+        ("cinema", "🎬", L10n.vibeCinema),
+        ("game", "🎮", L10n.gamesRooms),
+        ("echo", "🎙️", L10n.echoStage)
+    ]
     private let categories = ["Social", "Music", "Games", "Cinema", "Podcast"]
 
     var body: some View {
         NavigationStack {
             ZStack {
-                VibeTheme.backgroundGradient.ignoresSafeArea()
+                CosmicBackground()
                 VStack(alignment: .leading, spacing: 18) {
-                    Text("Create a room")
+                    Text(L10n.createRoom)
                         .font(.system(size: 26, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
+
+                    // Room type quick-select cards
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                        ForEach(roomTypes, id: \.kind) { type in
+                            Button {
+                                kind = type.kind
+                            } label: {
+                                HStack(spacing: 8) {
+                                    Text(type.emoji).font(.title3)
+                                    Text(type.label)
+                                        .font(.subheadline.weight(.semibold))
+                                        .foregroundStyle(.white)
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.7)
+                                    Spacer()
+                                }
+                                .padding(12)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                        .fill(kind == type.kind ? VibeTheme.primary.opacity(0.5) : VibeTheme.surface.opacity(0.7))
+                                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(kind == type.kind ? VibeTheme.lavender : VibeTheme.strokeStrong, lineWidth: 1))
+                                )
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
 
                     VStack(alignment: .leading, spacing: 6) {
                         Text(L10n.roomName).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
                         TextField("e.g. Late night talk", text: $title)
                             .vibeField()
-                    }
-
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(L10n.type).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
-                        Picker("Type", selection: $kind) {
-                            ForEach(kinds, id: \.self) { kind in
-                                Text(kind.capitalized).tag(kind)
-                            }
-                        }
-                        .pickerStyle(.segmented)
                     }
 
                     VStack(alignment: .leading, spacing: 6) {
@@ -118,7 +139,7 @@ struct CreateRoomView: View {
                             dismiss()
                         }
                     } label: {
-                        Text(appState.isBusy ? "Creating…" : "Create")
+                        Text(appState.isBusy ? "Creating…" : L10n.createRoom)
                             .vibePrimaryButton(!title.trimmingCharacters(in: .whitespaces).isEmpty && !appState.isBusy)
                     }
                     .disabled(title.trimmingCharacters(in: .whitespaces).isEmpty || appState.isBusy)
