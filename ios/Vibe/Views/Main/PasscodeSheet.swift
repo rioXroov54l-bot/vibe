@@ -37,7 +37,7 @@ struct PasscodeSheet: View {
                 }
 
                 Button {
-                    if passcode == room.passcodeHash ?? "" {
+                    if Crypto.sha256Hex(passcode) == room.passcodeHash ?? "" {
                         onUnlock()
                     } else {
                         errorMessage = L10n.wrongPasscode

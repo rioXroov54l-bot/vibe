@@ -77,7 +77,7 @@ final class DataService {
             "category": .number(Double(category)),
             "kind": .string(kind),
             "is_private": .bool(isPrivate),
-            "passcode_hash": isPrivate && !passcode.isEmpty ? .string(passcode) : .null
+            "passcode_hash": isPrivate && !passcode.isEmpty ? .string(Crypto.sha256Hex(passcode)) : .null
         ]
         let rows: [Room] = try await client.send(
             "rest/v1/vibe_rooms",
