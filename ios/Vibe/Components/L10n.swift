@@ -143,4 +143,6 @@ enum L10n {
     static var enterPasscode: String { ar ? "أدخل رمز الدخول" : "Enter passcode" }
     static var wrongPasscode: String { ar ? "رمز الدخول غير صحيح" : "Incorrect passcode" }
     static var unlock: String { ar ? "فتح" : "Unlock" }
+    static var makePrivate: String { ar ? "اجعلها خاصة" : "Make private" }
+    static var passcode: String { ar ? "رمز الدخول" : "Passcode" }
 }

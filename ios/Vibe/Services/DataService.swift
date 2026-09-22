@@ -62,12 +62,22 @@ final class DataService {
         return counts
     }
 
-    func createRoom(ownerId: String, title: String, category: Int, kind: String, token: String) async throws -> Room {
+    func createRoom(
+        ownerId: String,
+        title: String,
+        category: Int,
+        kind: String,
+        isPrivate: Bool,
+        passcode: String,
+        token: String
+    ) async throws -> Room {
         let body: [String: JSONValue] = [
             "owner_id": .string(ownerId),
             "title": .string(title),
             "category": .number(Double(category)),
-            "kind": .string(kind)
+            "kind": .string(kind),
+            "is_private": .bool(isPrivate),
+            "passcode_hash": isPrivate && !passcode.isEmpty ? .string(passcode) : .null
         ]
         let rows: [Room] = try await client.send(
             "rest/v1/vibe_rooms",

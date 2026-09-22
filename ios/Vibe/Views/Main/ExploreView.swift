@@ -231,6 +231,7 @@ struct ExploreView: View {
                 }
             }
         }
+        .animation(.easeInOut(duration: 0.28), value: selectedFilter)
     }
 }
 

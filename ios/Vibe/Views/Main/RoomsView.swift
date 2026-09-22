@@ -70,6 +70,8 @@ struct CreateRoomView: View {
     @State private var title = ""
     @State private var category = 1
     @State private var kind = "flash"
+    @State private var isPrivate = false
+    @State private var passcode = ""
 
     private let roomTypes: [(kind: String, emoji: String, label: String)] = [
         ("flash", "⚡", L10n.flashRooms),
@@ -131,11 +133,33 @@ struct CreateRoomView: View {
                         .frame(height: 120)
                     }
 
+                    Toggle(isOn: $isPrivate) {
+                        Text(L10n.makePrivate)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.white)
+                    }
+                    .tint(VibeTheme.primary)
+
+                    if isPrivate {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(L10n.passcode).font(.footnote.weight(.medium)).foregroundStyle(VibeTheme.textSecondary)
+                            TextField("1234", text: $passcode)
+                                .vibeField()
+                                .keyboardType(.numberPad)
+                        }
+                    }
+
                     Spacer()
 
                     Button {
                         Task {
-                            await appState.createRoom(title: title.trimmingCharacters(in: .whitespaces), category: category, kind: kind)
+                            await appState.createRoom(
+                                title: title.trimmingCharacters(in: .whitespaces),
+                                category: category,
+                                kind: kind,
+                                isPrivate: isPrivate,
+                                passcode: passcode
+                            )
                             dismiss()
                         }
                     } label: {
