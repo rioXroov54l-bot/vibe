@@ -7,6 +7,7 @@ struct OnboardingView: View {
     @State private var step = 0
     @State private var selections: [String: Set<String>] = [:]
     @State private var expandedCategories: Set<String> = []
+    @State private var onboardingError: String?
 
     private var groups: [OnboardingGroup] {
         switch step {
@@ -18,11 +19,6 @@ struct OnboardingView: View {
 
     private var selectedInterestCount: Int {
         InterestData.categories.reduce(0) { $0 + (selections[$1.id]?.count ?? 0) }
-    }
-
-    private var nextEnabled: Bool {
-        if step == 2 { return selectedInterestCount >= 3 }
-        return true
     }
 
     var body: some View {
@@ -64,13 +60,11 @@ struct OnboardingView: View {
                     .background(Circle().fill(.white.opacity(0.08)))
             }
 
+            Spacer()
             progressBar
+            Spacer()
 
-            Button(L10n.skip) {
-                finish()
-            }
-            .font(.subheadline.weight(.semibold))
-            .foregroundStyle(.white.opacity(0.7))
+            Color.clear.frame(width: 36, height: 36)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
@@ -97,6 +91,11 @@ struct OnboardingView: View {
             Text(currentSubtitle)
                 .font(.subheadline)
                 .foregroundStyle(VibeTheme.textSecondary)
+            if step == 2 {
+                Text(String(format: L10n.selectedCount, selectedInterestCount))
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(selectedInterestCount >= 3 ? VibeTheme.mint : VibeTheme.pink)
+            }
         }
     }
 
@@ -149,25 +148,39 @@ struct OnboardingView: View {
     // MARK: Footer
 
     private var footer: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 10) {
+            if let error = onboardingError ?? appState.errorMessage {
+                Text(error)
+                    .font(.footnote.weight(.medium))
+                    .foregroundStyle(VibeTheme.pink)
+                    .multilineTextAlignment(.center)
+            }
             Button {
-                if step < 2 {
-                    step += 1
-                } else {
-                    finish()
-                }
+                goNext()
             } label: {
                 Text(L10n.next)
                     .font(.headline.weight(.semibold))
                     .foregroundStyle(.black)
                     .frame(maxWidth: .infinity)
                     .frame(height: 54)
-                    .background(Capsule().fill(nextEnabled ? .white : .white.opacity(0.35)))
+                    .background(Capsule().fill(.white))
             }
-            .disabled(!nextEnabled)
         }
         .padding(.horizontal, 22)
         .padding(.vertical, 16)
+    }
+
+    private func goNext() {
+        if step == 2 && selectedInterestCount < 3 {
+            onboardingError = L10n.selectAtLeastThree
+            return
+        }
+        onboardingError = nil
+        if step < 2 {
+            step += 1
+        } else {
+            finish()
+        }
     }
 
     // MARK: Actions

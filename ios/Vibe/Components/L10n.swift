@@ -72,4 +72,6 @@ enum L10n {
     static var personalitySubtitle: String { ar ? "لا تتردد. الأصالة تجذب الأصالة." : "Don't hold back. Authenticity attracts authenticity." }
     static var interestsTitle: String { ar ? "ما هي اهتماماتك؟" : "What are you into?" }
     static var interestsSubtitle: String { ar ? "اختر 3 اهتمامات على الأقل للعثور على أشخاص يشاركونك نفس الاهتمامات." : "Choose at least 3 interests to find people who like similar things." }
+    static var selectAtLeastThree: String { ar ? "اختر 3 اهتمامات على الأقل." : "Select at least 3 interests." }
+    static var selectedCount: String { ar ? "تم اختيار %d من 3" : "%d of 3 selected" }
 }

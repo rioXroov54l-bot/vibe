@@ -23,8 +23,8 @@ final class VibeUITests: XCTestCase {
         attach(app.screenshot(), named: "02-login")
 
         // 3. Enter credentials.
-        let email = ProcessInfo.processInfo.environment["VIBE_TEST_EMAIL"] ?? "vibe.devtest@vibeapp.dev"
-        let password = ProcessInfo.processInfo.environment["VIBE_TEST_PASSWORD"] ?? "VibeDevTest123!"
+        let email = ProcessInfo.processInfo.environment["VIBE_TEST_EMAIL"] ?? "vibe.tester@vibeapp.dev"
+        let password = ProcessInfo.processInfo.environment["VIBE_TEST_PASSWORD"] ?? "VibeTest123!"
         emailField.tap()
         emailField.typeText(email)
         let passwordField = app.secureTextFields.firstMatch
@@ -36,29 +36,31 @@ final class VibeUITests: XCTestCase {
         app.buttons["Sign in"].tap()
 
         // 5. Onboarding (new confirmed user has no profile) or straight to main.
-        if app.buttons["Continue"].waitForExistence(timeout: 20) {
-            attach(app.screenshot(), named: "04-onboarding-welcome")
-            app.buttons["Continue"].tap()
-
-            // Interest selection (circular cards).
-            XCTAssertTrue(app.buttons["Music"].waitForExistence(timeout: 8), "Interest cards missing")
-            app.buttons["Music"].tap()
-            app.buttons["Travel"].tap()
-            app.buttons["Technology"].tap()
-            attach(app.screenshot(), named: "05-interests")
+        if app.staticTexts["Let's talk lifestyle habits"].waitForExistence(timeout: 20) {
+            attach(app.screenshot(), named: "04-lifestyle")
+            // Step 1: Lifestyle habits.
+            app.buttons["Not for me"].tap()
+            app.buttons["Non-smoker"].tap()
+            app.buttons["Sometimes"].tap()
+            app.buttons["Dog"].tap()
+            attach(app.screenshot(), named: "05-lifestyle-selected")
             app.buttons["Next"].tap()
 
-            // Personality selection.
-            XCTAssertTrue(app.buttons["Creative"].waitForExistence(timeout: 8), "Personality cards missing")
-            app.buttons["Creative"].tap()
-            app.buttons["Funny"].tap()
+            // Step 2: Personality & communication.
+            XCTAssertTrue(app.staticTexts["What else makes you-you?"].waitForExistence(timeout: 8), "Personality step missing")
+            app.buttons["Phone caller"].tap()
+            app.buttons["Time together"].tap()
+            app.buttons["Leo"].tap()
             attach(app.screenshot(), named: "06-personality")
             app.buttons["Next"].tap()
 
-            // Profile completion.
-            XCTAssertTrue(app.buttons["Enter Vibe"].waitForExistence(timeout: 8), "Profile step missing")
-            attach(app.screenshot(), named: "07-profile")
-            app.buttons["Enter Vibe"].tap()
+            // Step 3: Interests (3+ required).
+            XCTAssertTrue(app.staticTexts["What are you into?"].waitForExistence(timeout: 8), "Interests step missing")
+            app.buttons["Reading"].tap()
+            app.buttons["Home Workout"].tap()
+            app.buttons["Binge-Watching TV shows"].tap()
+            attach(app.screenshot(), named: "07-interests")
+            app.buttons["Next"].tap()
         }
 
         // 6. Main app reached.
