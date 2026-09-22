@@ -127,4 +127,5 @@ enum L10n {
     static var category: String { ar ? "التصنيف" : "Category" }
     static var liveVoiceNotEnabled: String { ar ? "🔴 البث الصوتي المباشر غير مفعّل بعد" : "🔴 Live voice streaming is not enabled yet" }
     static var audioRoomsComingSoon: String { ar ? "الغرف الصوتية قادمة قريباً. استكشف الحلقات التجريبية أدناه." : "Audio rooms are coming soon. Explore the demo episodes below." }
+    static var shareCinema: String { ar ? "🎬 انضم لي في سينما فايب! " : "🎬 Join me in Vibe Cinema! " }
 }
