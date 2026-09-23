@@ -49,6 +49,7 @@ struct MainTabView: View {
 
 private struct LiquidGlassTabBar: View {
     @Binding var selected: MainTabView.Tab
+    @EnvironmentObject private var localization: LocalizationManager
     @Namespace private var bubbleNamespace
 
     var body: some View {
