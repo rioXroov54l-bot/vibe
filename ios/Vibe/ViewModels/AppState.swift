@@ -175,8 +175,10 @@ final class AppState: ObservableObject {
         do {
             let profile = try await data.fetchProfile(id: session.user.id, token: session.accessToken)
             self.profile = profile
-            let prefs = try? await data.fetchPreferences(userId: session.user.id, token: session.accessToken)
-            self.needsOnboarding = !(prefs?.onboardingCompleted ?? false)
+            // Consult the same signal the RLS `onboarding_required` policy reads,
+            // so the app and the database never disagree about onboarding state.
+            let onboardingStep = (try? await data.fetchOnboardingStep(userId: session.user.id, token: session.accessToken)) ?? 0
+            self.needsOnboarding = onboardingStep < 3
             self.authFlow = .welcome
         } catch {
             // A brand-new account has no profile row yet; onboarding is required.

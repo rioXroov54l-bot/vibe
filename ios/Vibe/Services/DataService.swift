@@ -154,6 +154,22 @@ final class DataService {
         return rows.first
     }
 
+    /// Read the authoritative onboarding signal that the RLS `onboarding_required`
+    /// policy uses: `profiles.onboarding_step`. The app must consult this (not the
+    /// `preferences.onboarding_completed` convenience flag) so it never routes a
+    /// user into the main app while RLS still blocks social actions.
+    func fetchOnboardingStep(userId: String, token: String) async throws -> Int {
+        struct Row: Decodable {
+            let onboardingStep: Int
+            enum CodingKeys: String, CodingKey { case onboardingStep = "onboarding_step" }
+        }
+        let rows: [Row] = try await client.send(
+            "rest/v1/profiles?select=onboarding_step&id=eq.\(userId)",
+            token: token
+        )
+        return rows.first?.onboardingStep ?? 0
+    }
+
     func upsertPreferences(
         userId: String,
         selectedInterests: [String],
