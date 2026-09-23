@@ -31,7 +31,7 @@ struct MainTabView: View {
             }
             .animation(.spring(response: 0.36, dampingFraction: 0.86), value: selectedTab)
 
-            GlassTabBar(selected: $selectedTab)
+            LiquidGlassTabBar(selected: $selectedTab)
         }
         .ignoresSafeArea(.keyboard)
     }
@@ -47,40 +47,57 @@ struct MainTabView: View {
     }
 }
 
-private struct GlassTabBar: View {
+private struct LiquidGlassTabBar: View {
     @Binding var selected: MainTabView.Tab
+    @Namespace private var bubbleNamespace
 
     var body: some View {
         HStack(spacing: 0) {
             ForEach(MainTabView.Tab.allCases, id: \.rawValue) { tab in
                 Button {
-                    selected = tab
-                } label: {
-                    VStack(spacing: 4) {
-                        Image(systemName: tab.icon)
-                            .font(.system(size: 20, weight: .semibold))
-                        Text(title(for: tab))
-                            .font(.caption2.weight(.medium))
+                    withAnimation(.spring(response: 0.42, dampingFraction: 0.72)) {
+                        selected = tab
                     }
-                    .foregroundStyle(selected == tab ? .white : .white.opacity(0.48))
-                    .frame(maxWidth: .infinity)
-                    .scaleEffect(selected == tab ? 1.06 : 1.0)
-                    .shadow(color: selected == tab ? VibeTheme.lavender.opacity(0.7) : .clear, radius: 8)
-                    .animation(.spring(response: 0.3, dampingFraction: 0.65), value: selected)
+                } label: {
+                    tabLabel(tab)
                 }
                 .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 9)
         .background(
             Capsule()
                 .fill(.ultraThinMaterial)
-                .background(Capsule().fill(.black.opacity(0.45)))
-                .overlay(Capsule().stroke(.white.opacity(0.14), lineWidth: 1))
+                .background(Capsule().fill(.black.opacity(0.48)))
+                .overlay(Capsule().stroke(.white.opacity(0.16), lineWidth: 1))
+                .shadow(color: .black.opacity(0.35), radius: 18, y: 8)
         )
         .padding(.horizontal, 20)
         .padding(.bottom, 8)
+    }
+
+    private func tabLabel(_ tab: MainTabView.Tab) -> some View {
+        ZStack {
+            if selected == tab {
+                GlassBubble()
+                    .matchedGeometryEffect(id: "liquid-bubble", in: bubbleNamespace)
+            }
+
+            VStack(spacing: 3) {
+                Image(systemName: tab.icon)
+                    .font(.system(size: 19, weight: .semibold))
+                    .symbolRenderingMode(.hierarchical)
+                Text(title(for: tab))
+                    .font(.caption2.weight(.semibold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+            .foregroundStyle(selected == tab ? .white : .white.opacity(0.5))
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 52)
+        .contentShape(Rectangle())
     }
 
     private func title(for tab: MainTabView.Tab) -> String {
@@ -90,5 +107,56 @@ private struct GlassTabBar: View {
         case .chat: return L10n.chat
         case .profile: return L10n.profile
         }
+    }
+}
+
+/// Floating glass bubble indicator with an iridescent (holographic) border.
+private struct GlassBubble: View {
+    var body: some View {
+        Capsule()
+            .fill(.ultraThinMaterial)
+            .background(
+                Capsule().fill(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.22),
+                            Color.white.opacity(0.05),
+                            Color.white.opacity(0.11)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+            )
+            .overlay(iridescentBorder)
+            .overlay(specularHighlight)
+            .shadow(color: VibeTheme.lavender.opacity(0.55), radius: 13, y: 0)
+            .shadow(color: VibeTheme.primary.opacity(0.35), radius: 22, y: 0)
+            .frame(width: 72, height: 50)
+    }
+
+    private var iridescentBorder: some View {
+        Capsule()
+            .stroke(
+                AngularGradient(
+                    colors: [
+                        VibeTheme.lavender,
+                        VibeTheme.pink,
+                        VibeTheme.cyan,
+                        VibeTheme.mint,
+                        VibeTheme.lavender
+                    ],
+                    center: .center,
+                    startAngle: .degrees(0),
+                    endAngle: .degrees(360)
+                ),
+                lineWidth: 1.5
+            )
+    }
+
+    private var specularHighlight: some View {
+        Capsule()
+            .stroke(.white.opacity(0.32), lineWidth: 0.8)
+            .padding(1)
     }
 }
