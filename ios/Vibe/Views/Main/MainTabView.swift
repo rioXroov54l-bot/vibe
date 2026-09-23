@@ -110,7 +110,7 @@ private struct LiquidGlassTabBar: View {
     }
 }
 
-/// Floating glass bubble indicator with an iridescent (holographic) border.
+/// Floating frosted-glass bubble indicator that slides between tabs.
 private struct GlassBubble: View {
     var body: some View {
         Capsule()
@@ -119,44 +119,33 @@ private struct GlassBubble: View {
                 Capsule().fill(
                     LinearGradient(
                         colors: [
-                            Color.white.opacity(0.22),
-                            Color.white.opacity(0.05),
-                            Color.white.opacity(0.11)
+                            Color.white.opacity(0.18),
+                            Color.white.opacity(0.04),
+                            VibeTheme.lavender.opacity(0.12)
                         ],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
+                        startPoint: .top,
+                        endPoint: .bottom
                     )
                 )
             )
-            .overlay(iridescentBorder)
-            .overlay(specularHighlight)
-            .shadow(color: VibeTheme.lavender.opacity(0.55), radius: 13, y: 0)
-            .shadow(color: VibeTheme.primary.opacity(0.35), radius: 22, y: 0)
+            .overlay(glassEdge)
+            .shadow(color: VibeTheme.lavender.opacity(0.38), radius: 11, y: 0)
             .frame(width: 72, height: 50)
     }
 
-    private var iridescentBorder: some View {
+    private var glassEdge: some View {
         Capsule()
             .stroke(
-                AngularGradient(
+                LinearGradient(
                     colors: [
-                        VibeTheme.lavender,
-                        VibeTheme.pink,
-                        VibeTheme.cyan,
-                        VibeTheme.mint,
-                        VibeTheme.lavender
+                        Color.white.opacity(0.42),
+                        Color.white.opacity(0.10),
+                        VibeTheme.lavender.opacity(0.28)
                     ],
-                    center: .center,
-                    startAngle: .degrees(0),
-                    endAngle: .degrees(360)
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
                 ),
-                lineWidth: 1.5
+                lineWidth: 1
             )
-    }
-
-    private var specularHighlight: some View {
-        Capsule()
-            .stroke(.white.opacity(0.32), lineWidth: 0.8)
-            .padding(1)
     }
 }
