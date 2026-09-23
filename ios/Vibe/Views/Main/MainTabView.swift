@@ -49,23 +49,40 @@ struct MainTabView: View {
 
 private struct LiquidGlassTabBar: View {
     @Binding var selected: MainTabView.Tab
-    @Namespace private var bubbleNamespace
+    @Environment(\.layoutDirection) private var layoutDirection
+
+    private let tabs = MainTabView.Tab.allCases
 
     var body: some View {
-        HStack(spacing: 0) {
-            ForEach(MainTabView.Tab.allCases, id: \.rawValue) { tab in
-                Button {
-                    withAnimation(.spring(response: 0.5, dampingFraction: 0.78)) {
-                        selected = tab
+        GeometryReader { geo in
+            let count = CGFloat(tabs.count)
+            let slot = geo.size.width / count
+            let index = CGFloat(selected.rawValue)
+            let bubbleWidth = max(slot - 8, 48)
+            let bubbleX = layoutDirection == .rightToLeft
+                ? slot * (count - 1 - index) + (slot - bubbleWidth) / 2
+                : slot * index + (slot - bubbleWidth) / 2
+
+            ZStack(alignment: .topLeading) {
+                GlassBubble()
+                    .frame(width: bubbleWidth, height: 46)
+                    .offset(x: bubbleX, y: 6)
+                    .animation(.spring(response: 0.45, dampingFraction: 0.72), value: selected)
+
+                HStack(spacing: 0) {
+                    ForEach(tabs, id: \.rawValue) { tab in
+                        Button {
+                            selected = tab
+                        } label: {
+                            tabLabel(tab)
+                        }
+                        .buttonStyle(.plain)
                     }
-                } label: {
-                    tabLabel(tab)
                 }
-                .buttonStyle(.plain)
             }
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 7)
+        .frame(height: 58)
+        .padding(5)
         .background(
             Capsule()
                 .fill(.regularMaterial)
@@ -79,23 +96,16 @@ private struct LiquidGlassTabBar: View {
     }
 
     private func tabLabel(_ tab: MainTabView.Tab) -> some View {
-        ZStack {
-            if selected == tab {
-                GlassBubble()
-                    .matchedGeometryEffect(id: "liquid-bubble", in: bubbleNamespace)
-            }
-
-            VStack(spacing: 4) {
-                Image(systemName: tab.icon)
-                    .font(.system(size: 20, weight: .semibold))
-                    .symbolRenderingMode(.hierarchical)
-                Text(title(for: tab))
-                    .font(.caption2.weight(.semibold))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-            }
-            .foregroundStyle(selected == tab ? .white : .white.opacity(0.52))
+        VStack(spacing: 4) {
+            Image(systemName: tab.icon)
+                .font(.system(size: 20, weight: .semibold))
+                .symbolRenderingMode(.hierarchical)
+            Text(title(for: tab))
+                .font(.caption2.weight(.semibold))
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
+        .foregroundStyle(selected == tab ? .white : .white.opacity(0.52))
         .frame(maxWidth: .infinity)
         .frame(height: 54)
         .contentShape(Rectangle())
@@ -130,19 +140,18 @@ private struct GlassBubble: View {
             )
             .overlay(
                 Capsule().stroke(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(0.55),
-                        Color.white.opacity(0.16),
-                        VibeTheme.lavender.opacity(0.35)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
-                lineWidth: 1.2
-            )
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.55),
+                            Color.white.opacity(0.16),
+                            VibeTheme.lavender.opacity(0.35)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1.2
+                )
             )
             .shadow(color: VibeTheme.lavender.opacity(0.5), radius: 10, y: 0)
-            .frame(width: 76, height: 48)
     }
 }
