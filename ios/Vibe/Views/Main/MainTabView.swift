@@ -55,7 +55,7 @@ private struct LiquidGlassTabBar: View {
         HStack(spacing: 0) {
             ForEach(MainTabView.Tab.allCases, id: \.rawValue) { tab in
                 Button {
-                    withAnimation(.spring(response: 0.42, dampingFraction: 0.72)) {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.78)) {
                         selected = tab
                     }
                 } label: {
@@ -65,13 +65,14 @@ private struct LiquidGlassTabBar: View {
             }
         }
         .padding(.horizontal, 12)
-        .padding(.vertical, 9)
+        .padding(.vertical, 7)
         .background(
             Capsule()
-                .fill(.ultraThinMaterial)
-                .background(Capsule().fill(.black.opacity(0.48)))
-                .overlay(Capsule().stroke(.white.opacity(0.16), lineWidth: 1))
-                .shadow(color: .black.opacity(0.35), radius: 18, y: 8)
+                .fill(.regularMaterial)
+                .overlay(Capsule().fill(Color.white.opacity(0.05)))
+                .overlay(Capsule().stroke(Color.white.opacity(0.22), lineWidth: 1))
+                .clipShape(Capsule())
+                .shadow(color: .black.opacity(0.45), radius: 20, y: 10)
         )
         .padding(.horizontal, 20)
         .padding(.bottom, 8)
@@ -84,19 +85,19 @@ private struct LiquidGlassTabBar: View {
                     .matchedGeometryEffect(id: "liquid-bubble", in: bubbleNamespace)
             }
 
-            VStack(spacing: 3) {
+            VStack(spacing: 4) {
                 Image(systemName: tab.icon)
-                    .font(.system(size: 19, weight: .semibold))
+                    .font(.system(size: 20, weight: .semibold))
                     .symbolRenderingMode(.hierarchical)
                 Text(title(for: tab))
                     .font(.caption2.weight(.semibold))
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }
-            .foregroundStyle(selected == tab ? .white : .white.opacity(0.5))
+            .foregroundStyle(selected == tab ? .white : .white.opacity(0.52))
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 52)
+        .frame(height: 54)
         .contentShape(Rectangle())
     }
 
@@ -115,37 +116,33 @@ private struct GlassBubble: View {
     var body: some View {
         Capsule()
             .fill(.ultraThinMaterial)
-            .background(
+            .overlay(
                 Capsule().fill(
                     LinearGradient(
                         colors: [
-                            Color.white.opacity(0.18),
-                            Color.white.opacity(0.04),
-                            VibeTheme.lavender.opacity(0.12)
+                            Color.white.opacity(0.28),
+                            Color.white.opacity(0.06)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
                     )
                 )
             )
-            .overlay(glassEdge)
-            .shadow(color: VibeTheme.lavender.opacity(0.38), radius: 11, y: 0)
-            .frame(width: 72, height: 50)
-    }
-
-    private var glassEdge: some View {
-        Capsule()
-            .stroke(
+            .overlay(
+                Capsule().stroke(
                 LinearGradient(
                     colors: [
-                        Color.white.opacity(0.42),
-                        Color.white.opacity(0.10),
-                        VibeTheme.lavender.opacity(0.28)
+                        Color.white.opacity(0.55),
+                        Color.white.opacity(0.16),
+                        VibeTheme.lavender.opacity(0.35)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 ),
-                lineWidth: 1
+                lineWidth: 1.2
             )
+            )
+            .shadow(color: VibeTheme.lavender.opacity(0.5), radius: 10, y: 0)
+            .frame(width: 76, height: 48)
     }
 }
