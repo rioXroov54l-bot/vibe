@@ -12,6 +12,10 @@ final class RealtimeService {
     private var retryAttempt = 0
     private var messageHandler: ((Message) -> Void)?
     private var roomHandler: ((Room) -> Void)?
+    private var roomDeletedHandler: ((String) -> Void)?
+    private var memberHandler: ((String, Bool) -> Void)?
+
+    private var subscribedTables: Set<String> = []
 
     private var url: URL? {
         let anon = SupabaseConfig.anonKey
@@ -34,12 +38,21 @@ final class RealtimeService {
 
     func subscribeToMessages(_ handler: @escaping (Message) -> Void) {
         messageHandler = handler
-        sendJoin(topic: "realtime:public:messages")
+        joinTable("messages", event: "INSERT")
     }
 
-    func subscribeToRooms(_ handler: @escaping (Room) -> Void) {
-        roomHandler = handler
-        sendJoin(topic: "realtime:public:vibe_rooms")
+    /// Listen for room inserts and deletes so the lobby feed stays in sync
+    /// without manual pull-to-refresh (e.g. `room:expired` eviction).
+    func subscribeToRooms(onInsert: @escaping (Room) -> Void, onDelete: @escaping (String) -> Void) {
+        roomHandler = onInsert
+        roomDeletedHandler = onDelete
+        joinTable("vibe_rooms", event: "*")
+    }
+
+    /// Track presence: member joins/leaves so live listener counts update.
+    func subscribeToMembers(_ handler: @escaping (String, Bool) -> Void) {
+        memberHandler = handler
+        joinTable("vibe_members", event: "*")
     }
 
     // MARK: Connection
@@ -49,18 +62,23 @@ final class RealtimeService {
         let session = URLSession(configuration: .default)
         webSocket = session.webSocketTask(with: url)
         webSocket?.resume()
-        if messageHandler != nil { sendJoin(topic: "realtime:public:messages") }
-        if roomHandler != nil { sendJoin(topic: "realtime:public:vibe_rooms") }
+        for table in subscribedTables {
+            let event = table == "messages" ? "INSERT" : "*"
+            sendJoin(table: table, event: event)
+        }
         receive()
     }
 
-    private func sendJoin(topic: String) {
-        var config: [[String: String]] = [["event": "INSERT", "schema": "public"]]
-        if topic == "realtime:public:messages" {
-            config[0]["table"] = "messages"
-        } else if topic == "realtime:public:vibe_rooms" {
-            config[0]["table"] = "vibe_rooms"
+    private func joinTable(_ table: String, event: String) {
+        subscribedTables.insert(table)
+        if webSocket != nil {
+            sendJoin(table: table, event: event)
         }
+    }
+
+    private func sendJoin(table: String, event: String) {
+        let topic = "realtime:public:\(table)"
+        let config: [[String: String]] = [["event": event, "schema": "public", "table": table]]
         var payload: [String: Any] = ["config": ["postgres_changes": config]]
         if let token { payload["access_token"] = token }
         let join: [String: Any] = [
@@ -110,13 +128,29 @@ final class RealtimeService {
               json["event"] as? String == "postgres_changes",
               let payload = json["payload"] as? [String: Any],
               let dataPayload = payload["data"] as? [String: Any],
-              let new = dataPayload["new"] as? [String: Any],
               let table = dataPayload["table"] as? String else { return }
 
-        if table == "messages", let message = decodeMessage(new) {
-            messageHandler?(message)
-        } else if table == "vibe_rooms", let room = decodeRoom(new) {
-            roomHandler?(room)
+        let type = (dataPayload["type"] as? String)?.uppercased() ?? "INSERT"
+        let record = dataPayload["record"] as? [String: Any] ?? dataPayload["new"] as? [String: Any]
+        let oldRecord = dataPayload["old_record"] as? [String: Any] ?? dataPayload["old"] as? [String: Any]
+
+        switch table {
+        case "messages":
+            if type == "INSERT", let record, let message = decodeMessage(record) {
+                messageHandler?(message)
+            }
+        case "vibe_rooms":
+            if type == "DELETE", let oldRecord, let id = oldRecord["id"] as? String {
+                roomDeletedHandler?(id)
+            } else if type == "INSERT", let record, let room = decodeRoom(record) {
+                roomHandler?(room)
+            }
+        case "vibe_members":
+            if let record = record ?? oldRecord, let roomId = record["room_id"] as? String {
+                memberHandler?(roomId, type == "INSERT")
+            }
+        default:
+            break
         }
     }
 

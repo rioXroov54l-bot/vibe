@@ -197,10 +197,25 @@ final class AppState: ObservableObject {
                 self.activeRoomMessages.append(message)
             }
         }
-        RealtimeService.shared.subscribeToRooms { [weak self] room in
+        RealtimeService.shared.subscribeToRooms(
+            onInsert: { [weak self] room in
+                guard let self else { return }
+                if !self.rooms.contains(where: { $0.id == room.id }) {
+                    self.rooms.insert(room, at: 0)
+                }
+            },
+            onDelete: { [weak self] roomId in
+                self?.rooms.removeAll { $0.id == roomId }
+            }
+        )
+        RealtimeService.shared.subscribeToMembers { [weak self] roomId, joined in
             guard let self else { return }
-            if !self.rooms.contains(where: { $0.id == room.id }) {
-                self.rooms.insert(room, at: 0)
+            let current = self.memberCounts[roomId] ?? 0
+            let next = joined ? current + 1 : max(0, current - 1)
+            if next > 0 {
+                self.memberCounts[roomId] = next
+            } else {
+                self.memberCounts.removeValue(forKey: roomId)
             }
         }
     }
@@ -288,6 +303,10 @@ final class AppState: ObservableObject {
             if !self.rooms.contains(where: { $0.id == room.id }) {
                 self.rooms.insert(room, at: 0)
             }
+            // Host presence: the creator is tracked as the first listener so
+            // the room auto-expires once they (and everyone else) leave.
+            try? await self.data.joinRoom(roomId: room.id, userId: id, token: token)
+            self.memberCounts[room.id] = 1
         }
     }
 
